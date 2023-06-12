@@ -1,19 +1,19 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "target": "es5",
-        "lib": ["es6", "dom"],
-        "paths": {
-            "src": ["src/*"]
-        },
-        "jsx": "react-jsx",
-        "sourceMap": true,
-        "strictNullChecks": true
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "paths": {
+      "src": ["src/*"]
     },
-    "exclude": [
-        "node_modules/*"
-    ],
-    "include": [
-        "./src/**/*",
-    ]
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "strictNullChecks": true
+  },
+  "exclude": [
+    "node_modules/*"
+  ],
+  "include": [
+    "./src/**/*",
+  ]
 }

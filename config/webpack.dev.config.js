@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: './src/index.tsx',
-    devtool: 'inline-source-map',
+    devtool: 'eval-cheap-module-source-map',
     optimization: {
         runtimeChunk: 'single'
     },
@@ -33,6 +33,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
+                        cacheDirectory: true,
                         presets: [
                             ['@babel/preset-env', { targets: 'defaults' }],
                             ['@babel/preset-react', { runtime: 'automatic' }]

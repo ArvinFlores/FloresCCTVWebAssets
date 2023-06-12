@@ -7,7 +7,8 @@
             "src": ["src/*"]
         },
         "jsx": "react-jsx",
-        "sourceMap": true
+        "sourceMap": true,
+        "strictNullChecks": true
     },
     "exclude": [
         "node_modules/*"

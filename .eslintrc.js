@@ -36,10 +36,14 @@ module.exports = {
         }
       }
     ],
+    "@typescript-eslint/strict-boolean-expressions": [
+      2,
+      { "allowNullableBoolean": true }
+    ],
     "semi": [2, "always"],
     "max-len": [2, { "code": 120 }]
   },
   settings: {
     react: { version: 'detect' }
   }
-}
+};

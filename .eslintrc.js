@@ -17,31 +17,31 @@ module.exports = {
     'react-hooks'
   ],
   rules: {
-    "react/react-in-jsx-scope": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
-    "@typescript-eslint/semi": "off",
-    "@typescript-eslint/member-delimiter-style": [
-      "error",
+    'react/react-in-jsx-scope': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/semi': 'off',
+    '@typescript-eslint/member-delimiter-style': [
+      'error',
       {
-        "multiline": {
-          "delimiter": "semi",
-          "requireLast": true
+        'multiline': {
+          'delimiter': 'semi',
+          'requireLast': true
         },
-        "singleline": {
-          "delimiter": "semi",
-          "requireLast": true
+        'singleline': {
+          'delimiter': 'semi',
+          'requireLast': true
         }
       }
     ],
-    "@typescript-eslint/strict-boolean-expressions": [
+    '@typescript-eslint/strict-boolean-expressions': [
       2,
-      { "allowNullableBoolean": true }
+      { 'allowNullableBoolean': true }
     ],
-    "semi": [2, "always"],
-    "max-len": [2, { "code": 120 }]
+    'semi': [2, 'always'],
+    'max-len': [2, { 'code': 120 }]
   },
   settings: {
     react: { version: 'detect' }

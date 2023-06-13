@@ -23,6 +23,19 @@ module.exports = {
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
     "@typescript-eslint/semi": "off",
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "semi",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": true
+        }
+      }
+    ],
     "semi": [2, "always"],
     "max-len": [2, { "code": 120 }]
   },

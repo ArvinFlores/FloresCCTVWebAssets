@@ -5,7 +5,7 @@ export function Video ({ srcObject, ...props }: VideoProps): JSX.Element {
   const ref = useCallback(
     (node: HTMLVideoElement) => {
       // eslint-disable-next-line
-      if (node && srcObject) node.srcObject;
+      if (node && srcObject) node.srcObject = srcObject;
     },
     [srcObject]
   );

@@ -10,7 +10,8 @@ module.exports = {
   },
   devServer: {
     static: '../build',
-    port: 7777
+    port: 7777,
+    https: true
   },
   output: {
     filename: '[name].bundle.js',

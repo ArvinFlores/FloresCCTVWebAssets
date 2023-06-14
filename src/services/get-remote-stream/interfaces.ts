@@ -1,0 +1,7 @@
+export type ErrorCodes = 'WS_ERR' |
+'STREAM_BUSY' |
+'PC_ADD_ICE_CAND' |
+'PC_CREATE_ANSWER' |
+'PC_SET_REMOTE_DESC' |
+'PC_SET_LOCAL_DESC' |
+'PC_CONN_ERR';

@@ -1,10 +1,12 @@
-import type { GetRemoteStreamI } from './interfaces';
+import { createRecorderOptions } from './helpers';
+import type { GetRemoteStreamI, GetRemoteStreamValue } from './interfaces';
 
 export function getRemoteStream ({
   wsUrl,
   onStream,
-  onError
-}: GetRemoteStreamI): void {
+  onError,
+  onVideoRecorded
+}: GetRemoteStreamI): GetRemoteStreamValue {
   const ws = new WebSocket(wsUrl);
   const pcConfig = {
     iceServers: [
@@ -17,7 +19,9 @@ export function getRemoteStream ({
     ]
   };
   let iceCandidates: RTCIceCandidate[] = [];
-  let pc: RTCPeerConnection | null;
+  let pc: RTCPeerConnection | null = null;
+  let recorder: MediaRecorder | null = null;
+  let recordedBlobs: Blob[] = [];
   let remoteDesc = false;
 
   function createPeerConnection (): void {
@@ -150,5 +154,43 @@ export function getRemoteStream ({
   ws.onclose = (evt) => {
     pc?.close();
     pc = null;
+  };
+
+  return {
+    startVideoRecording () {
+      const tracks = pc?.getReceivers().map(rc => rc.track);
+
+      if (!tracks || !tracks.length || recorder?.state === 'recording') return;
+
+      try {
+        recorder = new MediaRecorder(
+          new MediaStream(tracks),
+          createRecorderOptions()
+        );
+      } catch (e) {
+        return onError?.({
+          message: 'Your browser does not support recording media',
+          code: 'MEDIA_REC_UNSUPPORTED',
+          details: e
+        });
+      }
+
+      recorder.onstop = () => {
+        onVideoRecorded?.(new Blob(recordedBlobs, { type: 'video/webm' }));
+
+        recordedBlobs = [];
+        recorder = null;
+      };
+      recorder.ondataavailable = (evt) => {
+        if (evt.data.size > 0) {
+          recordedBlobs.push(evt.data);
+        }
+      };
+
+      recorder.start();
+    },
+    stopVideoRecording () {
+      recorder?.stop();
+    }
   };
 }

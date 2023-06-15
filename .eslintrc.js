@@ -44,7 +44,8 @@ module.exports = {
     'max-len': [2, { 'code': 120 }],
     'jsx-quotes': ['error', 'prefer-double'],
     'react/jsx-boolean-value': ['error', 'always'],
-    'operator-linebreak': ['error', 'after']
+    'operator-linebreak': ['error', 'after'],
+    '@typescript-eslint/prefer-optional-chain': 'off'
   },
   settings: {
     react: { version: 'detect' }

@@ -1,5 +1,6 @@
 export type ErrorCodes = 'WS_ERR' |
 'STREAM_BUSY' |
+'MEDIA_REC_UNSUPPORTED' |
 'PC_ADD_ICE_CAND' |
 'PC_CREATE_ANSWER' |
 'PC_SET_REMOTE_DESC' |
@@ -25,4 +26,13 @@ export interface GetRemoteStreamI {
    * Error callback with details about the error
    */
   onError?: (err: GetRemoteStreamErrI) => void;
+  /**
+   * Callback when a video clip has been recorded from the stream
+   */
+  onVideoRecorded?: (blob: Blob) => void;
+}
+
+export interface GetRemoteStreamValue {
+  startVideoRecording: () => void;
+  stopVideoRecording: () => void;
 }

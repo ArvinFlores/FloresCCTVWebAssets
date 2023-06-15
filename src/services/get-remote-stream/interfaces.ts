@@ -6,6 +6,12 @@ export type ErrorCodes = 'WS_ERR' |
 'PC_SET_LOCAL_DESC' |
 'PC_CONN_ERR';
 
+export interface GetRemoteStreamErrI {
+  message: string;
+  code: ErrorCodes;
+  details?: object;
+}
+
 export interface GetRemoteStreamI {
   /**
    * The websocket url of the websocket server running on the rPi device
@@ -18,9 +24,5 @@ export interface GetRemoteStreamI {
   /**
    * Error callback with details about the error
    */
-  onError?: (err: {
-    message: string;
-    code: ErrorCodes;
-    details?: object;
-  }) => void;
+  onError?: (err: GetRemoteStreamErrI) => void;
 }

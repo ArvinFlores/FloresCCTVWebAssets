@@ -43,7 +43,8 @@ module.exports = {
     'semi': [2, 'always'],
     'max-len': [2, { 'code': 120 }],
     'jsx-quotes': ['error', 'prefer-double'],
-    'react/jsx-boolean-value': ['error', 'always']
+    'react/jsx-boolean-value': ['error', 'always'],
+    'operator-linebreak': ['error', 'after']
   },
   settings: {
     react: { version: 'detect' }

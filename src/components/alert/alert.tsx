@@ -38,7 +38,7 @@ export function Alert ({
               className="alert__expandable-btn-icon"
               icon={expanded ? faCaretUp : faCaretRight}
             />
-            {expandableLabel}
+            <span>{expandableLabel}</span>
           </button>
         )
       }

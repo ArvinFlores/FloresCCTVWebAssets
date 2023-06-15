@@ -34,13 +34,17 @@ export function App (): JSX.Element {
                   (
                     <div className="util-mt-2">
                       <JSONViewer>
-                        {loadError.details}
+                        {loadError}
                       </JSONViewer>
                     </div>
                   )
             }
           >
-            {streamBusyErr ? loadError.message : 'There was a problem getting the camera feed'}
+            {
+              streamBusyErr ?
+                loadError.message :
+                'There was a problem connecting to the camera, please try refreshing the browser'
+            }
           </Alert>
         )
       }

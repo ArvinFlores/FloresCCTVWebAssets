@@ -19,6 +19,8 @@
   margin: 1rem 0 0;
   color: white;
   font-size: .9rem;
+  display: flex;
+  align-items: center;
 }
 
 .alert__expandable-btn-icon {

@@ -8,7 +8,8 @@ export function Button ({
   outline,
   circular,
   variant,
-  disabled
+  disabled,
+  onClick
 }: ButtonProps): JSX.Element {
   return (
     <button
@@ -20,6 +21,7 @@ export function Button ({
         'btn--disabled': disabled
       })}
       disabled={disabled}
+      onClick={onClick}
     >
       {children}
     </button>

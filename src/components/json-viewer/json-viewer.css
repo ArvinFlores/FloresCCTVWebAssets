@@ -1,3 +1,5 @@
 .json-viewer {
   margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }

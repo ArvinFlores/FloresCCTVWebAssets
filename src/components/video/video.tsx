@@ -1,14 +1,29 @@
-import { useCallback } from 'react';
+import {
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  forwardRef
+} from 'react';
 import type { VideoProps } from './interfaces';
 
-export function Video ({ srcObject, ...props }: VideoProps): JSX.Element {
-  const ref = useCallback(
-    (node: HTMLVideoElement) => {
-      // eslint-disable-next-line
-      if (node && srcObject) node.srcObject = srcObject;
+export const Video = forwardRef<HTMLVideoElement, VideoProps>(function Video (
+  { srcObject, ...props },
+  ref
+): JSX.Element {
+  const vidRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(
+    () => {
+      if (!vidRef.current || !srcObject) return;
+      vidRef.current.srcObject = srcObject;
     },
     [srcObject]
   );
 
-  return <video ref={ref} {...props} />;
-}
+  useImperativeHandle(
+    ref,
+    () => vidRef.current as HTMLVideoElement
+  );
+
+  return <video ref={vidRef} {...props} />;
+});

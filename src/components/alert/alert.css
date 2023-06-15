@@ -1,0 +1,26 @@
+.alert {
+  padding: 1rem 1.5rem;
+  color: white;
+}
+
+.alert--info {
+  background-color: #31708f;
+}
+
+.alert--danger {
+  background-color: #a94442;
+}
+
+.alert__expandable-btn {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  margin: 1rem 0 0;
+  color: white;
+  font-size: .9rem;
+}
+
+.alert__expandable-btn-icon {
+  margin-right: 5px;
+}

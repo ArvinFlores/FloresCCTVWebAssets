@@ -1,0 +1,30 @@
+.record-button--active {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.record-button__icon--active {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  color: red;
+}
+
+.record-button__ring--active {
+  transform: rotate(-90deg);
+  stroke-dasharray: 177;
+  stroke-dashoffset: 177;
+  animation-name: fill-in;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+}
+
+@keyframes fill-in {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

@@ -9,10 +9,12 @@ export function Button ({
   circular,
   variant,
   disabled,
+  ariaLabel,
   onClick
 }: ButtonProps): JSX.Element {
   return (
     <button
+      aria-label={ariaLabel}
       className={classnames({
         btn: true,
         'btn--outline': outline,

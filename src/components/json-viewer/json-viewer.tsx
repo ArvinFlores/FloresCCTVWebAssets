@@ -8,8 +8,8 @@ export function JSONViewer ({
   spaces = 2
 }: JSONViewerProps): JSX.Element {
   return (
-    <pre className={`json-viewer ${className}`.trim()}>
+    <code className={`json-viewer ${className}`.trim()}>
       {JSON.stringify(children, null, spaces)}
-    </pre>
+    </code>
   );
 }

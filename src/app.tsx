@@ -26,6 +26,7 @@ export function App (): JSX.Element {
   const [loadError, setLoadError] = useState<GetRemoteStreamErrI | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string>('');
   const [recording, setRecording] = useState<boolean>(false);
+  const [speakingEnabled, setSpeakingEnabled] = useState<boolean>(false);
   const videofeedRef = useRef<VideoFeedRef>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const streamBusyErr = loadError?.code === 'STREAM_BUSY';
@@ -69,9 +70,13 @@ export function App (): JSX.Element {
   const handleOnVideoRecorded = (blob: Blob): void => {
     setPreviewSrc(URL.createObjectURL(blob));
   };
+  const handleToggleMic = (): void => {
+    setSpeakingEnabled(enabled => !enabled);
+  };
 
   return (
     <>
+      <div role="alert">
       {
         loadError && (
           <Alert
@@ -97,6 +102,7 @@ export function App (): JSX.Element {
           </Alert>
         )
       }
+      </div>
       <Navbar
         alignContent="center"
         stickToBottom={true}
@@ -133,8 +139,11 @@ export function App (): JSX.Element {
                   <>
                     <li>
                       <Button
-                        outline={true}
+                        ariaLabel={speakingEnabled ? 'Turn off mic' : 'Turn on mic'}
+                        outline={!speakingEnabled}
                         circular={true}
+                        variant={speakingEnabled ? 'danger' : undefined}
+                        onClick={handleToggleMic}
                       >
                         <FontAwesomeIcon
                           icon={faVolumeHigh}
@@ -146,6 +155,7 @@ export function App (): JSX.Element {
                       !recording && (
                         <li>
                           <Button
+                            ariaLabel="Take screenshot"
                             circular={true}
                             onClick={handleTakeScreenshot}
                           >
@@ -159,6 +169,7 @@ export function App (): JSX.Element {
                     }
                     <li>
                       <RecordButton
+                        ariaLabel={recording ? 'Stop recording' : 'Start recording'}
                         active={recording}
                         duration={RECORDING_LIMIT_SECS}
                         onClick={handleRecordClick}

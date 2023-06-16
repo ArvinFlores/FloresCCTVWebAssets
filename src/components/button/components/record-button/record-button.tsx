@@ -8,11 +8,13 @@ import type { RecordButtonProps } from './interfaces';
 export function RecordButton ({
   active,
   duration,
+  ariaLabel,
   onClick
 }: RecordButtonProps): JSX.Element {
   if (active) {
     return (
       <button
+        aria-label={ariaLabel}
         className="record-button--active"
         onClick={onClick}
       >
@@ -42,6 +44,7 @@ export function RecordButton ({
 
   return (
     <Button
+      ariaLabel={ariaLabel}
       circular={true}
       outline={true}
       variant="danger"

@@ -1,9 +1,10 @@
 import './alert.css';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { classnames } from 'src/util/classnames';
+import { uuid } from 'src/util/uuid';
 import type { AlertProps } from './interfaces';
 
 export function Alert ({
@@ -13,6 +14,8 @@ export function Alert ({
   expandableContent
 }: AlertProps): JSX.Element {
   const [expanded, setExpanded] = useState(false);
+  const randId = useRef<string>(uuid());
+  const ariaExpandedContentId = `alert__expandable-content-${randId.current}`;
   const toggleExpand = (): void => {
     setExpanded(val => !val);
   };
@@ -31,6 +34,8 @@ export function Alert ({
       {
         (expandableLabel ?? '') && (
           <button
+            aria-expanded={expanded}
+            aria-controls={ariaExpandedContentId}
             className="alert__expandable-btn"
             onClick={toggleExpand}
           >
@@ -42,7 +47,13 @@ export function Alert ({
           </button>
         )
       }
-      {expanded && expandableContent}
+      {
+        expanded && (
+          <div id={ariaExpandedContentId}>
+            {expandableContent}
+          </div>
+        )
+      }
     </div>
   );
 }

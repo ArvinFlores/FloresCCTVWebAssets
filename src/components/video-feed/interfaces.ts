@@ -4,6 +4,7 @@ import type { GetRemoteStreamI, GetRemoteStreamValue } from 'src/services/get-re
 export interface VideoFeedProps extends Omit<VideoProps, 'onError'>, Pick<
 GetRemoteStreamI,
 'wsUrl' |
+'onVideoRecorded' |
 'onError'
 > {
   onStreamStart?: () => void;

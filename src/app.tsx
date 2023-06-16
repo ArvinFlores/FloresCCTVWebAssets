@@ -10,8 +10,9 @@ import {
   faXmark,
   faDownload
 } from '@fortawesome/free-solid-svg-icons';
+import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
-import { Button } from 'src/components/button';
+import { Button, RecordButton } from 'src/components/button';
 import { Spinner } from 'src/components/spinner';
 import { VideoFeed, type VideoFeedRef } from 'src/components/video-feed';
 import { Alert } from 'src/components/alert';
@@ -21,10 +22,12 @@ import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
 
 export function App (): JSX.Element {
-  const [loadingFeed, setLoadingFeed] = useState(true);
+  const [loadingFeed, setLoadingFeed] = useState<boolean>(true);
   const [loadError, setLoadError] = useState<GetRemoteStreamErrI | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string>('');
+  const [recording, setRecording] = useState<boolean>(false);
   const videofeedRef = useRef<VideoFeedRef>(null);
+  const recordingRef = useRef<NodeJS.Timeout>();
   const streamBusyErr = loadError?.code === 'STREAM_BUSY';
   const handleStreamStart = (): void => {
     setLoadingFeed(false);
@@ -35,11 +38,36 @@ export function App (): JSX.Element {
     }
   };
   const handleCancelMediaPreview = (): void => {
+    if (previewSrc.startsWith('blob:')) {
+      URL.revokeObjectURL(previewSrc);
+    }
     setPreviewSrc('');
   };
   const handleMediaDownload = (): void => {
     downloadLocalFile(previewSrc);
+    if (previewSrc.startsWith('blob:')) {
+      URL.revokeObjectURL(previewSrc);
+    }
     setPreviewSrc('');
+  };
+  const handleRecordClick = (): void => {
+    const stopRecording = (): void => {
+      videofeedRef.current?.stream?.stopVideoRecording();
+      setRecording(false);
+      recordingRef.current = undefined;
+    };
+
+    if (recording) {
+      clearTimeout(recordingRef.current);
+      stopRecording();
+    } else {
+      videofeedRef.current?.stream?.startVideoRecording();
+      setRecording(true);
+      recordingRef.current = setTimeout(stopRecording, RECORDING_LIMIT_SECS * 1000);
+    }
+  };
+  const handleOnVideoRecorded = (blob: Blob): void => {
+    setPreviewSrc(URL.createObjectURL(blob));
   };
 
   return (
@@ -114,16 +142,27 @@ export function App (): JSX.Element {
                         />
                       </Button>
                     </li>
+                    {
+                      !recording && (
+                        <li>
+                          <Button
+                            circular={true}
+                            onClick={handleTakeScreenshot}
+                          >
+                            <FontAwesomeIcon
+                              icon={faCamera}
+                              size="2x"
+                            />
+                          </Button>
+                        </li>
+                      )
+                    }
                     <li>
-                      <Button
-                        circular={true}
-                        onClick={handleTakeScreenshot}
-                      >
-                        <FontAwesomeIcon
-                          icon={faCamera}
-                          size="2x"
-                        />
-                      </Button>
+                      <RecordButton
+                        active={recording}
+                        duration={RECORDING_LIMIT_SECS}
+                        onClick={handleRecordClick}
+                      />
                     </li>
                   </>
                 )
@@ -145,12 +184,24 @@ export function App (): JSX.Element {
         muted={true}
         onStreamStart={handleStreamStart}
         onError={setLoadError}
+        onVideoRecorded={handleOnVideoRecorded}
       />
       {
-        previewSrc && (
+        previewSrc.startsWith('data:') && (
           <img
             className="app__media-preview app__media-preview--high-priority"
             src={previewSrc}
+          />
+        )
+      }
+      {
+        previewSrc.startsWith('blob:') && (
+          <video
+            className="app__media-preview app__media-preview--high-priority"
+            src={previewSrc}
+            autoPlay={true}
+            muted={true}
+            loop={true}
           />
         )
       }

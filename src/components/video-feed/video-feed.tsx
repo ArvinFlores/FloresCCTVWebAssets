@@ -14,6 +14,7 @@ export const VideoFeed = forwardRef<VideoFeedRef, VideoFeedProps>(function Video
     wsUrl,
     srcObject,
     onStreamStart,
+    onVideoRecorded,
     onError,
     ...props
   },
@@ -35,6 +36,7 @@ export const VideoFeed = forwardRef<VideoFeedRef, VideoFeedProps>(function Video
     () => {
       streamRef.current = getRemoteStream({
         wsUrl,
+        onVideoRecorded,
         onError,
         onStream: (evt) => {
           setSrc(evt.streams[0]);

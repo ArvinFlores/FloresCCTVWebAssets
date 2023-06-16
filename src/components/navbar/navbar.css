@@ -18,3 +18,7 @@
 .navbar__content--right {
   justify-content: flex-end;
 }
+
+.navbar__content--center {
+  justify-content: center;
+}

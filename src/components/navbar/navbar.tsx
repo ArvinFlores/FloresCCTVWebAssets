@@ -18,7 +18,8 @@ export function Navbar ({
       <div
         className={classnames({
           navbar__content: true,
-          'navbar__content--right': alignContent === 'right'
+          'navbar__content--right': alignContent === 'right',
+          'navbar__content--center': alignContent === 'center'
         })}
       >
         {children}

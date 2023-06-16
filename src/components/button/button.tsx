@@ -18,6 +18,7 @@ export function Button ({
         'btn--outline': outline,
         'btn--circular': circular,
         'btn--danger': variant === 'danger',
+        'btn--primary': variant === 'primary',
         'btn--disabled': disabled
       })}
       disabled={disabled}

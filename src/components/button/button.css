@@ -2,6 +2,8 @@
   border: none;
   cursor: pointer;
   padding: .5rem 1.2rem;
+  display: flex;
+  align-items: center;
 }
 
 .btn--outline {
@@ -17,6 +19,11 @@
 
 .btn--danger {
   background-color: red;
+  color: white;
+}
+
+.btn--primary {
+  background-color: #007bff;
   color: white;
 }
 

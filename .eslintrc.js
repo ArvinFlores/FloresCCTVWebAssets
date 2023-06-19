@@ -45,7 +45,8 @@ module.exports = {
     'jsx-quotes': ['error', 'prefer-double'],
     'react/jsx-boolean-value': ['error', 'always'],
     'operator-linebreak': ['error', 'after'],
-    '@typescript-eslint/prefer-optional-chain': 'off'
+    '@typescript-eslint/prefer-optional-chain': 'off',
+    'no-unused-vars': ['error', { 'vars': 'all', 'args': 'all', 'ignoreRestSiblings': false }]
   },
   settings: {
     react: { version: 'detect' }

@@ -1,4 +1,4 @@
-export function uuid (len = 10) {
+export function uuid (len = 10): string {
   const arr = new Uint8Array(len);
   crypto.getRandomValues(arr);
   return Array.from(

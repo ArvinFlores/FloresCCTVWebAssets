@@ -151,7 +151,7 @@ export function getRemoteStream ({
       details: evt
     });
   };
-  ws.onclose = (evt) => {
+  ws.onclose = () => {
     pc?.close();
     pc = null;
   };

@@ -54,10 +54,8 @@ export class WebSocketConnection extends EventTargetDelegate {
   }
 
   private init (): void {
-    this.ws = new WebSocket(this.url, this.protocols);
-
     if (this.options.maxReconnectAttempts !== null) {
-      if (this.reconnectAttempts > this.options.maxReconnectAttempts) {
+      if (this.reconnectAttempts >= this.options.maxReconnectAttempts) {
         const event = new CustomEvent(
           'error',
           {
@@ -73,6 +71,8 @@ export class WebSocketConnection extends EventTargetDelegate {
         return;
       }
     }
+
+    this.ws = new WebSocket(this.url, this.protocols);
 
     let retryTimeout: NodeJS.Timeout;
     const timeout = setTimeout(

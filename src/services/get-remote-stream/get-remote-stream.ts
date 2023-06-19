@@ -1,13 +1,17 @@
+import { WebSocketConnection } from 'src/services/websocket-connection';
 import { createRecorderOptions } from './helpers';
 import type { GetRemoteStreamI, GetRemoteStreamValue } from './interfaces';
 
+/**
+ * Gets the camera stream from the raspberry pi
+ */
 export function getRemoteStream ({
   wsUrl,
   onStream,
   onError,
   onVideoRecorded
 }: GetRemoteStreamI): GetRemoteStreamValue {
-  const ws = new WebSocket(wsUrl);
+  const ws = new WebSocketConnection(wsUrl);
   const pcConfig = {
     iceServers: [
       {

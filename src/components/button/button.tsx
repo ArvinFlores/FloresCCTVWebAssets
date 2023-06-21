@@ -10,6 +10,7 @@ export function Button ({
   variant,
   disabled,
   ariaLabel,
+  className = '',
   onClick
 }: ButtonProps): JSX.Element {
   return (
@@ -21,7 +22,9 @@ export function Button ({
         'btn--circular': circular,
         'btn--danger': variant === 'danger',
         'btn--primary': variant === 'primary',
-        'btn--disabled': disabled
+        'btn--see-through': variant === 'see-through',
+        'btn--disabled': disabled,
+        [className]: true
       })}
       disabled={disabled}
       onClick={onClick}

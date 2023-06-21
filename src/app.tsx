@@ -6,9 +6,12 @@ import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faVolumeHigh,
+  faVolumeXmark,
   faCamera,
   faXmark,
-  faDownload
+  faDownload,
+  faMicrophone,
+  faMicrophoneSlash
 } from '@fortawesome/free-solid-svg-icons';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
@@ -27,6 +30,7 @@ export function App (): JSX.Element {
   const [previewSrc, setPreviewSrc] = useState<string>('');
   const [recording, setRecording] = useState<boolean>(false);
   const [speakingEnabled, setSpeakingEnabled] = useState<boolean>(false);
+  const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const videofeedRef = useRef<VideoFeedRef>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const streamBusyErr = loadError?.code === 'STREAM_BUSY';
@@ -72,6 +76,9 @@ export function App (): JSX.Element {
   };
   const handleToggleMic = (): void => {
     setSpeakingEnabled(enabled => !enabled);
+  };
+  const handleToggleVideoAudio = (): void => {
+    setVideoMuted(muted => !muted);
   };
 
   return (
@@ -146,7 +153,7 @@ export function App (): JSX.Element {
                         onClick={handleToggleMic}
                       >
                         <FontAwesomeIcon
-                          icon={faVolumeHigh}
+                          icon={speakingEnabled ? faMicrophone : faMicrophoneSlash}
                           size="2x"
                         />
                       </Button>
@@ -187,12 +194,24 @@ export function App (): JSX.Element {
           </div>
         )
       }
+      <Button
+        ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
+        className="util-ml-2 util-mt-2"
+        variant="see-through"
+        circular={true}
+        onClick={handleToggleVideoAudio}
+      >
+        <FontAwesomeIcon
+          icon={videoMuted ? faVolumeXmark : faVolumeHigh}
+          size="2x"
+        />
+      </Button>
       <VideoFeed
         ref={videofeedRef}
         wsUrl="wss://192.168.1.213:9000/stream"
         className="app__media-preview app__media-preview--low-priority"
         autoPlay={true}
-        muted={true}
+        muted={videoMuted}
         onStreamStart={handleStreamStart}
         onError={setLoadError}
         onVideoRecorded={handleOnVideoRecorded}

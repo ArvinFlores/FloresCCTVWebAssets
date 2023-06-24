@@ -6,7 +6,7 @@ export function MediaPreview ({ previewSrc }: MediaPreviewProps): JSX.Element {
       {
         previewSrc.startsWith('data:') && (
           <img
-            className="app__media-preview app__media-preview--high-priority"
+            className="util-fullscreen util-fullscreen--high-priority"
             src={previewSrc}
           />
         )
@@ -14,7 +14,7 @@ export function MediaPreview ({ previewSrc }: MediaPreviewProps): JSX.Element {
       {
         previewSrc.startsWith('blob:') && (
           <video
-            className="app__media-preview app__media-preview--high-priority"
+            className="util-fullscreen util-fullscreen--high-priority"
             src={previewSrc}
             autoPlay={true}
             muted={true}

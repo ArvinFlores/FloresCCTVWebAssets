@@ -1,6 +1,5 @@
 import '../styles/base.css';
 import '../styles/util.css';
-import './app.css';
 
 import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -169,7 +168,7 @@ export function App (): JSX.Element {
       <VideoFeed
         ref={videofeedRef}
         wsUrl="wss://192.168.1.213:9000/stream"
-        className="app__media-preview app__media-preview--low-priority"
+        className="util-fullscreen util-fullscreen--low-priority"
         autoPlay={true}
         muted={videoMuted}
         onStreamStart={handleStreamStart}

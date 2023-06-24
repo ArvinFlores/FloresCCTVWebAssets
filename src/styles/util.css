@@ -39,3 +39,20 @@
 .util-list--inline li:not(:last-child) {
   margin-right: 1rem;
 }
+
+.util-fullscreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.util-fullscreen--low-priority {
+  z-index: -1;
+}
+
+.util-fullscreen--high-priority {
+  z-index: 1;
+}

@@ -27,7 +27,7 @@ export function App (): JSX.Element {
   const [loadError, setLoadError] = useState<GetRemoteStreamErrI | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string>('');
   const [recording, setRecording] = useState<boolean>(false);
-  const [speakingEnabled, setSpeakingEnabled] = useState<boolean>(false);
+  const [micEnabled, setmicEnabled] = useState<boolean>(false);
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const videofeedRef = useRef<VideoFeedRef>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
@@ -79,14 +79,14 @@ export function App (): JSX.Element {
       const enabled = !audioTrack.enabled;
 
       audioTrack.enabled = enabled;
-      setSpeakingEnabled(enabled);
+      setmicEnabled(enabled);
     } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
           const pc = videofeedRef.current?.stream?.getPeerConnection();
           audioRef.current = stream;
           if (pc) stream.getTracks().forEach(track => pc.addTrack(track, stream));
-          setSpeakingEnabled(true);
+          setmicEnabled(true);
         })
         .catch(console.error);
     }
@@ -138,7 +138,7 @@ export function App (): JSX.Element {
       >
         <Controls
           previewingMedia={Boolean(previewSrc)}
-          micEnabled={speakingEnabled}
+          micEnabled={micEnabled}
           recording={recording}
           onToggleMic={handleToggleMic}
           onCancelMediaPreview={handleCancelMediaPreview}

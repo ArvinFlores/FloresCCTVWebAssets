@@ -20,6 +20,7 @@ import type { GetRemoteStreamErrI } from 'src/services/get-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
 import { Controls } from './components/controls';
+import { MediaPreview } from './components/media-preview';
 
 export function App (): JSX.Element {
   const [loadingFeed, setLoadingFeed] = useState<boolean>(true);
@@ -175,25 +176,7 @@ export function App (): JSX.Element {
         onError={setLoadError}
         onVideoRecorded={handleOnVideoRecorded}
       />
-      {
-        previewSrc.startsWith('data:') && (
-          <img
-            className="app__media-preview app__media-preview--high-priority"
-            src={previewSrc}
-          />
-        )
-      }
-      {
-        previewSrc.startsWith('blob:') && (
-          <video
-            className="app__media-preview app__media-preview--high-priority"
-            src={previewSrc}
-            autoPlay={true}
-            muted={true}
-            loop={true}
-          />
-        )
-      }
+      <MediaPreview previewSrc={previewSrc} />
     </ErrorBoundary>
   );
 }

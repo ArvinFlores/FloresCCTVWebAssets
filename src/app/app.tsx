@@ -6,12 +6,7 @@ import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faVolumeHigh,
-  faVolumeXmark,
-  faCamera,
-  faXmark,
-  faDownload,
-  faMicrophone,
-  faMicrophoneSlash
+  faVolumeXmark
 } from '@fortawesome/free-solid-svg-icons';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
@@ -24,7 +19,7 @@ import { ErrorBoundary } from 'src/components/error-boundary';
 import type { GetRemoteStreamErrI } from 'src/services/get-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
-import { RecordButton } from './components/record-button';
+import { Controls } from './components/controls';
 
 export function App (): JSX.Element {
   const [loadingFeed, setLoadingFeed] = useState<boolean>(true);
@@ -140,78 +135,16 @@ export function App (): JSX.Element {
         alignContent="center"
         stickToBottom={true}
       >
-        <ul className="util-list util-list--inline">
-          {
-            previewSrc ?
-                (
-                  <>
-                    <li>
-                      <Button onClick={handleCancelMediaPreview}>
-                        <FontAwesomeIcon
-                          className="util-mr-0"
-                          icon={faXmark}
-                        />
-                        <span>Cancel</span>
-                      </Button>
-                    </li>
-                    <li>
-                      <Button
-                        variant="primary"
-                        onClick={handleMediaDownload}
-                      >
-                        <FontAwesomeIcon
-                          className="util-mr-0"
-                          icon={faDownload}
-                        />
-                        <span>Download</span>
-                      </Button>
-                    </li>
-                  </>
-                ) :
-                (
-                  <>
-                    <li>
-                      <Button
-                        ariaLabel={speakingEnabled ? 'Turn off mic' : 'Turn on mic'}
-                        outline={!speakingEnabled}
-                        circular={true}
-                        variant={speakingEnabled ? 'danger' : undefined}
-                        onClick={handleToggleMic}
-                      >
-                        <FontAwesomeIcon
-                          icon={speakingEnabled ? faMicrophone : faMicrophoneSlash}
-                          size="2x"
-                        />
-                      </Button>
-                    </li>
-                    {
-                      !recording && (
-                        <li>
-                          <Button
-                            ariaLabel="Take screenshot"
-                            circular={true}
-                            onClick={handleTakeScreenshot}
-                          >
-                            <FontAwesomeIcon
-                              icon={faCamera}
-                              size="2x"
-                            />
-                          </Button>
-                        </li>
-                      )
-                    }
-                    <li>
-                      <RecordButton
-                        ariaLabel={recording ? 'Stop recording' : 'Start recording'}
-                        active={recording}
-                        duration={RECORDING_LIMIT_SECS}
-                        onClick={handleRecordClick}
-                      />
-                    </li>
-                  </>
-                )
-          }
-        </ul>
+        <Controls
+          previewingMedia={Boolean(previewSrc)}
+          micEnabled={speakingEnabled}
+          recording={recording}
+          onToggleMic={handleToggleMic}
+          onCancelMediaPreview={handleCancelMediaPreview}
+          onDownloadMediaPreview={handleMediaDownload}
+          onTakeScreenshot={handleTakeScreenshot}
+          onRecord={handleRecordClick}
+        />
       </Navbar>
       {
         loadingFeed && (

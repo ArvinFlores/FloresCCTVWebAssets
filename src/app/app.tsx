@@ -20,6 +20,7 @@ import { Spinner } from 'src/components/spinner';
 import { VideoFeed, type VideoFeedRef } from 'src/components/video-feed';
 import { Alert } from 'src/components/alert';
 import { JSONViewer } from 'src/components/json-viewer';
+import { ErrorBoundary } from 'src/components/error-boundary';
 import type { GetRemoteStreamErrI } from 'src/services/get-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
@@ -97,9 +98,17 @@ export function App (): JSX.Element {
   const handleToggleVideoAudio = (): void => {
     setVideoMuted(muted => !muted);
   };
+  const renderFallbackError = (error: Error): JSX.Element => {
+    return (
+      <Alert type="danger">
+        <p>The application encountered an unexpected error: {error.message || 'Unknown Error'}</p>
+        <p>Please try refreshing your browser</p>
+      </Alert>
+    );
+  };
 
   return (
-    <>
+    <ErrorBoundary fallback={renderFallbackError}>
       <div role="alert">
       {
         loadError && (
@@ -252,6 +261,6 @@ export function App (): JSX.Element {
           />
         )
       }
-    </>
+    </ErrorBoundary>
   );
 }

@@ -2,7 +2,7 @@ import './record-button.css';
 
 import { faVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '../../button';
+import { Button } from 'src/components/button';
 import type { RecordButtonProps } from './interfaces';
 
 export function RecordButton ({

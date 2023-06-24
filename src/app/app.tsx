@@ -1,5 +1,5 @@
-import './styles/base.css';
-import './styles/util.css';
+import '../styles/base.css';
+import '../styles/util.css';
 import './app.css';
 
 import { useState, useRef } from 'react';
@@ -15,7 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
-import { Button, RecordButton } from 'src/components/button';
+import { Button } from 'src/components/button';
 import { Spinner } from 'src/components/spinner';
 import { VideoFeed, type VideoFeedRef } from 'src/components/video-feed';
 import { Alert } from 'src/components/alert';
@@ -23,6 +23,7 @@ import { JSONViewer } from 'src/components/json-viewer';
 import type { GetRemoteStreamErrI } from 'src/services/get-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
+import { RecordButton } from './components/record-button';
 
 export function App (): JSX.Element {
   const [loadingFeed, setLoadingFeed] = useState<boolean>(true);

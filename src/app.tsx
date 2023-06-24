@@ -33,6 +33,7 @@ export function App (): JSX.Element {
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const videofeedRef = useRef<VideoFeedRef>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
+  const audioRef = useRef<MediaStream | null>(null);
   const streamBusyErr = loadError?.code === 'STREAM_BUSY';
   const handleStreamStart = (): void => {
     setLoadingFeed(false);
@@ -75,7 +76,22 @@ export function App (): JSX.Element {
     setPreviewSrc(URL.createObjectURL(blob));
   };
   const handleToggleMic = (): void => {
-    setSpeakingEnabled(enabled => !enabled);
+    if (audioRef.current) {
+      const audioTrack = audioRef.current.getAudioTracks()[0];
+      const enabled = !audioTrack.enabled;
+
+      audioTrack.enabled = enabled;
+      setSpeakingEnabled(enabled);
+    } else {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          const pc = videofeedRef.current?.stream?.getPeerConnection();
+          audioRef.current = stream;
+          if (pc) stream.getTracks().forEach(track => pc.addTrack(track, stream));
+          setSpeakingEnabled(true);
+        })
+        .catch(console.error);
+    }
   };
   const handleToggleVideoAudio = (): void => {
     setVideoMuted(muted => !muted);

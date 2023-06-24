@@ -35,4 +35,5 @@ export interface GetRemoteStreamI {
 export interface GetRemoteStreamValue {
   startVideoRecording: () => void;
   stopVideoRecording: () => void;
+  getPeerConnection: () => RTCPeerConnection | null;
 }

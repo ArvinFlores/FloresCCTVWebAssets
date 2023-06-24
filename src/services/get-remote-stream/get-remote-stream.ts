@@ -57,6 +57,13 @@ export function getRemoteStream ({
           });
       }
     };
+    pc.onnegotiationneeded = async () => {
+      await pc?.setLocalDescription(await pc.createOffer());
+      ws.send(JSON.stringify({
+        what: 'offer',
+        data: pc?.localDescription
+      }));
+    };
   }
 
   function addIceCandidates (): void {
@@ -195,6 +202,9 @@ export function getRemoteStream ({
     },
     stopVideoRecording () {
       recorder?.stop();
+    },
+    getPeerConnection () {
+      return pc;
     }
   };
 }

@@ -1,3 +1,5 @@
+import type { ConnectionStateChangeEvent } from 'src/services/websocket-connection';
+
 export type ErrorCodes = 'WS_ERR' |
 'STREAM_BUSY' |
 'MEDIA_REC_UNSUPPORTED' |
@@ -30,6 +32,10 @@ export interface GetRemoteStreamI {
    * Callback when a video clip has been recorded from the stream
    */
   onVideoRecorded?: (blob: Blob) => void;
+  /**
+   * Callback when the websocket connection status changes
+   */
+  onWSConnectionChange?: (ev: CustomEvent<ConnectionStateChangeEvent>) => void;
 }
 
 export interface GetRemoteStreamValue {

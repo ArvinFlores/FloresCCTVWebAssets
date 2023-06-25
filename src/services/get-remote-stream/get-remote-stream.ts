@@ -9,7 +9,8 @@ export function getRemoteStream ({
   wsUrl,
   onStream,
   onError,
-  onVideoRecorded
+  onVideoRecorded,
+  onWSConnectionChange
 }: GetRemoteStreamI): GetRemoteStreamValue {
   const ws = new WebSocketConnection(wsUrl);
   const pcConfig = {
@@ -166,6 +167,7 @@ export function getRemoteStream ({
     pc?.close();
     pc = null;
   };
+  ws.onconnectionstatechange = (ev) => onWSConnectionChange?.(ev);
 
   return {
     startVideoRecording () {

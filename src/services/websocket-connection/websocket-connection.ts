@@ -57,7 +57,10 @@ export class WebSocketConnection extends EventTargetDelegate {
     this.addEventListener('close', ev => { this.onclose(ev); });
     this.addEventListener('message', ev => { this.onmessage(ev); });
     this.addEventListener('error', ev => { this.onerror(ev); });
-    this.addEventListener('connection-state-change', ev => { this.onconnectionstatechange(ev); });
+    this.addEventListener(
+      'connection-state-change',
+      (ev: CustomEvent<ConnectionStateChangeEvent>) => { this.onconnectionstatechange(ev); }
+    );
   }
 
   private init (): void {
@@ -181,6 +184,6 @@ export class WebSocketConnection extends EventTargetDelegate {
   onclose (ev): void {}
   onmessage (ev): void {}
   onerror (ev): void {}
-  onconnectionstatechange (ev): void {}
+  onconnectionstatechange (ev: CustomEvent<ConnectionStateChangeEvent>): void {}
   /* eslint-enable no-unused-vars */
 }

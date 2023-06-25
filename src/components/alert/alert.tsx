@@ -2,7 +2,7 @@ import './alert.css';
 
 import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretRight, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { classnames } from 'src/util/classnames';
 import { uuid } from 'src/util/uuid';
 import type { AlertProps } from './interfaces';
@@ -11,7 +11,8 @@ export function Alert ({
   type,
   children,
   expandableLabel,
-  expandableContent
+  expandableContent,
+  onDismiss
 }: AlertProps): JSX.Element {
   const [expanded, setExpanded] = useState(false);
   const randId = useRef<string>(uuid());
@@ -28,6 +29,19 @@ export function Alert ({
         'alert--danger': type === 'danger'
       })}
     >
+      {
+        onDismiss && (
+          <button
+            className="alert__close-btn"
+            onClick={onDismiss}
+          >
+            <FontAwesomeIcon
+              icon={faXmark}
+              size="2x"
+            />
+          </button>
+        )
+      }
       <div>
         {children}
       </div>

@@ -1,6 +1,7 @@
 .alert {
   padding: 1rem 1.5rem;
   color: white;
+  position: relative;
 }
 
 .alert--info {
@@ -25,4 +26,14 @@
 
 .alert__expandable-btn-icon {
   margin-right: 5px;
+}
+
+.alert__close-btn {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  background: none;
+  border: 0;
+  color: white;
+  cursor: pointer;
 }

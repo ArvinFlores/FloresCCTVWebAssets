@@ -1,5 +1,5 @@
 import type { VideoHTMLAttributes } from 'react';
 
 export type VideoProps = VideoHTMLAttributes<HTMLVideoElement> & {
-  srcObject?: MediaStream;
+  srcObject?: MediaStream | null;
 };

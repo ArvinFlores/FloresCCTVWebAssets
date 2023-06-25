@@ -10,34 +10,42 @@ import {
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
 import { Button } from 'src/components/button';
-import { Spinner } from 'src/components/spinner';
-import { VideoFeed, type VideoFeedRef } from 'src/components/video-feed';
 import { Alert } from 'src/components/alert';
 import { JSONViewer } from 'src/components/json-viewer';
 import { ErrorBoundary } from 'src/components/error-boundary';
+import { Video } from 'src/components/video';
 import type { GetRemoteStreamErrI } from 'src/services/get-remote-stream';
+import { useRemoteStream } from 'src/hooks/use-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
 
 export function App (): JSX.Element {
-  const [loadingFeed, setLoadingFeed] = useState<boolean>(true);
   const [loadError, setLoadError] = useState<GetRemoteStreamErrI | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string>('');
   const [recording, setRecording] = useState<boolean>(false);
   const [micEnabled, setmicEnabled] = useState<boolean>(false);
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
-  const videofeedRef = useRef<VideoFeedRef>(null);
+  const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const audioRef = useRef<MediaStream | null>(null);
   const streamBusyErr = loadError?.code === 'STREAM_BUSY';
-  const handleStreamStart = (): void => {
-    setLoadingFeed(false);
-  };
+  const {
+    stream,
+    startVideoRecording,
+    stopVideoRecording,
+    getPeerConnection
+  } = useRemoteStream({
+    wsUrl: 'wss://192.168.1.213:9000/stream',
+    onError: setLoadError,
+    onVideoRecorded: (blob: Blob): void => {
+      setPreviewSrc(URL.createObjectURL(blob));
+    }
+  });
   const handleTakeScreenshot = (): void => {
-    if (videofeedRef?.current?.video) {
-      setPreviewSrc(takeScreenshot(videofeedRef.current.video));
+    if (videofeedRef?.current) {
+      setPreviewSrc(takeScreenshot(videofeedRef.current));
     }
   };
   const handleCancelMediaPreview = (): void => {
@@ -55,7 +63,7 @@ export function App (): JSX.Element {
   };
   const handleRecordClick = (): void => {
     const stopRecording = (): void => {
-      videofeedRef.current?.stream?.stopVideoRecording();
+      stopVideoRecording?.();
       setRecording(false);
       recordingRef.current = undefined;
     };
@@ -64,13 +72,10 @@ export function App (): JSX.Element {
       clearTimeout(recordingRef.current);
       stopRecording();
     } else {
-      videofeedRef.current?.stream?.startVideoRecording();
+      startVideoRecording?.();
       setRecording(true);
       recordingRef.current = setTimeout(stopRecording, RECORDING_LIMIT_SECS * 1000);
     }
-  };
-  const handleOnVideoRecorded = (blob: Blob): void => {
-    setPreviewSrc(URL.createObjectURL(blob));
   };
   const handleToggleMic = (): void => {
     if (audioRef.current) {
@@ -82,7 +87,7 @@ export function App (): JSX.Element {
     } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
-          const pc = videofeedRef.current?.stream?.getPeerConnection();
+          const pc = getPeerConnection?.();
           audioRef.current = stream;
           if (pc) stream.getTracks().forEach(track => pc.addTrack(track, stream));
           setmicEnabled(true);
@@ -146,13 +151,6 @@ export function App (): JSX.Element {
           onRecord={handleRecordClick}
         />
       </Navbar>
-      {
-        loadingFeed && (
-          <div className="util-perfect-center">
-            <Spinner size="medium" />
-          </div>
-        )
-      }
       <Button
         ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
         className="util-ml-2 util-mt-2"
@@ -165,15 +163,12 @@ export function App (): JSX.Element {
           size="2x"
         />
       </Button>
-      <VideoFeed
+      <Video
         ref={videofeedRef}
-        wsUrl="wss://192.168.1.213:9000/stream"
+        srcObject={stream}
         className="util-fullscreen util-fullscreen--low-priority"
         autoPlay={true}
         muted={videoMuted}
-        onStreamStart={handleStreamStart}
-        onError={setLoadError}
-        onVideoRecorded={handleOnVideoRecorded}
       />
       <MediaPreview previewSrc={previewSrc} />
     </ErrorBoundary>

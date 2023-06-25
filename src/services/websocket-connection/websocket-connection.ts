@@ -1,5 +1,5 @@
 import { EventTargetDelegate } from 'src/util/event-target-delegate';
-import type { CreateWebSocketI } from './interfaces';
+import type { CreateWebSocketI, ConnectionStateChangeEvent } from './interfaces';
 
 /**
  * A wrapper around the native WebSocket class that provides automatic reconnect ability
@@ -12,6 +12,7 @@ export class WebSocketConnection extends EventTargetDelegate {
   private reconnectAttempts: number;
   private forcedClosed: boolean;
   private timedOut: boolean;
+  private hasConnectedOnce: boolean;
 
   ws: WebSocket | null;
 
@@ -33,6 +34,7 @@ export class WebSocketConnection extends EventTargetDelegate {
     this.reconnectAttempts = 0;
     this.forcedClosed = false;
     this.timedOut = false;
+    this.hasConnectedOnce = false;
     this.ws = null;
     this.options = {
       reconnectInterval,
@@ -51,6 +53,7 @@ export class WebSocketConnection extends EventTargetDelegate {
     this.addEventListener('close', ev => { this.onclose(ev); });
     this.addEventListener('message', ev => { this.onmessage(ev); });
     this.addEventListener('error', ev => { this.onerror(ev); });
+    this.addEventListener('connection-state-change', ev => { this.onconnectionstatechange(ev); });
   }
 
   private init (): void {
@@ -67,12 +70,28 @@ export class WebSocketConnection extends EventTargetDelegate {
         );
 
         this.dispatchEvent(event);
+        this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+          'connection-state-change',
+          { detail: { status: 'failed' } }
+        ));
 
         return;
       }
     }
 
     this.ws = new WebSocket(this.url, this.protocols);
+
+    if (this.hasConnectedOnce) {
+      this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+        'connection-state-change',
+        { detail: { status: 'reconnecting' } }
+      ));
+    } else {
+      this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+        'connection-state-change',
+        { detail: { status: 'connecting' } }
+      ));
+    }
 
     let retryTimeout: NodeJS.Timeout;
     const timeout = setTimeout(
@@ -85,8 +104,13 @@ export class WebSocketConnection extends EventTargetDelegate {
     );
 
     this.ws.onopen = (event) => {
+      this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+        'connection-state-change',
+        { detail: { status: 'connected' } }
+      ));
       clearTimeout(timeout);
       this.reconnectAttempts = 0;
+      this.hasConnectedOnce = true;
       this.dispatchEvent(event);
     };
 
@@ -96,6 +120,10 @@ export class WebSocketConnection extends EventTargetDelegate {
       this.ws = null;
       if (this.forcedClosed) {
         this.dispatchEvent(event);
+        this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+          'connection-state-change',
+          { detail: { status: 'closed' } }
+        ));
       } else {
         if (!this.timedOut) {
           this.dispatchEvent(event);
@@ -128,7 +156,7 @@ export class WebSocketConnection extends EventTargetDelegate {
     return this.ws?.send(data);
   }
 
-  close (code: number = 1000, reason: string): void {
+  close (code: number = 1000, reason?: string): void {
     this.forcedClosed = true;
     this.ws?.close(code, reason);
   }
@@ -138,5 +166,6 @@ export class WebSocketConnection extends EventTargetDelegate {
   onclose (ev): void {}
   onmessage (ev): void {}
   onerror (ev): void {}
+  onconnectionstatechange (ev): void {}
   /* eslint-enable no-unused-vars */
 }

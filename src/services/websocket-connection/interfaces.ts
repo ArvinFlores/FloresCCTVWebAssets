@@ -20,3 +20,13 @@ export interface CreateWebSocketI {
    */
   maxReconnectAttempts: number | null;
 }
+
+export type ConnectionStatus = 'connecting' |
+'connected' |
+'reconnecting' |
+'failed' |
+'closed';
+
+export interface ConnectionStateChangeEvent {
+  status: ConnectionStatus;
+}

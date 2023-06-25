@@ -1,5 +1,9 @@
 import { EventTargetDelegate } from 'src/util/event-target-delegate';
-import type { CreateWebSocketI, ConnectionStateChangeEvent } from './interfaces';
+import type {
+  CreateWebSocketI,
+  ConnectionStateChangeEvent,
+  ConnectionErrorEvent
+} from './interfaces';
 
 /**
  * A wrapper around the native WebSocket class that provides automatic reconnect ability
@@ -59,12 +63,12 @@ export class WebSocketConnection extends EventTargetDelegate {
   private init (): void {
     if (this.options.maxReconnectAttempts !== null) {
       if (this.reconnectAttempts >= this.options.maxReconnectAttempts) {
-        const event = new CustomEvent(
+        const event = new CustomEvent<ConnectionErrorEvent>(
           'error',
           {
             detail: {
-              code: 1006,
-              reason: 'The maximum number of connection attempts has been exceeded'
+              code: 'CONN_MAX_RETRIES_EXCEEDED',
+              message: 'The maximum number of connection attempts has been exceeded'
             }
           }
         );
@@ -127,6 +131,17 @@ export class WebSocketConnection extends EventTargetDelegate {
       } else {
         if (!this.timedOut) {
           this.dispatchEvent(event);
+        }
+        if (this.reconnectAttempts > 0) {
+          this.dispatchEvent(new CustomEvent<ConnectionErrorEvent>(
+            'error',
+            {
+              detail: {
+                code: 'CONN_RETRY_FAILED',
+                message: 'The websocket failed to establish a connection'
+              }
+            }
+          ));
         }
         const {
           reconnectInterval,

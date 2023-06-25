@@ -27,6 +27,14 @@ export type ConnectionStatus = 'connecting' |
 'failed' |
 'closed';
 
+export type ConnectionErrorCode = 'CONN_MAX_RETRIES_EXCEEDED' |
+'CONN_RETRY_FAILED';
+
 export interface ConnectionStateChangeEvent {
   status: ConnectionStatus;
+}
+
+export interface ConnectionErrorEvent {
+  code: ConnectionErrorCode;
+  message: string;
 }

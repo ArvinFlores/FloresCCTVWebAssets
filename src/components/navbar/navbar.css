@@ -7,7 +7,6 @@
 
 .navbar--sticky-bottom {
   position: fixed;
-  z-index: 1000;
   bottom: 0;
 }
 

@@ -12,7 +12,8 @@ export function Navbar ({
     <nav
       className={classnames({
         navbar: true,
-        'navbar--sticky-bottom': stickToBottom
+        'navbar--sticky-bottom': stickToBottom,
+        'util-z-1000': true
       })}
     >
       <div

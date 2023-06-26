@@ -1,7 +1,7 @@
 import '../styles/base.css';
 import '../styles/util.css';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faVolumeHigh,
@@ -149,9 +149,31 @@ export function App (): JSX.Element {
     );
   };
 
+  useEffect(
+    () => {
+      const hasVideoFeed = wsConnStatus === 'connected' && stream != null;
+      if (hasVideoFeed && error != null) {
+        setError(null);
+      }
+    },
+    [wsConnStatus, stream, error]
+  );
+
+  useEffect(
+    () => {
+      if (wsConnStatus === 'reconnecting' && recording) {
+        handleRecordClick();
+      }
+    },
+    [wsConnStatus, recording]
+  );
+
   return (
     <ErrorBoundary fallback={renderFallbackError}>
-      <div role="alert">
+      <div
+        role="alert"
+        className="util-p-rel util-z-1000"
+      >
       {
         error && (
           <Alert
@@ -178,7 +200,7 @@ export function App (): JSX.Element {
           stream === null ||
           ['connecting', 'reconnecting'].includes(wsConnStatus as string)
         ) && (
-          <div className="util-perfect-center">
+          <div className="util-perfect-center util-z-1000">
             <Spinner size="medium" />
           </div>
         )
@@ -198,31 +220,35 @@ export function App (): JSX.Element {
                 size="2x"
               />
             </Button>
-            <Navbar
-              alignContent="center"
-              stickToBottom={true}
-            >
-              <Controls
-                previewingMedia={Boolean(previewSrc)}
-                micActive={micActive}
-                micEnabled={micEnabled}
-                recordingEnabled={recordingEnabled}
-                recording={recording}
-                onToggleMic={handleToggleMic}
-                onCancelMediaPreview={handleCancelMediaPreview}
-                onDownloadMediaPreview={handleMediaDownload}
-                onTakeScreenshot={handleTakeScreenshot}
-                onRecord={handleRecordClick}
-              />
-            </Navbar>
             <Video
               ref={videofeedRef}
               srcObject={stream}
-              className="util-fullscreen util-fullscreen--low-priority"
+              className="util-fullscreen util-z-neg"
               autoPlay={true}
               muted={videoMuted}
             />
           </>
+        )
+      }
+      {
+        Boolean(stream ?? previewSrc) && (
+          <Navbar
+            alignContent="center"
+            stickToBottom={true}
+          >
+            <Controls
+              previewingMedia={Boolean(previewSrc)}
+              micActive={micActive}
+              micEnabled={micEnabled}
+              recordingEnabled={recordingEnabled}
+              recording={recording}
+              onToggleMic={handleToggleMic}
+              onCancelMediaPreview={handleCancelMediaPreview}
+              onDownloadMediaPreview={handleMediaDownload}
+              onTakeScreenshot={handleTakeScreenshot}
+              onRecord={handleRecordClick}
+            />
+          </Navbar>
         )
       }
       <MediaPreview previewSrc={previewSrc} />

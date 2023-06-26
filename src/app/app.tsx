@@ -14,15 +14,16 @@ import { Alert } from 'src/components/alert';
 import { JSONViewer } from 'src/components/json-viewer';
 import { ErrorBoundary } from 'src/components/error-boundary';
 import { Video } from 'src/components/video';
-import type { GetRemoteStreamErrI } from 'src/services/get-remote-stream';
+import { Spinner } from 'src/components/spinner';
 import { useRemoteStream } from 'src/hooks/use-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
+import type { AppError } from './interfaces';
 
 export function App (): JSX.Element {
-  const [loadError, setLoadError] = useState<GetRemoteStreamErrI | null>(null);
+  const [error, setError] = useState<AppError | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string>('');
   const [recording, setRecording] = useState<boolean>(false);
   const [micEnabled, setmicEnabled] = useState<boolean>(false);
@@ -30,15 +31,42 @@ export function App (): JSX.Element {
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const audioRef = useRef<MediaStream | null>(null);
-  const streamBusyErr = loadError?.code === 'STREAM_BUSY';
   const {
     stream,
+    wsConnStatus,
     startVideoRecording,
     stopVideoRecording,
     getPeerConnection
   } = useRemoteStream({
     wsUrl: 'wss://192.168.1.213:9000/stream',
-    onError: setLoadError,
+    onError: (error) => {
+      const { code } = error;
+
+      if (code === 'STREAM_BUSY') {
+        setError({
+          message: 'Sorry, someone else is currently using the camera',
+          dismissable: false
+        });
+      } else if (code === 'MEDIA_REC_UNSUPPORTED') {
+        setError({
+          message: 'We were unable to record video',
+          dismissable: true,
+          details: { ...error }
+        });
+      } else if (code === 'CONN_MAX_RETRIES_EXCEEDED') {
+        setError({
+          message: 'We were unable to connect to the camera, please try refreshing the browser',
+          dismissable: false,
+          details: { ...error }
+        });
+      } else {
+        setError({
+          message: 'Trying to connect to the camera, please wait',
+          dismissable: false,
+          details: { ...error }
+        });
+      }
+    },
     onVideoRecorded: (blob: Blob): void => {
       setPreviewSrc(URL.createObjectURL(blob));
     }
@@ -98,6 +126,9 @@ export function App (): JSX.Element {
   const handleToggleVideoAudio = (): void => {
     setVideoMuted(muted => !muted);
   };
+  const handleCloseAlert = (): void => {
+    setError(null);
+  };
   const renderFallbackError = (error: Error): JSX.Element => {
     return (
       <Alert type="danger">
@@ -111,65 +142,76 @@ export function App (): JSX.Element {
     <ErrorBoundary fallback={renderFallbackError}>
       <div role="alert">
       {
-        loadError && (
+        error && (
           <Alert
             type="danger"
-            expandableLabel={streamBusyErr ? undefined : 'Details'}
+            expandableLabel={error.details && 'Details'}
             expandableContent={
-              streamBusyErr ?
-                undefined :
-                  (
-                    <div className="util-mt-2">
-                      <JSONViewer>
-                        {loadError}
-                      </JSONViewer>
-                    </div>
-                  )
+              error.details && (
+                <div className="util-mt-2">
+                  <JSONViewer>
+                    {error.details}
+                  </JSONViewer>
+                </div>
+              )
             }
+            onDismiss={error.dismissable ? handleCloseAlert : undefined}
           >
-            {
-              streamBusyErr ?
-                loadError.message :
-                'There was a problem connecting to the camera, please try refreshing the browser'
-            }
+            {error.message}
           </Alert>
         )
       }
       </div>
-      <Navbar
-        alignContent="center"
-        stickToBottom={true}
-      >
-        <Controls
-          previewingMedia={Boolean(previewSrc)}
-          micEnabled={micEnabled}
-          recording={recording}
-          onToggleMic={handleToggleMic}
-          onCancelMediaPreview={handleCancelMediaPreview}
-          onDownloadMediaPreview={handleMediaDownload}
-          onTakeScreenshot={handleTakeScreenshot}
-          onRecord={handleRecordClick}
-        />
-      </Navbar>
-      <Button
-        ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
-        className="util-ml-2 util-mt-2"
-        variant="see-through"
-        circular={true}
-        onClick={handleToggleVideoAudio}
-      >
-        <FontAwesomeIcon
-          icon={videoMuted ? faVolumeXmark : faVolumeHigh}
-          size="2x"
-        />
-      </Button>
-      <Video
-        ref={videofeedRef}
-        srcObject={stream}
-        className="util-fullscreen util-fullscreen--low-priority"
-        autoPlay={true}
-        muted={videoMuted}
-      />
+      {
+        !['closed', 'failed'].includes(wsConnStatus as string) && (
+          stream === null ||
+          ['connecting', 'reconnecting'].includes(wsConnStatus as string)
+        ) && (
+          <div className="util-perfect-center">
+            <Spinner size="medium" />
+          </div>
+        )
+      }
+      {
+        stream && (
+          <>
+            <Button
+              ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
+              className="util-ml-2 util-mt-2"
+              variant="see-through"
+              circular={true}
+              onClick={handleToggleVideoAudio}
+            >
+              <FontAwesomeIcon
+                icon={videoMuted ? faVolumeXmark : faVolumeHigh}
+                size="2x"
+              />
+            </Button>
+            <Navbar
+              alignContent="center"
+              stickToBottom={true}
+            >
+              <Controls
+                previewingMedia={Boolean(previewSrc)}
+                micEnabled={micEnabled}
+                recording={recording}
+                onToggleMic={handleToggleMic}
+                onCancelMediaPreview={handleCancelMediaPreview}
+                onDownloadMediaPreview={handleMediaDownload}
+                onTakeScreenshot={handleTakeScreenshot}
+                onRecord={handleRecordClick}
+              />
+            </Navbar>
+            <Video
+              ref={videofeedRef}
+              srcObject={stream}
+              className="util-fullscreen util-fullscreen--low-priority"
+              autoPlay={true}
+              muted={videoMuted}
+            />
+          </>
+        )
+      }
       <MediaPreview previewSrc={previewSrc} />
     </ErrorBoundary>
   );

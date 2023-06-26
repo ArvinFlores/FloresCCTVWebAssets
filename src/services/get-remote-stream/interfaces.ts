@@ -1,4 +1,7 @@
-import type { ConnectionStateChangeEvent } from 'src/services/websocket-connection';
+import type {
+  ConnectionStateChangeEvent,
+  ConnectionErrorCode
+} from 'src/services/websocket-connection';
 
 export type ErrorCodes = 'WS_ERR' |
 'STREAM_BUSY' |
@@ -7,12 +10,13 @@ export type ErrorCodes = 'WS_ERR' |
 'PC_CREATE_ANSWER' |
 'PC_SET_REMOTE_DESC' |
 'PC_SET_LOCAL_DESC' |
-'PC_CONN_ERR';
+'PC_CONN_ERR' |
+ConnectionErrorCode;
 
 export interface GetRemoteStreamErrI {
   message: string;
   code: ErrorCodes;
-  details?: object;
+  details?: string;
 }
 
 export interface GetRemoteStreamI {

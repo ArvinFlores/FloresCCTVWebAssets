@@ -13,6 +13,7 @@ export function useRemoteStream ({
 }: UseRemoteStreamI): UseRemoteStreamValue {
   const [stream, setStream] = useState<UseRemoteStreamValue['stream']>(null);
   const [wsConnStatus, setWSConnStatus] = useState<UseRemoteStreamValue['wsConnStatus']>(null);
+  const prevWSConnStatusRef = useRef<UseRemoteStreamValue['wsConnStatus']>(null);
   const streamRef = useRef<GetRemoteStreamValue | null>(null);
   const {
     startVideoRecording,
@@ -28,7 +29,15 @@ export function useRemoteStream ({
           setStream(ev.streams[0]);
         },
         onWSConnectionChange: (ev) => {
-          setWSConnStatus(ev.detail.status);
+          const { status } = ev.detail;
+          const prevStatus = prevWSConnStatusRef.current;
+
+          if (prevStatus === 'connected' && status !== 'connected') {
+            setStream(null);
+          }
+
+          prevWSConnStatusRef.current = status;
+          setWSConnStatus(status);
         },
         onError,
         onVideoRecorded

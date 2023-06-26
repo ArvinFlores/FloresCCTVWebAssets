@@ -12,7 +12,7 @@ export function getRemoteStream ({
   onVideoRecorded,
   onWSConnectionChange
 }: GetRemoteStreamI): GetRemoteStreamValue {
-  const ws = new WebSocketConnection(wsUrl);
+  const ws = new WebSocketConnection(wsUrl, [], { maxReconnectAttempts: 8 });
   const pcConfig = {
     iceServers: [
       {
@@ -74,7 +74,7 @@ export function getRemoteStream ({
           onError?.({
             message: 'The peer connection failed to add the ICE candidate',
             code: 'PC_ADD_ICE_CAND',
-            details: err
+            details: err.message ?? ''
           });
         });
     });
@@ -116,7 +116,7 @@ export function getRemoteStream ({
                     onError?.({
                       message: 'The peer connection failed to set the local description',
                       code: 'PC_SET_LOCAL_DESC',
-                      details: err
+                      details: err.message ?? ''
                     });
                   });
               })
@@ -124,7 +124,7 @@ export function getRemoteStream ({
                 onError?.({
                   message: 'The peer connection failed to create an answer',
                   code: 'PC_CREATE_ANSWER',
-                  details: err
+                  details: err.message ?? ''
                 });
               });
           })
@@ -135,7 +135,7 @@ export function getRemoteStream ({
                 'perhaps an unsupported codec on this browser'
               ].join(' '),
               code: 'PC_SET_REMOTE_DESC',
-              details: err
+              details: err.message ?? ''
             });
           });
         break;
@@ -145,6 +145,7 @@ export function getRemoteStream ({
             message: data,
             code: 'STREAM_BUSY'
           });
+          ws.close();
         }
         break;
       case 'iceCandidate':
@@ -157,11 +158,9 @@ export function getRemoteStream ({
     }
   };
   ws.onerror = (evt) => {
-    onError?.({
-      message: 'The connection with the websocket has been closed due to an error',
-      code: 'WS_ERR',
-      details: evt
-    });
+    if ('detail' in evt) {
+      onError?.(evt.detail);
+    }
   };
   ws.onclose = () => {
     pc?.close();
@@ -184,7 +183,7 @@ export function getRemoteStream ({
         return onError?.({
           message: 'Your browser does not support recording media',
           code: 'MEDIA_REC_UNSUPPORTED',
-          details: e
+          details: e.message ?? ''
         });
       }
 

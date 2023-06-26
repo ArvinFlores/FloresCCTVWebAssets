@@ -5,7 +5,6 @@ import type {
 
 export type ErrorCodes = 'WS_ERR' |
 'STREAM_BUSY' |
-'MEDIA_REC_UNSUPPORTED' |
 'PC_ADD_ICE_CAND' |
 'PC_CREATE_ANSWER' |
 'PC_SET_REMOTE_DESC' |

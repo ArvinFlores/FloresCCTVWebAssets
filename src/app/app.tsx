@@ -25,8 +25,10 @@ import type { AppError } from './interfaces';
 export function App (): JSX.Element {
   const [error, setError] = useState<AppError | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string>('');
+  const [recordingEnabled, setRecordingEnabled] = useState<boolean>(true);
   const [recording, setRecording] = useState<boolean>(false);
-  const [micEnabled, setmicEnabled] = useState<boolean>(false);
+  const [micActive, setMicActive] = useState<boolean>(false);
+  const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
@@ -46,12 +48,6 @@ export function App (): JSX.Element {
         setError({
           message: 'Sorry, someone else is currently using the camera',
           dismissable: false
-        });
-      } else if (code === 'MEDIA_REC_UNSUPPORTED') {
-        setError({
-          message: 'We were unable to record video',
-          dismissable: true,
-          details: { ...error }
         });
       } else if (code === 'CONN_MAX_RETRIES_EXCEEDED') {
         setError({
@@ -90,19 +86,27 @@ export function App (): JSX.Element {
     setPreviewSrc('');
   };
   const handleRecordClick = (): void => {
-    const stopRecording = (): void => {
-      stopVideoRecording?.();
-      setRecording(false);
-      recordingRef.current = undefined;
-    };
-
-    if (recording) {
-      clearTimeout(recordingRef.current);
-      stopRecording();
-    } else {
-      startVideoRecording?.();
-      setRecording(true);
-      recordingRef.current = setTimeout(stopRecording, RECORDING_LIMIT_SECS * 1000);
+    try {
+      const stopRecording = (): void => {
+        stopVideoRecording?.();
+        setRecording(false);
+        recordingRef.current = undefined;
+      };
+      if (recording) {
+        clearTimeout(recordingRef.current);
+        stopRecording();
+      } else {
+        startVideoRecording?.();
+        setRecording(true);
+        recordingRef.current = setTimeout(stopRecording, RECORDING_LIMIT_SECS * 1000);
+      }
+    } catch (e) {
+      setError({
+        message: 'We were unable to record video',
+        dismissable: true,
+        details: { message: e.message }
+      });
+      setRecordingEnabled(false);
     }
   };
   const handleToggleMic = (): void => {
@@ -111,16 +115,23 @@ export function App (): JSX.Element {
       const enabled = !audioTrack.enabled;
 
       audioTrack.enabled = enabled;
-      setmicEnabled(enabled);
+      setMicActive(enabled);
     } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
           const pc = getPeerConnection?.();
           audioRef.current = stream;
           if (pc) stream.getTracks().forEach(track => pc.addTrack(track, stream));
-          setmicEnabled(true);
+          setMicActive(true);
         })
-        .catch(console.error);
+        .catch((err) => {
+          setError({
+            message: 'Your microphone was unable to be turned on',
+            dismissable: true,
+            details: { message: err.message }
+          });
+          setMicEnabled(false);
+        });
     }
   };
   const handleToggleVideoAudio = (): void => {
@@ -193,7 +204,9 @@ export function App (): JSX.Element {
             >
               <Controls
                 previewingMedia={Boolean(previewSrc)}
+                micActive={micActive}
                 micEnabled={micEnabled}
+                recordingEnabled={recordingEnabled}
                 recording={recording}
                 onToggleMic={handleToggleMic}
                 onCancelMediaPreview={handleCancelMediaPreview}

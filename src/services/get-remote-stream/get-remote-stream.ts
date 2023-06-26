@@ -180,11 +180,7 @@ export function getRemoteStream ({
           createRecorderOptions()
         );
       } catch (e) {
-        return onError?.({
-          message: 'Your browser does not support recording media',
-          code: 'MEDIA_REC_UNSUPPORTED',
-          details: e.message ?? ''
-        });
+        throw Error(e);
       }
 
       recorder.onstop = () => {

@@ -9,6 +9,7 @@ export function RecordButton ({
   active,
   duration,
   ariaLabel,
+  disabled,
   onClick
 }: RecordButtonProps): JSX.Element {
   if (active) {
@@ -16,6 +17,7 @@ export function RecordButton ({
       <button
         aria-label={ariaLabel}
         className="record-button--active"
+        disabled={disabled}
         onClick={onClick}
       >
         <FontAwesomeIcon
@@ -47,7 +49,8 @@ export function RecordButton ({
       ariaLabel={ariaLabel}
       circular={true}
       outline={true}
-      variant="danger"
+      variant={disabled ? undefined : 'danger'}
+      disabled={disabled}
       onClick={onClick}
     >
       <FontAwesomeIcon

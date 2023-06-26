@@ -13,8 +13,10 @@ import type { ControlsProps } from './interfaces';
 
 export function Controls ({
   previewingMedia,
+  micActive,
   micEnabled,
   recording,
+  recordingEnabled,
   onToggleMic,
   onCancelMediaPreview,
   onDownloadMediaPreview,
@@ -54,14 +56,15 @@ export function Controls ({
               <>
                 <li>
                   <Button
-                    ariaLabel={micEnabled ? 'Turn off mic' : 'Turn on mic'}
-                    outline={!micEnabled}
+                    ariaLabel={micActive ? 'Turn off mic' : 'Turn on mic'}
+                    outline={!micActive}
                     circular={true}
-                    variant={micEnabled ? 'danger' : undefined}
+                    variant={micActive ? 'danger' : undefined}
+                    disabled={!micEnabled}
                     onClick={onToggleMic}
                   >
                     <FontAwesomeIcon
-                      icon={micEnabled ? faMicrophone : faMicrophoneSlash}
+                      icon={micActive ? faMicrophone : faMicrophoneSlash}
                       size="2x"
                     />
                   </Button>
@@ -87,6 +90,7 @@ export function Controls ({
                     ariaLabel={recording ? 'Stop recording' : 'Start recording'}
                     active={recording}
                     duration={RECORDING_LIMIT_SECS}
+                    disabled={!recordingEnabled}
                     onClick={onRecord}
                   />
                 </li>

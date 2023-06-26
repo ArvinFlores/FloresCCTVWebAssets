@@ -168,6 +168,16 @@ export function App (): JSX.Element {
     [wsConnStatus, recording]
   );
 
+  useEffect(
+    () => {
+      if (wsConnStatus === 'reconnecting' && audioRef.current) {
+        if (micActive) setMicActive(false);
+        audioRef.current = null;
+      }
+    },
+    [wsConnStatus, micActive]
+  );
+
   return (
     <ErrorBoundary fallback={renderFallbackError}>
       <div

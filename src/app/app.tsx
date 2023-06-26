@@ -172,7 +172,7 @@ export function App (): JSX.Element {
     <ErrorBoundary fallback={renderFallbackError}>
       <div
         role="alert"
-        className="util-p-rel util-z-1000"
+        className="util-pos-rel util-z-1000"
       >
       {
         error && (

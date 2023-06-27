@@ -61,6 +61,7 @@ export function Controls ({
                     circular={true}
                     variant={micActive ? 'danger' : undefined}
                     disabled={!micEnabled}
+                    style={{ padding: micActive ? '1rem 1.31rem' : '1rem .9rem' }}
                     onClick={onToggleMic}
                   >
                     <FontAwesomeIcon

@@ -221,6 +221,7 @@ export function App (): JSX.Element {
             <Button
               ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
               className="util-ml-2 util-mt-2"
+              style={{ padding: videoMuted ? '1rem' : '1rem .9rem' }}
               variant="see-through"
               circular={true}
               onClick={handleToggleVideoAudio}

@@ -5,5 +5,10 @@ export type ButtonProps = PropsWithChildren<{
   circular?: boolean;
   variant?: 'danger' | 'primary' | 'see-through';
   ariaLabel?: string;
-  className?: string;
-}> & Pick<ButtonHTMLAttributes<unknown>, 'disabled' | 'onClick'>;
+}> & Pick<
+ButtonHTMLAttributes<unknown>,
+'disabled' |
+'onClick' |
+'style' |
+'className'
+>;

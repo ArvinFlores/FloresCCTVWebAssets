@@ -4,13 +4,15 @@
   padding: 0;
   cursor: pointer;
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .record-button__icon--active {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -50%);
   color: red;
 }
 

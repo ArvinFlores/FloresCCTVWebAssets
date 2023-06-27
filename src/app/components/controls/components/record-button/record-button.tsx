@@ -27,14 +27,14 @@ export function RecordButton ({
         />
         <svg
           className="record-button__ring--active"
-          height="65"
-          width="65"
+          height="60"
+          width="60"
           style={{ animationDuration: `${duration}s` }}
         >
           <circle
-            cx="32"
-            cy="32"
-            r="28"
+            cx="30"
+            cy="30"
+            r="27"
             stroke="red"
             strokeWidth="6"
             fill="transparent"

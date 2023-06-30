@@ -13,18 +13,12 @@ export function Navbar ({
       className={classnames({
         navbar: true,
         'navbar--sticky-bottom': stickToBottom,
+        'navbar--pull-right': alignContent === 'right',
+        'navbar--pull-center': alignContent === 'center',
         'util-z-1000': true
       })}
     >
-      <div
-        className={classnames({
-          navbar__content: true,
-          'navbar__content--right': alignContent === 'right',
-          'navbar__content--center': alignContent === 'center'
-        })}
-      >
         {children}
-      </div>
     </nav>
   );
 }

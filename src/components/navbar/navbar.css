@@ -3,6 +3,9 @@
   background-color: rgba(0, 0, 0, .6);
   padding: 1rem;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  min-height: 6rem;
 }
 
 .navbar--sticky-bottom {
@@ -10,14 +13,10 @@
   bottom: 0;
 }
 
-.navbar__content {
-  display: flex;
-}
-
-.navbar__content--right {
+.navbar--pull-right {
   justify-content: flex-end;
 }
 
-.navbar__content--center {
+.navbar--pull-center {
   justify-content: center;
 }

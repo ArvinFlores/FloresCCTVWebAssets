@@ -33,6 +33,7 @@ finally run the following to start the development server on port 7777:
 npm start
 ```
 You should now be able to access the application on `https://localhost:7777`
+
 Note: The dev server uses `https` so that the browser can access the device's microphone and camera
 
 ## Production
@@ -42,6 +43,7 @@ To create a production bundle run the following:
 npm run build
 ```
 This will place all of the production assets into the `build/` directory
+
 Note: The assets are all hashed to take advantage of browser caching and will only change when the actual content of the file changes
 
 ## Scripts

@@ -2,28 +2,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
   entry: './src/index.tsx',
-  devtool: 'eval-cheap-module-source-map',
-  optimization: {
-    runtimeChunk: 'single'
-  },
-  devServer: {
-    static: '../build',
-    port: 7777,
-    https: true
-  },
-  output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, '../build'),
-    clean: true
-  },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'FloresCCTV',
       template: path.join(__dirname, '../static', 'index.html'),
       favicon: path.join(__dirname, '../static', 'favicon.ico'),
-      inject: 'body'
+      inject: 'body',
+      scriptLoading: 'blocking'
     })
   ],
   module: {

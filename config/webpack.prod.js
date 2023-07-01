@@ -3,6 +3,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const base = require('./webpack.base');
 
 module.exports = merge(base, {
@@ -15,6 +16,9 @@ module.exports = merge(base, {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static'
     })
   ],
   module: {

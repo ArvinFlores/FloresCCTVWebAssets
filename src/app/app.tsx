@@ -3,10 +3,8 @@ import '../styles/util.css';
 
 import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faVolumeHigh,
-  faVolumeXmark
-} from '@fortawesome/free-solid-svg-icons';
+import { faVolumeHigh } from '@fortawesome/free-solid-svg-icons/faVolumeHigh';
+import { faVolumeXmark } from '@fortawesome/free-solid-svg-icons/faVolumeXmark';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
 import { Button } from 'src/components/button';

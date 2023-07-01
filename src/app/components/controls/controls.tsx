@@ -1,10 +1,8 @@
-import {
-  faCamera,
-  faXmark,
-  faDownload,
-  faMicrophone,
-  faMicrophoneSlash
-} from '@fortawesome/free-solid-svg-icons';
+import { faCamera } from '@fortawesome/free-solid-svg-icons/faCamera';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
+import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
+import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone';
+import { faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons/faMicrophoneSlash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Button } from 'src/components/button';

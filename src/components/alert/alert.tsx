@@ -2,7 +2,9 @@ import './alert.css';
 
 import { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretRight, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { classnames } from 'src/util/classnames';
 import { uuid } from 'src/util/uuid';
 import type { AlertProps } from './interfaces';

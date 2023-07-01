@@ -1,4 +1,5 @@
 import { WebSocketConnection } from 'src/services/websocket-connection';
+import { isMobile } from 'src/util/is-mobile';
 import { createRecorderOptions } from './helpers';
 import type { GetRemoteStreamI, GetRemoteStreamValue } from './interfaces';
 
@@ -184,7 +185,10 @@ export function getRemoteStream ({
       }
 
       recorder.onstop = () => {
-        onVideoRecorded?.(new Blob(recordedBlobs, { type: 'video/webm' }));
+        onVideoRecorded?.(new Blob(
+          recordedBlobs,
+          { type: isMobile() ? 'video/mp4' : 'video/webm' }
+        ));
 
         recordedBlobs = [];
         recorder = null;

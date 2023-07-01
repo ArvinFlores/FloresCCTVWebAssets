@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack serve --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js",
+    "build:analyze": "webpack --config ./config/webpack.prod.js --env analyze=true",
     "lint": "eslint src --ext js,jsx,ts,tsx"
   },
   "author": "Arvin Flores",

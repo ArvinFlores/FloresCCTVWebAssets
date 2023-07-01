@@ -53,3 +53,4 @@ Note: The assets are all hashed to take advantage of browser caching and will on
 | start | starts the dev server on `https://localhost:7777` |
 | lint | lints the js/ts files |
 | build | creates production assets and places them in the `build/` directory |
+| build:analyze | does the same as the `build` script but includes a bundle analysis report |

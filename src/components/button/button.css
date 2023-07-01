@@ -4,6 +4,7 @@
   padding: .5rem 1.2rem;
   display: flex;
   align-items: center;
+  color: black;
 }
 
 .btn--disabled {

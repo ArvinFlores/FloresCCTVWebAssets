@@ -62,6 +62,7 @@ export function App (): JSX.Element {
       }
     },
     onVideoRecorded: (blob: Blob): void => {
+      setRecording(false);
       setPreviewSrc(URL.createObjectURL(blob));
     }
   });
@@ -87,7 +88,6 @@ export function App (): JSX.Element {
     try {
       const stopRecording = (): void => {
         stopVideoRecording?.();
-        setRecording(false);
         recordingRef.current = undefined;
       };
       if (recording) {
@@ -96,7 +96,10 @@ export function App (): JSX.Element {
       } else {
         startVideoRecording?.();
         setRecording(true);
-        recordingRef.current = setTimeout(stopRecording, RECORDING_LIMIT_SECS * 1000);
+        recordingRef.current = setTimeout(
+          stopRecording,
+          (RECORDING_LIMIT_SECS * 1000) - 500
+        );
       }
     } catch (e) {
       setError({

@@ -1,3 +1,4 @@
+import { Video } from 'src/components/video';
 import type { MediaPreviewProps } from './interfaces';
 
 export function MediaPreview ({ previewSrc }: MediaPreviewProps): JSX.Element {
@@ -13,12 +14,13 @@ export function MediaPreview ({ previewSrc }: MediaPreviewProps): JSX.Element {
       }
       {
         previewSrc.startsWith('blob:') && (
-          <video
+          <Video
             className="util-fullscreen util-z-1"
             src={previewSrc}
             autoPlay={true}
             muted={true}
             loop={true}
+            playsInline={true}
           />
         )
       }

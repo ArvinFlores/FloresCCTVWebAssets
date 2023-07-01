@@ -237,6 +237,7 @@ export function App (): JSX.Element {
               className="util-fullscreen util-z-neg"
               autoPlay={true}
               muted={videoMuted}
+              playsInline={true}
             />
           </>
         )

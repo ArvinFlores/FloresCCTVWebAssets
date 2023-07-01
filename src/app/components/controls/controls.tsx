@@ -1,3 +1,5 @@
+import './controls.css';
+
 import { faCamera } from '@fortawesome/free-solid-svg-icons/faCamera';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
@@ -55,11 +57,11 @@ export function Controls ({
                 <li>
                   <Button
                     ariaLabel={micActive ? 'Turn off mic' : 'Turn on mic'}
+                    className="controls__btn"
                     outline={!micActive}
                     circular={true}
                     variant={micActive ? 'danger' : undefined}
                     disabled={!micEnabled}
-                    style={{ padding: micActive ? '1rem 1.31rem' : '1rem .9rem' }}
                     onClick={onToggleMic}
                   >
                     <FontAwesomeIcon
@@ -73,6 +75,7 @@ export function Controls ({
                     <li>
                       <Button
                         ariaLabel="Take screenshot"
+                        className="controls__btn"
                         circular={true}
                         onClick={onTakeScreenshot}
                       >
@@ -87,6 +90,7 @@ export function Controls ({
                 <li>
                   <RecordButton
                     ariaLabel={recording ? 'Stop recording' : 'Start recording'}
+                    className="controls__btn"
                     active={recording}
                     duration={RECORDING_LIMIT_SECS}
                     disabled={!recordingEnabled}

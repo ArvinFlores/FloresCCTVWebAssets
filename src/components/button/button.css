@@ -2,8 +2,6 @@
   border: none;
   cursor: pointer;
   padding: .5rem 1.2rem;
-  display: flex;
-  align-items: center;
   color: black;
 }
 
@@ -21,6 +19,10 @@
 .btn--circular {
   padding: 1rem;
   border-radius: 100%;
+  aspect-ratio: 2;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
 }
 
 .btn--danger {

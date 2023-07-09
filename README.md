@@ -28,7 +28,16 @@ then install the dependencies by running:
 ```
 npm install
 ```
-finally run the following to start the development server on port 7777:
+
+### Create env file
+In the root of the project, create a `.env.development` file and add the following
+```
+CAMERA_IP=<raspberry pi ip>
+```
+Where `<raspberry pi ip>` is whatever the IP address of the raspberry pi is on the LAN, [this section](https://github.com/ArvinFlores/FloresCCTVStreamServer#ssh-into-the-pi) on the server repo guide explains how you can find the raspberry pi on your LAN
+
+### Start the dev server
+You can run the following to start the development server on port 7777:
 ```
 npm start
 ```

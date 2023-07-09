@@ -13,13 +13,13 @@ module.exports = (env) => {
     })
   ];
 
-  if (Boolean(env.analyze)) {
+  if (Boolean(env.ANALYZE)) {
     plugins.push(new BundleAnalyzerPlugin({
       analyzerMode: 'static'
     }));
   }
 
-  return merge(base, {
+  return merge(base(env), {
     mode: 'production',
     output: {
       filename: '[name].[contenthash].js',

@@ -38,7 +38,7 @@ export function App (): JSX.Element {
     stopVideoRecording,
     getPeerConnection
   } = useRemoteStream({
-    wsUrl: 'wss://192.168.1.213:9000/stream',
+    wsUrl: `wss://${CAMERA_IP}:9000/stream`,
     onError: (error) => {
       const { code } = error;
 

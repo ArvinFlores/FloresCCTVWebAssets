@@ -1,0 +1,5 @@
+{
+  "name": "@types/florescctv",
+  "main": "./global.d.ts",
+  "types": "./global.d.ts"
+}

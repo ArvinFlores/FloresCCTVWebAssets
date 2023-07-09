@@ -1,7 +1,7 @@
 const { merge } = require('webpack-merge');
 const base = require('./webpack.base');
 
-module.exports = merge(base, {
+module.exports = (env) => merge(base(env), {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
   optimization: {

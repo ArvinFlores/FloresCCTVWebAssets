@@ -13,7 +13,7 @@ module.exports = (env) => {
     })
   ];
 
-  if (Boolean(env.ANALYZE)) {
+  if (env.ANALYZE === "true") {
     plugins.push(new BundleAnalyzerPlugin({
       analyzerMode: 'static'
     }));

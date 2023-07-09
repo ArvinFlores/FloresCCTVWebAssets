@@ -7,7 +7,7 @@
     "start": "webpack serve --config ./config/webpack.dev.js --env APP_ENV=development",
     "build": "webpack --config ./config/webpack.prod.js --env APP_ENV=production",
     "build:analyze": "webpack --config ./config/webpack.prod.js --env APP_ENV=production --env ANALYZE=true",
-    "lint": "eslint src --ext js,jsx,ts,tsx"
+    "lint": "eslint config src --ext js,jsx,ts,tsx"
   },
   "author": "Arvin Flores",
   "license": "ISC",

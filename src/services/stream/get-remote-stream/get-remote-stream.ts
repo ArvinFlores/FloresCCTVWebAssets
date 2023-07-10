@@ -1,6 +1,5 @@
 import { WebSocketConnection } from 'src/services/websocket-connection';
-import { isMobile } from 'src/util/is-mobile';
-import { createRecorderOptions } from './helpers';
+import { createRecordingHelpers } from '../helpers';
 import type { GetRemoteStreamI, GetRemoteStreamValue } from '../interfaces';
 
 /**
@@ -26,9 +25,11 @@ export function getRemoteStream ({
   };
   let iceCandidates: RTCIceCandidate[] = [];
   let pc: RTCPeerConnection | null = null;
-  let recorder: MediaRecorder | null = null;
-  let recordedBlobs: Blob[] = [];
   let remoteDesc = false;
+  const {
+    startRecording,
+    stopRecording
+  } = createRecordingHelpers();
 
   function createPeerConnection (): void {
     pc = new RTCPeerConnection(pcConfig);
@@ -172,42 +173,15 @@ export function getRemoteStream ({
   ws.onconnectionstatechange = (ev) => onWSConnectionChange?.(ev);
 
   return {
-    startVideoRecording () {
-      const tracks = pc?.getReceivers().map(rc => rc.track);
-
-      if (!tracks || !tracks.length || recorder?.state === 'recording') return;
-
-      try {
-        recorder = new MediaRecorder(
-          new MediaStream(tracks),
-          createRecorderOptions()
-        );
-      } catch (e) {
-        throw Error(e);
-      }
-
-      recorder.onstop = () => {
-        onVideoRecorded?.(new Blob(
-          recordedBlobs,
-          { type: isMobile() ? 'video/mp4' : 'video/webm' }
-        ));
-
-        recordedBlobs = [];
-        recorder = null;
-      };
-      recorder.ondataavailable = (evt) => {
-        if (evt.data.size > 0) {
-          recordedBlobs.push(evt.data);
-        }
-      };
-
-      recorder.start();
-    },
-    stopVideoRecording () {
-      recorder?.stop();
-    },
     getPeerConnection () {
       return pc;
-    }
+    },
+    startVideoRecording () {
+      startRecording(
+        pc?.getReceivers().map(rc => rc.track) ?? [],
+        onVideoRecorded
+      );
+    },
+    stopVideoRecording: stopRecording
   };
 }

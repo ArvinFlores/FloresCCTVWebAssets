@@ -1,7 +1,7 @@
 import type {
   GetRemoteStreamI,
   GetRemoteStreamValue
-} from 'src/services/get-remote-stream';
+} from 'src/services/stream';
 import type { ConnectionStatus } from 'src/services/websocket-connection';
 
 export type WSConnStatus = 'connecting' |

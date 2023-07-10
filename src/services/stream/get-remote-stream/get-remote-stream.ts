@@ -1,7 +1,7 @@
 import { WebSocketConnection } from 'src/services/websocket-connection';
 import { isMobile } from 'src/util/is-mobile';
 import { createRecorderOptions } from './helpers';
-import type { GetRemoteStreamI, GetRemoteStreamValue } from './interfaces';
+import type { GetRemoteStreamI, GetRemoteStreamValue } from '../interfaces';
 
 /**
  * Gets the camera stream from the raspberry pi
@@ -32,7 +32,9 @@ export function getRemoteStream ({
 
   function createPeerConnection (): void {
     pc = new RTCPeerConnection(pcConfig);
-    pc.ontrack = onStream ?? null;
+    pc.ontrack = (ev) => {
+      onStream?.(ev.streams[0]);
+    };
     pc.onicecandidate = (evt) => {
       if (evt.candidate) {
         const {

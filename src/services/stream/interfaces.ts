@@ -1,7 +1,7 @@
 import type {
   ConnectionStateChangeEvent,
   ConnectionErrorCode
-} from 'src/services/websocket-connection';
+} from '../websocket-connection';
 
 export type ErrorCodes = 'WS_ERR' |
 'STREAM_BUSY' |
@@ -26,7 +26,7 @@ export interface GetRemoteStreamI {
   /**
    * Success callback when the stream has been retrieved
    */
-  onStream?: (ev: RTCTrackEvent) => void;
+  onStream?: (stream: MediaStream) => void;
   /**
    * Error callback with details about the error
    */

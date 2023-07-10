@@ -3,7 +3,8 @@ import {
   useEffect,
   useRef
 } from 'react';
-import { getRemoteStream, type GetRemoteStreamValue } from 'src/services/get-remote-stream';
+import { getRemoteStream } from 'src/services/stream/get-remote-stream';
+import type { GetRemoteStreamValue } from 'src/services/stream';
 import type { UseRemoteStreamI, UseRemoteStreamValue } from './interfaces';
 
 export function useRemoteStream ({
@@ -25,8 +26,8 @@ export function useRemoteStream ({
     () => {
       streamRef.current = getRemoteStream({
         wsUrl,
-        onStream: (ev) => {
-          setStream(ev.streams[0]);
+        onStream: (stream) => {
+          setStream(stream);
         },
         onWSConnectionChange: (ev) => {
           const { status } = ev.detail;

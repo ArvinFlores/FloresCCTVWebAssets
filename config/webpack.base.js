@@ -29,7 +29,8 @@ module.exports = {
       inject: 'body',
       scriptLoading: 'blocking'
     }),
-    new webpack.DefinePlugin(envConfig)
+    new webpack.DefinePlugin(envConfig),
+    new webpack.ProvidePlugin({ adapter: ['webrtc-adapter', 'default'] })
   ],
   module: {
     rules: [

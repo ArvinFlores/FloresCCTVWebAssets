@@ -19,7 +19,7 @@ module.exports = (env) => {
     }));
   }
 
-  return merge(base(env), {
+  return merge(base, {
     mode: 'production',
     output: {
       filename: '[name].[contenthash].js',

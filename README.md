@@ -30,7 +30,7 @@ npm install
 ```
 
 ### Create env file
-In the root of the project, create a `.env.development` file and add the following
+In the root of the project, create a `.env` file and add the following
 ```
 CAMERA_IP=<raspberry pi ip>
 ```

@@ -4,9 +4,9 @@
   "description": "Static assets for FloresCCTV web application",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --config ./config/webpack.dev.js --env APP_ENV=development",
-    "build": "webpack --config ./config/webpack.prod.js --env APP_ENV=production",
-    "build:analyze": "webpack --config ./config/webpack.prod.js --env APP_ENV=production --env ANALYZE=true",
+    "start": "webpack serve --config ./config/webpack.dev.js",
+    "build": "webpack --config ./config/webpack.prod.js",
+    "build:analyze": "webpack --config ./config/webpack.prod.js --env ANALYZE=true",
     "lint": "eslint config src --ext js,jsx,ts,tsx"
   },
   "author": "Arvin Flores",

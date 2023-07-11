@@ -30,13 +30,14 @@ export function App (): JSX.Element {
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
-  const audioRef = useRef<MediaStream | null>(null);
   const {
     stream,
     wsConnStatus,
     startVideoRecording,
     stopVideoRecording,
-    getPeerConnection
+    hasLocalStream,
+    addLocalStream,
+    toggleLocalAudio
   } = useRemoteStream({
     wsUrl: `wss://${CAMERA_IP}:9000/stream`,
     onError: (error) => {
@@ -111,18 +112,12 @@ export function App (): JSX.Element {
     }
   };
   const handleToggleMic = (): void => {
-    if (audioRef.current) {
-      const audioTrack = audioRef.current.getAudioTracks()[0];
-      const enabled = !audioTrack.enabled;
-
-      audioTrack.enabled = enabled;
-      setMicActive(enabled);
+    if (hasLocalStream?.()) {
+      setMicActive(toggleLocalAudio?.() ?? false);
     } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
-          const pc = getPeerConnection?.();
-          audioRef.current = stream;
-          if (pc) stream.getTracks().forEach(track => pc.addTrack(track, stream));
+          addLocalStream?.(stream);
           setMicActive(true);
         })
         .catch((err) => {
@@ -171,9 +166,8 @@ export function App (): JSX.Element {
 
   useEffect(
     () => {
-      if (wsConnStatus === 'reconnecting' && audioRef.current) {
+      if (wsConnStatus === 'reconnecting') {
         if (micActive) setMicActive(false);
-        audioRef.current = null;
       }
     },
     [wsConnStatus, micActive]

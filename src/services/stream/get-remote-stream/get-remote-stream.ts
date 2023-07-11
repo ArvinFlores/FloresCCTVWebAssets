@@ -163,6 +163,8 @@ export function getRemoteStream ({
   };
   ws.onerror = (evt) => {
     if ('detail' in evt) {
+      pc?.close();
+      pc = null;
       onError?.(evt.detail);
     }
   };
@@ -173,8 +175,23 @@ export function getRemoteStream ({
   ws.onconnectionstatechange = (ev) => onWSConnectionChange?.(ev);
 
   return {
-    getPeerConnection () {
-      return pc;
+    hasLocalStream () {
+      const tracks = pc?.getSenders().map(sender => sender.track).filter(Boolean) ?? [];
+      return tracks.length > 0;
+    },
+    addLocalStream (stream) {
+      stream.getTracks().forEach(track => pc?.addTrack(track, stream));
+    },
+    toggleLocalAudio () {
+      const tracks = pc?.getSenders().map(sender => sender.track).filter(Boolean) ?? [];
+      const audioTracks = tracks.filter(track => track?.kind === 'audio');
+      const audioTrack = audioTracks[0];
+
+      if (audioTrack == null) return false;
+
+      audioTrack.enabled = !audioTrack.enabled;
+
+      return audioTrack.enabled;
     },
     startVideoRecording () {
       startRecording(

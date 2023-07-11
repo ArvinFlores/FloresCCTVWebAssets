@@ -19,9 +19,11 @@ GetRemoteStreamI,
 
 export type UseRemoteStreamValue = Partial<Pick<
 GetRemoteStreamValue,
-'getPeerConnection' |
 'startVideoRecording' |
-'stopVideoRecording'
+'stopVideoRecording' |
+'hasLocalStream' |
+'addLocalStream' |
+'toggleLocalAudio'
 >> & {
   wsConnStatus: ConnectionStatus | null;
   stream: MediaStream | null | undefined;

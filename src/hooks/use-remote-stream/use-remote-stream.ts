@@ -19,7 +19,9 @@ export function useRemoteStream ({
   const {
     startVideoRecording,
     stopVideoRecording,
-    getPeerConnection
+    hasLocalStream,
+    addLocalStream,
+    toggleLocalAudio
   } = streamRef.current ?? {};
 
   useEffect(
@@ -52,6 +54,8 @@ export function useRemoteStream ({
     wsConnStatus,
     startVideoRecording,
     stopVideoRecording,
-    getPeerConnection
+    hasLocalStream,
+    addLocalStream,
+    toggleLocalAudio
   };
 }

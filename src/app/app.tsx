@@ -166,8 +166,8 @@ export function App (): JSX.Element {
 
   useEffect(
     () => {
-      if (wsConnStatus === 'reconnecting') {
-        if (micActive) setMicActive(false);
+      if (wsConnStatus === 'reconnecting' && micActive) {
+        setMicActive(false);
       }
     },
     [wsConnStatus, micActive]

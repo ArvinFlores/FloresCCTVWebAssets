@@ -1,5 +1,6 @@
 import { WebSocketConnection } from 'src/services/websocket-connection';
 import { createRecordingHelpers } from '../helpers';
+import { getSenderTracks } from './helpers';
 import type { GetRemoteStreamI, GetRemoteStreamValue } from '../interfaces';
 
 /**
@@ -176,14 +177,13 @@ export function getRemoteStream ({
 
   return {
     hasLocalStream () {
-      const tracks = pc?.getSenders().map(sender => sender.track).filter(Boolean) ?? [];
-      return tracks.length > 0;
+      return getSenderTracks(pc).length > 0;
     },
     addLocalStream (stream) {
       stream.getTracks().forEach(track => pc?.addTrack(track, stream));
     },
     toggleLocalAudio () {
-      const tracks = pc?.getSenders().map(sender => sender.track).filter(Boolean) ?? [];
+      const tracks = getSenderTracks(pc);
       const audioTracks = tracks.filter(track => track?.kind === 'audio');
       const audioTrack = audioTracks[0];
 

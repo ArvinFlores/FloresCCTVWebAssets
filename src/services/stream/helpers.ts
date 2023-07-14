@@ -20,7 +20,7 @@ function createRecorderOptions (): MediaRecorderOptions {
 }
 
 export function createRecordingHelpers (): {
-  startRecording: (tracks: MediaStreamTrack[], onVideoRecorded?: (blob: Blob) => void) => void;
+  startRecording: (stream: MediaStream, onVideoRecorded?: (blob: Blob) => void) => void;
   stopRecording: () => void;
 } {
   let recorder: MediaRecorder | null = null;
@@ -28,14 +28,16 @@ export function createRecordingHelpers (): {
 
   return {
     startRecording (
-      tracks: MediaStreamTrack[],
+      stream: MediaStream,
       onVideoRecorded?: (blob: Blob) => void
     ) {
+      const tracks = stream.getTracks();
+
       if (!tracks.length || recorder?.state === 'recording') return;
 
       try {
         recorder = new MediaRecorder(
-          new MediaStream(tracks),
+          stream,
           createRecorderOptions()
         );
       } catch (e) {

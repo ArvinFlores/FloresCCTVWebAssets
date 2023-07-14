@@ -195,7 +195,7 @@ export function getCameraStream ({
     },
     startVideoRecording () {
       startRecording(
-        pc?.getReceivers().map(rc => rc.track) ?? [],
+        new MediaStream(pc?.getReceivers().map(rc => rc.track) ?? []),
         onVideoRecorded
       );
     },

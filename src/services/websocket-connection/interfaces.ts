@@ -1,4 +1,4 @@
-export interface CreateWebSocketI {
+export interface WebSocketConnectionI {
   /**
    * The number of milliseconds to delay before attempting to reconnect
    */

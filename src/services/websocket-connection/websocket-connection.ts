@@ -1,6 +1,6 @@
 import { EventTargetDelegate } from 'src/util/event-target-delegate';
 import type {
-  CreateWebSocketI,
+  WebSocketConnectionI,
   ConnectionStateChangeEvent,
   ConnectionErrorEvent
 } from './interfaces';
@@ -10,7 +10,7 @@ import type {
  */
 export class WebSocketConnection extends EventTargetDelegate {
   readonly url: string;
-  readonly options: CreateWebSocketI;
+  readonly options: WebSocketConnectionI;
   readonly protocols: string[];
 
   private reconnectAttempts: number;
@@ -29,7 +29,7 @@ export class WebSocketConnection extends EventTargetDelegate {
       reconnectDecayFactor = 1.5,
       timeoutInterval = 2000,
       maxReconnectAttempts = null
-    }: Partial<CreateWebSocketI> = {}
+    }: Partial<WebSocketConnectionI> = {}
   ) {
     super();
 

@@ -3,8 +3,8 @@ import {
   useEffect,
   useRef
 } from 'react';
-import { getRemoteStream } from 'src/services/stream/get-remote-stream';
-import type { GetRemoteStreamValue } from 'src/services/stream';
+import { getCameraStream } from 'src/services/stream/get-camera-stream';
+import type { SingleStreamValue } from 'src/services/stream';
 import type { UseRemoteStreamI, UseRemoteStreamValue } from './interfaces';
 
 export function useRemoteStream ({
@@ -15,7 +15,7 @@ export function useRemoteStream ({
   const [stream, setStream] = useState<UseRemoteStreamValue['stream']>(null);
   const [wsConnStatus, setWSConnStatus] = useState<UseRemoteStreamValue['wsConnStatus']>(null);
   const prevWSConnStatusRef = useRef<UseRemoteStreamValue['wsConnStatus']>(null);
-  const streamRef = useRef<GetRemoteStreamValue | null>(null);
+  const streamRef = useRef<SingleStreamValue | null>(null);
   const {
     startVideoRecording,
     stopVideoRecording,
@@ -26,9 +26,9 @@ export function useRemoteStream ({
 
   useEffect(
     () => {
-      streamRef.current = getRemoteStream({
+      streamRef.current = getCameraStream({
         wsUrl,
-        onStream: (stream) => {
+        onStreamChange: (stream) => {
           setStream(stream);
         },
         onWSConnectionChange: (ev) => {

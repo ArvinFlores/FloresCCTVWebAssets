@@ -1,18 +1,18 @@
 import { WebSocketConnection } from 'src/services/websocket-connection';
-import { createRecordingHelpers } from '../helpers';
 import { getSenderTracks } from './helpers';
-import type { GetRemoteStreamI, GetRemoteStreamValue } from '../interfaces';
+import { createRecordingHelpers } from '../helpers';
+import type { SingleStreamI, SingleStreamValue } from '../interfaces';
 
 /**
- * Gets the camera stream from the raspberry pi
+ * Gets the camera stream directly from the raspberry pi
  */
-export function getRemoteStream ({
+export function getCameraStream ({
   wsUrl,
-  onStream,
+  onStreamChange,
   onError,
   onVideoRecorded,
   onWSConnectionChange
-}: GetRemoteStreamI): GetRemoteStreamValue {
+}: SingleStreamI): SingleStreamValue {
   const ws = new WebSocketConnection(wsUrl, [], { maxReconnectAttempts: 8 });
   const pcConfig = {
     iceServers: [
@@ -35,7 +35,7 @@ export function getRemoteStream ({
   function createPeerConnection (): void {
     pc = new RTCPeerConnection(pcConfig);
     pc.ontrack = (ev) => {
-      onStream?.(ev.streams[0]);
+      onStreamChange?.(ev.streams[0]);
     };
     pc.onicecandidate = (evt) => {
       if (evt.candidate) {

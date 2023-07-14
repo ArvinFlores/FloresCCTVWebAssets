@@ -1,8 +1,8 @@
 import { EventTargetDelegate } from 'src/util/event-target-delegate';
 import type {
   WebSocketConnectionI,
-  ConnectionStateChangeEvent,
-  ConnectionErrorEvent
+  WebSocketConnectionStateChangeEvent,
+  WebSocketConnectionErrorEvent
 } from './interfaces';
 
 /**
@@ -59,14 +59,14 @@ export class WebSocketConnection extends EventTargetDelegate {
     this.addEventListener('error', ev => { this.onerror(ev); });
     this.addEventListener(
       'connection-state-change',
-      (ev: CustomEvent<ConnectionStateChangeEvent>) => { this.onconnectionstatechange(ev); }
+      (ev: CustomEvent<WebSocketConnectionStateChangeEvent>) => { this.onconnectionstatechange(ev); }
     );
   }
 
   private init (): void {
     if (this.options.maxReconnectAttempts !== null) {
       if (this.reconnectAttempts >= this.options.maxReconnectAttempts) {
-        const event = new CustomEvent<ConnectionErrorEvent>(
+        const event = new CustomEvent<WebSocketConnectionErrorEvent>(
           'error',
           {
             detail: {
@@ -77,7 +77,7 @@ export class WebSocketConnection extends EventTargetDelegate {
         );
 
         this.dispatchEvent(event);
-        this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+        this.dispatchEvent(new CustomEvent<WebSocketConnectionStateChangeEvent>(
           'connection-state-change',
           { detail: { status: 'failed' } }
         ));
@@ -89,12 +89,12 @@ export class WebSocketConnection extends EventTargetDelegate {
     this.ws = new WebSocket(this.url, this.protocols);
 
     if (this.hasConnectedOnce) {
-      this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+      this.dispatchEvent(new CustomEvent<WebSocketConnectionStateChangeEvent>(
         'connection-state-change',
         { detail: { status: 'reconnecting' } }
       ));
     } else {
-      this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+      this.dispatchEvent(new CustomEvent<WebSocketConnectionStateChangeEvent>(
         'connection-state-change',
         { detail: { status: 'connecting' } }
       ));
@@ -111,7 +111,7 @@ export class WebSocketConnection extends EventTargetDelegate {
     );
 
     this.ws.onopen = (event) => {
-      this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+      this.dispatchEvent(new CustomEvent<WebSocketConnectionStateChangeEvent>(
         'connection-state-change',
         { detail: { status: 'connected' } }
       ));
@@ -127,7 +127,7 @@ export class WebSocketConnection extends EventTargetDelegate {
       this.ws = null;
       if (this.forcedClosed) {
         this.dispatchEvent(event);
-        this.dispatchEvent(new CustomEvent<ConnectionStateChangeEvent>(
+        this.dispatchEvent(new CustomEvent<WebSocketConnectionStateChangeEvent>(
           'connection-state-change',
           { detail: { status: 'closed' } }
         ));
@@ -136,7 +136,7 @@ export class WebSocketConnection extends EventTargetDelegate {
           this.dispatchEvent(event);
         }
         if (this.reconnectAttempts > 0) {
-          this.dispatchEvent(new CustomEvent<ConnectionErrorEvent>(
+          this.dispatchEvent(new CustomEvent<WebSocketConnectionErrorEvent>(
             'error',
             {
               detail: {
@@ -184,6 +184,6 @@ export class WebSocketConnection extends EventTargetDelegate {
   onclose (ev): void {}
   onmessage (ev): void {}
   onerror (ev): void {}
-  onconnectionstatechange (ev: CustomEvent<ConnectionStateChangeEvent>): void {}
+  onconnectionstatechange (ev: CustomEvent<WebSocketConnectionStateChangeEvent>): void {}
   /* eslint-enable no-unused-vars */
 }

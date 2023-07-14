@@ -1,30 +1,17 @@
 import type {
-  GetRemoteStreamI,
-  GetRemoteStreamValue
+  SingleStreamI,
+  SingleStreamValue
 } from 'src/services/stream';
-import type { ConnectionStatus } from 'src/services/websocket-connection';
-
-export type WSConnStatus = 'connecting' |
-'connected' |
-'reconnecting' |
-'closed' |
-'failed';
+import type { WebSocketConnectionStatus } from 'src/services/websocket-connection';
 
 export type UseRemoteStreamI = Pick<
-GetRemoteStreamI,
+SingleStreamI,
 'wsUrl' |
 'onError' |
 'onVideoRecorded'
 >;
 
-export type UseRemoteStreamValue = Partial<Pick<
-GetRemoteStreamValue,
-'startVideoRecording' |
-'stopVideoRecording' |
-'hasLocalStream' |
-'addLocalStream' |
-'toggleLocalAudio'
->> & {
-  wsConnStatus: ConnectionStatus | null;
+export type UseRemoteStreamValue = Partial<SingleStreamValue> & {
+  wsConnStatus: WebSocketConnectionStatus | null;
   stream: MediaStream | null | undefined;
 };

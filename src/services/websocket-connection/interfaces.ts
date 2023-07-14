@@ -21,20 +21,20 @@ export interface WebSocketConnectionI {
   maxReconnectAttempts: number | null;
 }
 
-export type ConnectionStatus = 'connecting' |
+export type WebSocketConnectionStatus = 'connecting' |
 'connected' |
 'reconnecting' |
 'failed' |
 'closed';
 
-export type ConnectionErrorCode = 'CONN_MAX_RETRIES_EXCEEDED' |
+export type WebSocketConnectionErrorCode = 'CONN_MAX_RETRIES_EXCEEDED' |
 'CONN_RETRY_FAILED';
 
-export interface ConnectionStateChangeEvent {
-  status: ConnectionStatus;
+export interface WebSocketConnectionStateChangeEvent {
+  status: WebSocketConnectionStatus;
 }
 
-export interface ConnectionErrorEvent {
-  code: ConnectionErrorCode;
+export interface WebSocketConnectionErrorEvent {
+  code: WebSocketConnectionErrorCode;
   message: string;
 }

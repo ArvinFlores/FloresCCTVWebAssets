@@ -3,7 +3,7 @@ import type {
   WebSocketConnectionErrorCode
 } from '../websocket-connection';
 
-export type StreamErrorCode = 'WS_ERR' |
+type StreamErrorCode = 'WS_ERR' |
 'STREAM_BUSY' |
 'PC_ADD_ICE_CAND' |
 'PC_CREATE_ANSWER' |
@@ -12,7 +12,7 @@ export type StreamErrorCode = 'WS_ERR' |
 'PC_CONN_ERR' |
 WebSocketConnectionErrorCode;
 
-export interface StreamErrorI {
+interface StreamErrorI {
   message: string;
   code: StreamErrorCode;
   details?: string;
@@ -20,7 +20,7 @@ export interface StreamErrorI {
 
 interface StreamI {
   /**
-   * The websocket url of the websocket server running on the rPi device
+   * The websocket url of the websocket server to connect to
    */
   wsUrl: string;
   /**
@@ -38,12 +38,21 @@ interface StreamI {
 }
 
 interface StreamValue {
+  /**
+   * Checks if at least one local stream has been added to the peer connection
+   */
   hasLocalStream: () => boolean;
+  /**
+   * Adds a local stream to the peer connection
+   */
   addLocalStream: (stream: MediaStream) => void;
+  /**
+   * Toggles the local audio, returns true if audio is enabled, false otherwise
+   */
   toggleLocalAudio: () => boolean;
 }
 
-interface MultiStreamItem {
+export interface MultiStreamItem {
   id: number;
   label: string;
   stream: MediaStream;

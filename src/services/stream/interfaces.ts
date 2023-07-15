@@ -50,6 +50,10 @@ interface StreamValue {
    * Toggles the local audio, returns true if audio is enabled, false otherwise
    */
   toggleLocalAudio: () => boolean;
+  /**
+   * Stops the active video recording of the stream
+   */
+  stopVideoRecording: () => void;
 }
 
 export interface MultiStreamItem {
@@ -73,11 +77,15 @@ export interface MultiStreamI extends StreamI {
 }
 
 export interface SingleStreamValue extends StreamValue {
+  /**
+   * Starts video recording the current video stream
+   */
   startVideoRecording: () => void;
-  stopVideoRecording: () => void;
 }
 
 export interface MultiStreamValue extends StreamValue {
+  /**
+   * Starts video recording the specified video stream
+   */
   startVideoRecording: (item: MultiStreamItem) => void;
-  stopVideoRecording: (item: MultiStreamItem) => void;
 }

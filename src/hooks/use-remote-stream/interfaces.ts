@@ -10,11 +10,17 @@ MultiStreamI,
 'wsUrl' |
 'onError' |
 'onVideoRecorded'
->;
+> & {
+  /**
+   * Callback to set the active stream, even when the list of streams changes
+   * If this callback is undefined, the hook will set the first item in the stream list as active
+   */
+  defaultActiveStream?: (item: MultiStreamItem, idx: number) => boolean;
+};
 
 export type UseRemoteStreamValue = Partial<MultiStreamValue> & {
   wsConnStatus: WebSocketConnectionStatus | null;
   streams: MultiStreamItem[];
   activeStream: MultiStreamItem | null;
-  setActiveStream: (MultiStreamItem) => void;
+  setActiveStream: (item: MultiStreamItem) => void;
 };

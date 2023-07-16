@@ -39,7 +39,7 @@ export function App (): JSX.Element {
     addLocalStream,
     toggleLocalAudio
   } = useRemoteStream({
-    wsUrl: `wss://${CAMERA_IP}:9000/stream`,
+    wsUrl: JANUS_URL || `wss://${CAMERA_IP}:9000/stream`,
     onError: (error) => {
       const { code } = error;
 

@@ -1,0 +1,13 @@
+.fixed {
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fixed--top {
+  top: 0;
+}
+
+.fixed--bottom {
+  bottom: 0;
+}

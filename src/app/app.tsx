@@ -13,6 +13,7 @@ import { JSONViewer } from 'src/components/json-viewer';
 import { ErrorBoundary } from 'src/components/error-boundary';
 import { Video } from 'src/components/video';
 import { Spinner } from 'src/components/spinner';
+import { Fixed } from 'src/components/fixed';
 import { useRemoteStream } from 'src/hooks/use-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
@@ -239,23 +240,25 @@ export function App (): JSX.Element {
       }
       {
         Boolean(activeStream ?? previewSrc) && (
-          <Navbar
-            alignContent="center"
-            stickToBottom={true}
+          <Fixed
+            direction="bottom"
+            className="util-z-1000"
           >
-            <Controls
-              previewingMedia={Boolean(previewSrc)}
-              micActive={micActive}
-              micEnabled={micEnabled}
-              recordingEnabled={recordingEnabled}
-              recording={recording}
-              onToggleMic={handleToggleMic}
-              onCancelMediaPreview={handleCancelMediaPreview}
-              onDownloadMediaPreview={handleMediaDownload}
-              onTakeScreenshot={handleTakeScreenshot}
-              onRecord={handleRecordClick}
-            />
-          </Navbar>
+            <Navbar alignContent="center">
+              <Controls
+                previewingMedia={Boolean(previewSrc)}
+                micActive={micActive}
+                micEnabled={micEnabled}
+                recordingEnabled={recordingEnabled}
+                recording={recording}
+                onToggleMic={handleToggleMic}
+                onCancelMediaPreview={handleCancelMediaPreview}
+                onDownloadMediaPreview={handleMediaDownload}
+                onTakeScreenshot={handleTakeScreenshot}
+                onRecord={handleRecordClick}
+              />
+            </Navbar>
+          </Fixed>
         )
       }
       <MediaPreview previewSrc={previewSrc} />

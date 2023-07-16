@@ -8,11 +8,6 @@
   min-height: 6rem;
 }
 
-.navbar--sticky-bottom {
-  position: fixed;
-  bottom: 0;
-}
-
 .navbar--pull-right {
   justify-content: flex-end;
 }

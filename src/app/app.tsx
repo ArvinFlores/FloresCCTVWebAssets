@@ -31,7 +31,7 @@ export function App (): JSX.Element {
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const {
-    stream,
+    activeStream,
     wsConnStatus,
     startVideoRecording,
     stopVideoRecording,
@@ -87,6 +87,7 @@ export function App (): JSX.Element {
   };
   const handleRecordClick = (): void => {
     try {
+      if (activeStream === null) return;
       const stopRecording = (): void => {
         stopVideoRecording?.();
         recordingRef.current = undefined;
@@ -95,7 +96,7 @@ export function App (): JSX.Element {
         clearTimeout(recordingRef.current);
         stopRecording();
       } else {
-        startVideoRecording?.();
+        startVideoRecording?.(activeStream);
         setRecording(true);
         recordingRef.current = setTimeout(
           stopRecording,
@@ -147,12 +148,12 @@ export function App (): JSX.Element {
 
   useEffect(
     () => {
-      const hasVideoFeed = wsConnStatus === 'connected' && stream != null;
+      const hasVideoFeed = wsConnStatus === 'connected' && activeStream != null;
       if (hasVideoFeed && error != null) {
         setError(null);
       }
     },
-    [wsConnStatus, stream, error]
+    [wsConnStatus, activeStream, error]
   );
 
   useEffect(
@@ -202,7 +203,7 @@ export function App (): JSX.Element {
       </div>
       {
         !['closed', 'failed'].includes(wsConnStatus as string) && (
-          stream === null ||
+          activeStream === null ||
           ['connecting', 'reconnecting'].includes(wsConnStatus as string)
         ) && (
           <div className="util-perfect-center util-z-1000">
@@ -211,7 +212,7 @@ export function App (): JSX.Element {
         )
       }
       {
-        stream && (
+        activeStream && (
           <>
             <Button
               ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
@@ -227,7 +228,7 @@ export function App (): JSX.Element {
             </Button>
             <Video
               ref={videofeedRef}
-              srcObject={stream}
+              srcObject={activeStream.stream}
               className="util-fullscreen util-z-neg"
               autoPlay={true}
               muted={videoMuted}
@@ -237,7 +238,7 @@ export function App (): JSX.Element {
         )
       }
       {
-        Boolean(stream ?? previewSrc) && (
+        Boolean(activeStream ?? previewSrc) && (
           <Navbar
             alignContent="center"
             stickToBottom={true}

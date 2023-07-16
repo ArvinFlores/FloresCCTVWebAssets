@@ -1,17 +1,20 @@
 import type {
-  SingleStreamI,
-  SingleStreamValue
+  MultiStreamI,
+  MultiStreamValue,
+  MultiStreamItem
 } from 'src/services/stream';
 import type { WebSocketConnectionStatus } from 'src/services/websocket-connection';
 
 export type UseRemoteStreamI = Pick<
-SingleStreamI,
+MultiStreamI,
 'wsUrl' |
 'onError' |
 'onVideoRecorded'
 >;
 
-export type UseRemoteStreamValue = Partial<SingleStreamValue> & {
+export type UseRemoteStreamValue = Partial<MultiStreamValue> & {
   wsConnStatus: WebSocketConnectionStatus | null;
-  stream: MediaStream | null | undefined;
+  streams: MultiStreamItem[];
+  activeStream: MultiStreamItem | null;
+  setActiveStream: (MultiStreamItem) => void;
 };

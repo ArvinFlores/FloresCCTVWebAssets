@@ -4,7 +4,7 @@ import {
   useRef
 } from 'react';
 import { getCameraStream } from 'src/services/stream/get-camera-stream';
-import type { SingleStreamValue } from 'src/services/stream';
+import type { MultiStreamValue } from 'src/services/stream';
 import type { UseRemoteStreamI, UseRemoteStreamValue } from './interfaces';
 
 export function useRemoteStream ({
@@ -12,10 +12,11 @@ export function useRemoteStream ({
   onError,
   onVideoRecorded
 }: UseRemoteStreamI): UseRemoteStreamValue {
-  const [stream, setStream] = useState<UseRemoteStreamValue['stream']>(null);
+  const [activeStream, setActiveStream] = useState<UseRemoteStreamValue['activeStream']>(null);
+  const [streams] = useState<UseRemoteStreamValue['streams']>([]);
   const [wsConnStatus, setWSConnStatus] = useState<UseRemoteStreamValue['wsConnStatus']>(null);
   const prevWSConnStatusRef = useRef<UseRemoteStreamValue['wsConnStatus']>(null);
-  const streamRef = useRef<SingleStreamValue | null>(null);
+  const streamRef = useRef<MultiStreamValue | null>(null);
   const {
     startVideoRecording,
     stopVideoRecording,
@@ -29,14 +30,14 @@ export function useRemoteStream ({
       streamRef.current = getCameraStream({
         wsUrl,
         onStreamChange: (stream) => {
-          setStream(stream);
+          setActiveStream({ id: 1, label: 'FloresCCTV', stream });
         },
         onWSConnectionChange: (ev) => {
           const { status } = ev.detail;
           const prevStatus = prevWSConnStatusRef.current;
 
           if (prevStatus === 'connected' && status !== 'connected') {
-            setStream(null);
+            setActiveStream(null);
           }
 
           prevWSConnStatusRef.current = status;
@@ -50,7 +51,9 @@ export function useRemoteStream ({
   );
 
   return {
-    stream,
+    activeStream,
+    setActiveStream,
+    streams,
     wsConnStatus,
     startVideoRecording,
     stopVideoRecording,

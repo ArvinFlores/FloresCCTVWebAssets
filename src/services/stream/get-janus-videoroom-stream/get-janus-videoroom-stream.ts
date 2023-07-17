@@ -63,7 +63,7 @@ export function getJanusVideoroomStream ({
 
               if (!event) return;
 
-              if (['joined', 'event'].includes(event)) {
+              if (event === 'joined') {
                 if (Array.isArray(publishers)) {
                   publishers.forEach(publisher => {
                     createRemoteFeed({
@@ -86,9 +86,28 @@ export function getJanusVideoroomStream ({
                   });
                 }
               } else if (event === 'event') {
-                if (leaving) {
-                  remoteTracks.delete(leaving);
+                if (Array.isArray(publishers)) {
+                  publishers.forEach(publisher => {
+                    createRemoteFeed({
+                      streams: createPublisherStreams(publisher),
+                      room,
+                      janus,
+                      onRemoteTrack: (track) => {
+                        if (!track.muted) {
+                          const stream = remoteTracks.get(publisher.id)?.stream ?? new MediaStream();
+                          stream.addTrack(track);
+                          remoteTracks.set(
+                            publisher.id,
+                            { stream, label: publisher.display ?? '' }
+                          );
+                        }
 
+                        onStreamChange?.(toMultiStreamItems(remoteTracks));
+                      }
+                    });
+                  });
+                } else if (leaving) {
+                  remoteTracks.delete(leaving);
                   onStreamChange?.(toMultiStreamItems(remoteTracks));
                 }
               }

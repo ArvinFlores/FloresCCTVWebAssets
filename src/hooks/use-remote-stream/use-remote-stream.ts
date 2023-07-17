@@ -5,7 +5,7 @@ import {
 } from 'react';
 import { getCameraStream } from 'src/services/stream/get-camera-stream';
 import { getJanusVideoroomStream } from 'src/services/stream/get-janus-videoroom-stream';
-import type { MultiStreamValue } from 'src/services/stream';
+import type { MultiStreamItem, MultiStreamValue } from 'src/services/stream';
 import type { UseRemoteStreamI, UseRemoteStreamValue } from './interfaces';
 import { without } from './helpers';
 
@@ -35,15 +35,18 @@ export function useRemoteStream ({
           room: Number(JANUS_ROOM),
           wsUrl,
           onStreamChange: (streams) => {
+            const setDefault = (): MultiStreamItem | null => {
+              return defaultActiveStream ? (streams.find(defaultActiveStream) ?? null) : streams[0];
+            };
+
             if (activeStream) {
               const exists = streams.find(stream => stream.id === activeStream.id);
-              if (!exists) setActiveStream(null);
-              setStreams(without(activeStream, streams));
+              if (!exists) setActiveStream(setDefault());
             } else {
-              const active = defaultActiveStream ? (streams.find(defaultActiveStream) ?? null) : streams[0];
-              setActiveStream(active);
-              setStreams(without(active, streams));
+              setActiveStream(setDefault());
             }
+
+            setStreams(streams);
           },
           onVideoRecorded
         }) :
@@ -72,11 +75,8 @@ export function useRemoteStream ({
 
   return {
     activeStream,
-    setActiveStream: (item) => {
-      setActiveStream(item);
-      setStreams(without(item, streams));
-    },
-    streams,
+    setActiveStream,
+    streams: without(activeStream, streams),
     wsConnStatus,
     startVideoRecording,
     stopVideoRecording,

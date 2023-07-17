@@ -20,7 +20,7 @@ export function Alert ({
   const randId = useRef<string>(uuid());
   const ariaExpandedContentId = `alert__expandable-content-${randId.current}`;
   const toggleExpand = (): void => {
-    setExpanded(val => !val);
+    setExpanded((val) => !val);
   };
 
   return (

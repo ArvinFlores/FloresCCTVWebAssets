@@ -40,7 +40,7 @@ export function useRemoteStream ({
             };
 
             if (activeStream) {
-              const exists = streams.find(stream => stream.id === activeStream.id);
+              const exists = streams.find((stream) => stream.id === activeStream.id);
               if (!exists) setActiveStream(setDefault());
             } else {
               setActiveStream(setDefault());

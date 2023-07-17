@@ -65,7 +65,7 @@ export function getJanusVideoroomStream ({
 
               if (event === 'joined') {
                 if (Array.isArray(publishers)) {
-                  publishers.forEach(publisher => {
+                  publishers.forEach((publisher) => {
                     createRemoteFeed({
                       streams: createPublisherStreams(publisher),
                       room,
@@ -87,7 +87,7 @@ export function getJanusVideoroomStream ({
                 }
               } else if (event === 'event') {
                 if (Array.isArray(publishers)) {
-                  publishers.forEach(publisher => {
+                  publishers.forEach((publisher) => {
                     createRemoteFeed({
                       streams: createPublisherStreams(publisher),
                       room,
@@ -131,7 +131,7 @@ export function getJanusVideoroomStream ({
     addLocalStream (stream) {
       localHandle?.createOffer({
         // @ts-expect-error janus typings have not been updated by the author
-        tracks: stream.getTracks().map(track => ({
+        tracks: stream.getTracks().map((track) => ({
           type: track.kind,
           capture: track
         })),

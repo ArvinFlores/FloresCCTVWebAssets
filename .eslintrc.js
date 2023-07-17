@@ -7,7 +7,8 @@ const common = {
     'semi': [2, 'always'],
     'max-len': [2, { 'code': 120 }],
     'operator-linebreak': ['error', 'after'],
-    'no-unused-vars': ['error', { 'vars': 'all', 'args': 'all', 'ignoreRestSiblings': false }]
+    'no-unused-vars': ['error', { 'vars': 'all', 'args': 'all', 'ignoreRestSiblings': false }],
+    'arrow-parens': [2, 'always']
   }
 };
 

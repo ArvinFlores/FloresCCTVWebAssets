@@ -60,7 +60,7 @@ export function createRemoteFeed ({
 }
 
 export function createPublisherStreams (publisher: JanusPublisher): Array<Record<string, number | string>> {
-  return publisher.streams.map(stream => ({
+  return publisher.streams.map((stream) => ({
     ...stream,
     id: publisher.id,
     display: publisher.display ?? ''

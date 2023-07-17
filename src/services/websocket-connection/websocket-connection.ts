@@ -53,10 +53,10 @@ export class WebSocketConnection extends EventTargetDelegate {
   }
 
   bindEvents (): void {
-    this.addEventListener('open', ev => { this.onopen(ev); });
-    this.addEventListener('close', ev => { this.onclose(ev); });
-    this.addEventListener('message', ev => { this.onmessage(ev); });
-    this.addEventListener('error', ev => { this.onerror(ev); });
+    this.addEventListener('open', (ev) => { this.onopen(ev); });
+    this.addEventListener('close', (ev) => { this.onclose(ev); });
+    this.addEventListener('message', (ev) => { this.onmessage(ev); });
+    this.addEventListener('error', (ev) => { this.onerror(ev); });
     this.addEventListener(
       'connection-state-change',
       (ev: CustomEvent<WebSocketConnectionStateChangeEvent>) => { this.onconnectionstatechange(ev); }

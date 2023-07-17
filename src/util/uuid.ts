@@ -3,6 +3,6 @@ export function uuid (len = 10): string {
   crypto.getRandomValues(arr);
   return Array.from(
     arr,
-    dec => dec.toString(16).padStart(2, '0')
+    (dec) => dec.toString(16).padStart(2, '0')
   ).join('').slice(0, len);
 }

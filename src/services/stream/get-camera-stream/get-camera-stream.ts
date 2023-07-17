@@ -73,9 +73,9 @@ export function getCameraStream ({
   }
 
   function addIceCandidates (): void {
-    iceCandidates.forEach(candidate => {
+    iceCandidates.forEach((candidate) => {
       pc?.addIceCandidate(candidate)
-        .catch(err => {
+        .catch((err) => {
           onError?.({
             message: 'The peer connection failed to add the ICE candidate',
             code: 'PC_ADD_ICE_CAND',
@@ -109,7 +109,7 @@ export function getCameraStream ({
             remoteDesc = true;
             addIceCandidates();
             pc?.createAnswer()
-              .then(answer => {
+              .then((answer) => {
                 pc?.setLocalDescription(answer)
                   .then(() => {
                     ws.send(JSON.stringify({
@@ -125,7 +125,7 @@ export function getCameraStream ({
                     });
                   });
               })
-              .catch(err => {
+              .catch((err) => {
                 onError?.({
                   message: 'The peer connection failed to create an answer',
                   code: 'PC_CREATE_ANSWER',
@@ -180,11 +180,11 @@ export function getCameraStream ({
       return getSenderTracks(pc).length > 0;
     },
     addLocalStream (stream) {
-      stream.getTracks().forEach(track => pc?.addTrack(track, stream));
+      stream.getTracks().forEach((track) => pc?.addTrack(track, stream));
     },
     toggleLocalAudio () {
       const tracks = getSenderTracks(pc);
-      const audioTracks = tracks.filter(track => track?.kind === 'audio');
+      const audioTracks = tracks.filter((track) => track?.kind === 'audio');
       const audioTrack = audioTracks[0];
 
       if (audioTrack == null) return false;
@@ -195,7 +195,7 @@ export function getCameraStream ({
     },
     startVideoRecording () {
       startRecording(
-        new MediaStream(pc?.getReceivers().map(rc => rc.track) ?? []),
+        new MediaStream(pc?.getReceivers().map((rc) => rc.track) ?? []),
         onVideoRecorded
       );
     },

@@ -121,7 +121,7 @@ export function App (): JSX.Element {
       setMicActive(toggleLocalAudio?.() ?? false);
     } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
+        .then((stream) => {
           addLocalStream?.(stream);
           setMicActive(true);
         })
@@ -136,7 +136,7 @@ export function App (): JSX.Element {
     }
   };
   const handleToggleVideoAudio = (): void => {
-    setVideoMuted(muted => !muted);
+    setVideoMuted((muted) => !muted);
   };
   const handleCloseAlert = (): void => {
     setError(null);

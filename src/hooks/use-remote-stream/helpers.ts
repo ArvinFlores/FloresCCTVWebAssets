@@ -6,9 +6,9 @@ export function without (
 ): MultiStreamItem[] {
   if (item == null) return items;
   const keys = Object.keys(item);
-  return items.filter(i => {
+  return items.filter((i) => {
     const isItem = keys.every(
-      key => item[key] === i[key]
+      (key) => item[key] === i[key]
     ) && keys.length === Object.keys(i).length;
     return !isItem;
   });

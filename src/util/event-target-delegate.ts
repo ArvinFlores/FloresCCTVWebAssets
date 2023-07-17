@@ -13,7 +13,7 @@ export class EventTargetDelegate implements EventTarget {
 
     if (!callback) return;
 
-    if (this.events.get(type)?.find(fn => fn === callback)) return;
+    if (this.events.get(type)?.find((fn) => fn === callback)) return;
 
     this.events.get(type)?.push(callback);
   }
@@ -23,14 +23,14 @@ export class EventTargetDelegate implements EventTarget {
 
     this.events.set(
       type,
-      this.events.get(type)?.filter(fn => fn !== callback) ?? []
+      this.events.get(type)?.filter((fn) => fn !== callback) ?? []
     );
 
     if (!(this.events.get(type)?.length ?? 0)) this.events.delete(type);
   }
 
   dispatchEvent (event: Event): boolean {
-    this.events.get(event.type)?.forEach(fn => {
+    this.events.get(event.type)?.forEach((fn) => {
       if (typeof fn === 'function') {
         fn(event);
       }

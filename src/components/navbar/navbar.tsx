@@ -15,7 +15,7 @@ export function Navbar ({
         'navbar--pull-center': alignContent === 'center'
       })}
     >
-        {children}
+      {children}
     </nav>
   );
 }

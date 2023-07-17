@@ -8,7 +8,8 @@ const common = {
     'max-len': [2, { 'code': 120 }],
     'operator-linebreak': ['error', 'after'],
     'no-unused-vars': ['error', { 'vars': 'all', 'args': 'all', 'ignoreRestSiblings': false }],
-    'arrow-parens': [2, 'always']
+    'arrow-parens': [2, 'always'],
+    'indent': 'off'
   }
 };
 
@@ -50,6 +51,7 @@ module.exports = {
         'react-hooks/exhaustive-deps': 'warn',
         '@typescript-eslint/no-use-before-define': ['error'],
         '@typescript-eslint/semi': 'off',
+        '@typescript-eslint/indent': [2, 2],
         '@typescript-eslint/member-delimiter-style': [
           'error',
           {

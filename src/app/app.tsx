@@ -184,26 +184,26 @@ export function App (): JSX.Element {
         role="alert"
         className="util-pos-rel util-z-1000"
       >
-      {
-        error && (
-          <Alert
-            type="danger"
-            expandableLabel={error.details && 'Details'}
-            expandableContent={
-              error.details && (
-                <div className="util-mt-2">
-                  <JSONViewer>
-                    {error.details}
-                  </JSONViewer>
-                </div>
-              )
-            }
-            onDismiss={error.dismissable ? handleCloseAlert : undefined}
-          >
-            {error.message}
-          </Alert>
-        )
-      }
+        {
+          error && (
+            <Alert
+              type="danger"
+              expandableLabel={error.details && 'Details'}
+              expandableContent={
+                error.details && (
+                  <div className="util-mt-2">
+                    <JSONViewer>
+                      {error.details}
+                    </JSONViewer>
+                  </div>
+                )
+              }
+              onDismiss={error.dismissable ? handleCloseAlert : undefined}
+            >
+              {error.message}
+            </Alert>
+          )
+        }
       </div>
       {
         !['closed', 'failed'].includes(wsConnStatus as string) && (

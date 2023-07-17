@@ -13,27 +13,27 @@ export function StreamsPreview ({
         streams.map((item) => {
           const { id, label, stream } = item;
           const content = stream.getVideoTracks().length > 0 ?
-              (
-                <a
-                  aria-label={`Watch ${label ?? 'camera'} video stream`}
-                  href="#"
-                  onClick={() => onVideoPreviewClick?.(item)}
-                >
-                  <VideoThumbnail
-                    label={label}
-                    srcObject={stream}
-                  />
-                </a>
-              ) :
-              (
-                <Audio
-                  className="util-hidden"
+            (
+              <a
+                aria-label={`Watch ${label ?? 'camera'} video stream`}
+                href="#"
+                onClick={() => onVideoPreviewClick?.(item)}
+              >
+                <VideoThumbnail
+                  label={label}
                   srcObject={stream}
-                  autoPlay={true}
-                  controls={true}
-                  muted={audioMuted}
                 />
-              );
+              </a>
+            ) :
+            (
+              <Audio
+                className="util-hidden"
+                srcObject={stream}
+                autoPlay={true}
+                controls={true}
+                muted={audioMuted}
+              />
+            );
 
           return (
             <li key={id}>

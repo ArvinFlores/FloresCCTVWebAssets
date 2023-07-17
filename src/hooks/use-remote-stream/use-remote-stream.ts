@@ -35,9 +35,9 @@ export function useRemoteStream ({
           room: Number(JANUS_ROOM),
           wsUrl,
           onStreamChange: (streams) => {
-            const setDefault = (): MultiStreamItem | null => {
-              return defaultActiveStream ? (streams.find(defaultActiveStream) ?? null) : streams[0];
-            };
+            const setDefault = (): MultiStreamItem | null => defaultActiveStream ?
+              (streams.find(defaultActiveStream) ?? null) :
+              streams[0];
 
             if (activeStream) {
               const exists = streams.find((stream) => stream.id === activeStream.id);

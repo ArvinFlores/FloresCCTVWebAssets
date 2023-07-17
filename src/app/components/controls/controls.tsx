@@ -27,78 +27,78 @@ export function Controls ({
     <ul className="util-list util-list--inline">
       {
         previewingMedia ?
-            (
-              <>
-                <li>
-                  <Button onClick={onCancelMediaPreview}>
-                    <FontAwesomeIcon
-                      className="util-mr-0"
-                      icon={faXmark}
-                    />
-                    <span>Cancel</span>
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    variant="primary"
-                    onClick={onDownloadMediaPreview}
-                  >
-                    <FontAwesomeIcon
-                      className="util-mr-0"
-                      icon={faDownload}
-                    />
-                    <span>Download</span>
-                  </Button>
-                </li>
-              </>
-            ) :
-            (
-              <>
-                <li>
-                  <Button
-                    ariaLabel={micActive ? 'Turn off mic' : 'Turn on mic'}
-                    className="controls__btn"
-                    outline={!micActive}
-                    circular={true}
-                    variant={micActive ? 'danger' : undefined}
-                    disabled={!micEnabled}
-                    onClick={onToggleMic}
-                  >
-                    <FontAwesomeIcon
-                      icon={micActive ? faMicrophone : faMicrophoneSlash}
-                      size="2x"
-                    />
-                  </Button>
-                </li>
-                {
-                  !recording && (
-                    <li>
-                      <Button
-                        ariaLabel="Take screenshot"
-                        className="controls__btn"
-                        circular={true}
-                        onClick={onTakeScreenshot}
-                      >
-                        <FontAwesomeIcon
-                          icon={faCamera}
-                          size="2x"
-                        />
-                      </Button>
-                    </li>
-                  )
-                }
-                <li>
-                  <RecordButton
-                    ariaLabel={recording ? 'Stop recording' : 'Start recording'}
-                    className="controls__btn"
-                    active={recording}
-                    duration={RECORDING_LIMIT_SECS}
-                    disabled={!recordingEnabled}
-                    onClick={onRecord}
+          (
+            <>
+              <li>
+                <Button onClick={onCancelMediaPreview}>
+                  <FontAwesomeIcon
+                    className="util-mr-0"
+                    icon={faXmark}
                   />
-                </li>
-              </>
-            )
+                  <span>Cancel</span>
+                </Button>
+              </li>
+              <li>
+                <Button
+                  variant="primary"
+                  onClick={onDownloadMediaPreview}
+                >
+                  <FontAwesomeIcon
+                    className="util-mr-0"
+                    icon={faDownload}
+                  />
+                  <span>Download</span>
+                </Button>
+              </li>
+            </>
+          ) :
+          (
+            <>
+              <li>
+                <Button
+                  ariaLabel={micActive ? 'Turn off mic' : 'Turn on mic'}
+                  className="controls__btn"
+                  outline={!micActive}
+                  circular={true}
+                  variant={micActive ? 'danger' : undefined}
+                  disabled={!micEnabled}
+                  onClick={onToggleMic}
+                >
+                  <FontAwesomeIcon
+                    icon={micActive ? faMicrophone : faMicrophoneSlash}
+                    size="2x"
+                  />
+                </Button>
+              </li>
+              {
+                !recording && (
+                  <li>
+                    <Button
+                      ariaLabel="Take screenshot"
+                      className="controls__btn"
+                      circular={true}
+                      onClick={onTakeScreenshot}
+                    >
+                      <FontAwesomeIcon
+                        icon={faCamera}
+                        size="2x"
+                      />
+                    </Button>
+                  </li>
+                )
+              }
+              <li>
+                <RecordButton
+                  ariaLabel={recording ? 'Stop recording' : 'Start recording'}
+                  className="controls__btn"
+                  active={recording}
+                  duration={RECORDING_LIMIT_SECS}
+                  disabled={!recordingEnabled}
+                  onClick={onRecord}
+                />
+              </li>
+            </>
+          )
       }
     </ul>
   );

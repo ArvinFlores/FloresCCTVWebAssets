@@ -11,7 +11,7 @@ import { Button } from 'src/components/button';
 import { Alert } from 'src/components/alert';
 import { JSONViewer } from 'src/components/json-viewer';
 import { ErrorBoundary } from 'src/components/error-boundary';
-import { Video } from 'src/components/video';
+import { Video } from 'src/components/media';
 import { Spinner } from 'src/components/spinner';
 import { Fixed } from 'src/components/fixed';
 import { useRemoteStream } from 'src/hooks/use-remote-stream';

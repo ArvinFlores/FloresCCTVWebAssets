@@ -1,4 +1,4 @@
-import { Video } from 'src/components/video';
+import { Video } from 'src/components/media';
 import type { MediaPreviewProps } from './interfaces';
 
 export function MediaPreview ({ previewSrc }: MediaPreviewProps): JSX.Element {

@@ -1,0 +1,27 @@
+.video-thumbnail {
+  width: 200px;
+  height: 200px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.video-thumbnail--overlay:after {
+  content: '';
+  background-color: rgba(0, 0, 0, .1);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.video-thumbnail__label {
+  color: white;
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: calc(200px - 15%);
+}

@@ -19,6 +19,7 @@ import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
+import { StreamsPreview } from './components/streams-preview';
 import type { AppError } from './interfaces';
 
 export function App (): JSX.Element {
@@ -33,12 +34,14 @@ export function App (): JSX.Element {
   const recordingRef = useRef<NodeJS.Timeout>();
   const {
     activeStream,
+    streams,
     wsConnStatus,
     startVideoRecording,
     stopVideoRecording,
     hasLocalStream,
     addLocalStream,
-    toggleLocalAudio
+    toggleLocalAudio,
+    setActiveStream
   } = useRemoteStream({
     wsUrl: JANUS_URL || `wss://${CAMERA_IP}:9000/stream`,
     onError: (error) => {
@@ -244,6 +247,17 @@ export function App (): JSX.Element {
             direction="bottom"
             className="util-z-1000"
           >
+            {
+              streams.length > 0 && (
+                <div className="util-ml-2 util-mb-2">
+                  <StreamsPreview
+                    streams={streams}
+                    audioMuted={videoMuted}
+                    onVideoPreviewClick={setActiveStream}
+                  />
+                </div>
+              )
+            }
             <Navbar alignContent="center">
               <Controls
                 previewingMedia={Boolean(previewSrc)}

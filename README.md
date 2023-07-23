@@ -36,6 +36,15 @@ CAMERA_IP=<raspberry pi ip>
 ```
 Where `<raspberry pi ip>` is whatever the IP address of the raspberry pi is on the LAN, [this section](https://github.com/ArvinFlores/FloresCCTVStreamServer#ssh-into-the-pi) on the server repo guide explains how you can find the raspberry pi on your LAN
 
+#### Run with Janus
+If you are going to stream using Janus, make sure you have gone through the steps in [this repo](https://github.com/ArvinFlores/FloresCCTVGatewayServer) and that the Janus server is running
+
+You will need to set the following env variables for the client code to be able to find the Janus server
+```
+JANUS_URL=<url of the janus server>
+JANUS_ROOM=<the janus video room to join>
+```
+
 ### Start the dev server
 You can run the following to start the development server on port 7777:
 ```

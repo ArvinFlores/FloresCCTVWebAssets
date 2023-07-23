@@ -10,7 +10,9 @@ if (!fs.existsSync(envPath)) {
   throw Error(`The .env file was not found, have you declared it in the root of the project?`);
 }
 
-const config = dotenv.config({ path: envPath }).parsed;
+const actualConfig = dotenv.config({ path: envPath }).parsed;
+const exampleConfig = dotenv.config({ path: `${envPath}.example` }).parsed;
+const config = { ...exampleConfig, ...actualConfig };
 const envConfig = Object.keys(config).reduce(
   (acc, key) => ({
     ...acc,

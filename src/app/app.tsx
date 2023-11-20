@@ -21,6 +21,7 @@ import { downloadLocalFile } from 'src/util/download-local-file';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
 import { StreamsPreview } from './components/streams-preview';
+import { RecordingsPanel } from './components/recordings-panel';
 import type { AppError } from './interfaces';
 
 export function App (): JSX.Element {
@@ -31,6 +32,7 @@ export function App (): JSX.Element {
   const [micActive, setMicActive] = useState<boolean>(false);
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
+  const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const {
@@ -142,6 +144,9 @@ export function App (): JSX.Element {
   const handleCloseAlert = (): void => {
     setError(null);
   };
+  const handleToggleRecordingsPanel = (): void => {
+    setShowRecordingsPanel((show) => !show);
+  };
   const renderFallbackError = (error: Error): JSX.Element => {
     return (
       <Alert type="danger">
@@ -231,16 +236,21 @@ export function App (): JSX.Element {
                   size="2x"
                 />
               </Button>
-              <Button
-                ariaLabel="Open past recordings menu"
-                variant="see-through"
-                circular={true}
-              >
-                <FontAwesomeIcon
-                  icon={faBars}
-                  size="2x"
-                />
-              </Button>
+              {
+                !showRecordingsPanel && (
+                  <Button
+                    ariaLabel="Open recordings panel"
+                    variant="see-through"
+                    circular={true}
+                    onClick={handleToggleRecordingsPanel}
+                  >
+                    <FontAwesomeIcon
+                      icon={faBars}
+                      size="2x"
+                    />
+                  </Button>
+                )
+              }
             </div>
             <Video
               ref={videofeedRef}
@@ -250,6 +260,7 @@ export function App (): JSX.Element {
               muted={videoMuted}
               playsInline={true}
             />
+            {showRecordingsPanel && <RecordingsPanel onClose={handleToggleRecordingsPanel} />}
           </>
         )
       }

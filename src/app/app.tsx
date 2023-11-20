@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVolumeHigh } from '@fortawesome/free-solid-svg-icons/faVolumeHigh';
 import { faVolumeXmark } from '@fortawesome/free-solid-svg-icons/faVolumeXmark';
+import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
 import { Button } from 'src/components/button';
@@ -218,18 +219,29 @@ export function App (): JSX.Element {
       {
         activeStream && (
           <>
-            <Button
-              ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
-              className="util-ml-2 util-mt-2"
-              variant="see-through"
-              circular={true}
-              onClick={handleToggleVideoAudio}
-            >
-              <FontAwesomeIcon
-                icon={videoMuted ? faVolumeXmark : faVolumeHigh}
-                size="2x"
-              />
-            </Button>
+            <div className="util-ml-2 util-mr-2 util-mt-2 util-flex-container util-flex-container--h-sb">
+              <Button
+                ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
+                variant="see-through"
+                circular={true}
+                onClick={handleToggleVideoAudio}
+              >
+                <FontAwesomeIcon
+                  icon={videoMuted ? faVolumeXmark : faVolumeHigh}
+                  size="2x"
+                />
+              </Button>
+              <Button
+                ariaLabel="Open past recordings menu"
+                variant="see-through"
+                circular={true}
+              >
+                <FontAwesomeIcon
+                  icon={faBars}
+                  size="2x"
+                />
+              </Button>
+            </div>
             <Video
               ref={videofeedRef}
               srcObject={activeStream.stream}

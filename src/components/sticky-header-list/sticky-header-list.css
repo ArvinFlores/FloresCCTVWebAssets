@@ -1,0 +1,11 @@
+.sticky-header-list {
+  overflow: scroll;
+}
+
+.sticky-header-list__header {
+  background-color: #ededed;
+  padding: 1rem .5rem;
+  border-bottom: 1px solid #dad6d6;
+  position: sticky;
+  top: 0;
+}

@@ -13,3 +13,21 @@
   height: 100%;
   float: right;
 }
+
+@media screen and (min-width: 1025px) {
+  .recordings-panel__content {
+    width: 60%;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .recordings-panel__content {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .recordings-panel__content {
+    width: 100%;
+  }
+}

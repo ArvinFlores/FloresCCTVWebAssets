@@ -1,0 +1,13 @@
+.recording-item {
+  padding: 1rem;
+}
+
+.recording-item__img {
+  width: 250px;
+  height: 175px;
+  object-fit: contain;
+}
+
+.recording-item__label {
+  color: white;
+}

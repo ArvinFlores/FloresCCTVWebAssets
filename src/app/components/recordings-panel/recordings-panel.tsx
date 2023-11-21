@@ -3,12 +3,16 @@ import './recordings-panel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { Button } from 'src/components/button';
+import { OutsideClick } from 'src/components/outside-click';
 import type { RecordingsPanelProps } from './interfaces';
 
 export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element {
   return (
     <div className="recordings-panel util-z-2000">
-      <div className="recordings-panel__content">
+      <OutsideClick
+        className="recordings-panel__content"
+        onClick={onClose}
+      >
         <div className="util-flex-container util-flex-container--h-sb">
           <div />
           <Button
@@ -24,7 +28,7 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
             />
           </Button>
         </div>
-      </div>
+      </OutsideClick>
     </div>
   );
 }

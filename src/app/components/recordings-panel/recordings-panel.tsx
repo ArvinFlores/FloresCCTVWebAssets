@@ -8,6 +8,13 @@ import { StickyHeaderList } from 'src/components/sticky-header-list';
 import { Spinner } from 'src/components/spinner';
 import { useAsyncCall } from 'src/hooks/use-async-call';
 import { florescctvClient } from 'src/services/florescctv-client';
+import {
+  ampmFormat,
+  dateFormat,
+  daysBetween,
+  daysAgoFormat
+} from 'src/util/datetime';
+import { RecordingItem } from './components/recording-item';
 import type { RecordingsPanelProps } from './interfaces';
 import { createStickyHeaderItems } from './helpers';
 
@@ -53,7 +60,28 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
             (
               data?.files && data.files.length > 0 ?
                 (
-                  <StickyHeaderList items={createStickyHeaderItems(data.files)} />
+                  <StickyHeaderList
+                    items={createStickyHeaderItems(data.files).map(({ header, children }) => {
+                      const itemDate = new Date(header);
+                      const currYear = new Date().getFullYear();
+                      const itemYear = itemDate.getFullYear();
+                      const longFormat = itemYear === currYear ? 'mm dd' : 'mm dd, yyyy';
+                      const dayDiff = daysBetween(new Date(), itemDate);
+
+                      return {
+                        header: dayDiff > 6 ? dateFormat(itemDate, longFormat) : daysAgoFormat(itemDate, true),
+                        children: children.map(({ id, thumbnail, created_at: createdAt }) => {
+                          return (
+                            <RecordingItem
+                              key={id}
+                              thumbnail={thumbnail}
+                              label={ampmFormat(new Date(createdAt))}
+                            />
+                          );
+                        })
+                      };
+                    })}
+                  />
                 ) :
                 (
                   <div className="util-perfect-center">

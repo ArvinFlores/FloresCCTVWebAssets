@@ -1,33 +1,26 @@
-import { createElement } from 'react';
 import type { FileStorage } from 'florescctvwebservice-types';
-import type { StickyHeaderListItem } from 'src/components/sticky-header-list/interfaces';
-import { RecordingItem } from './components/recording-item';
+import { daysBetween } from 'src/util/datetime';
+import type { ICreateStickyHeaderItem } from './interfaces';
 
-export function createStickyHeaderItems (files: FileStorage.File[]): StickyHeaderListItem[] {
-  return files.reduce<StickyHeaderListItem[]>(
+export function createStickyHeaderItems (files: FileStorage.File[]): ICreateStickyHeaderItem[] {
+  return files.reduce(
     (acc, item) => {
-      const last = acc[acc.length - 1] as StickyHeaderListItem | undefined;
-      const lastDate = last ? (last.header as string).split('T')[0] : '';
-      const currDate = item.created_at.split('T')[0];
-      const el = createElement(
-        RecordingItem,
-        {
-          thumbnail: item.thumbnail,
-          label: item.created_at
-        }
-      );
+      const last = acc[acc.length - 1] as ICreateStickyHeaderItem | undefined;
+      const lastDate = last ? new Date(last.header) : null;
+      const currDate = new Date(item.created_at);
+      const sameDay = lastDate && daysBetween(lastDate, currDate) === 0;
 
-      if (!last || lastDate !== currDate) {
+      if (!last || !sameDay) {
         return [
           ...acc,
           {
             header: item.created_at,
-            children: [el]
+            children: [item]
           }
         ];
       }
 
-      last.children.push(el);
+      last.children.push(item);
 
       return acc;
     },

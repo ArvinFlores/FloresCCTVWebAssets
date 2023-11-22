@@ -75,3 +75,7 @@
 .util-flex-container--h-sb {
   justify-content: space-between;
 }
+
+.util-ta-c {
+  text-align: center;
+}

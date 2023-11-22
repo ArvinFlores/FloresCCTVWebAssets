@@ -5,6 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  color: white;
 }
 
 .recordings-panel__content {
@@ -12,6 +13,7 @@
   width: 50%;
   height: 100%;
   float: right;
+  position: relative;
 }
 
 @media screen and (min-width: 1025px) {

@@ -9,6 +9,7 @@
   border-top: 16px solid #3498db;
   border-radius: 50%;
   animation: spin 2s linear infinite;
+  display: inline-block;
 }
 
 .spinner--small {

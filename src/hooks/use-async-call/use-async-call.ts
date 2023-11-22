@@ -24,7 +24,7 @@ export function useAsyncCall<Data> ({
     fn(...params).then((response) => {
       setHasFetched(true);
       setStatus('idle');
-      setData(handleData ? handleData(response, data) : response);
+      setData((data) => handleData ? handleData(response, data) : response);
     }).catch((error) => {
       setStatus('error');
       setError(error);

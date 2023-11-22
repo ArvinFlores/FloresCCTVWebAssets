@@ -14,7 +14,7 @@ export interface IUseAsyncOptions<Data> {
    * A handler to handle data from an async call, useful if you need to manipulate
    * how data is stored in the hook
    */
-  handleData?: (data: Data | null, prevData: Data | null) => Data;
+  handleData?: (data: Data, prevData: Data | null) => Data;
   /**
    * If true will not fire the async call on mount
    * IUseAsync.fetch will be provided in order to manually make the call

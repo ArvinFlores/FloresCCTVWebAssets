@@ -16,6 +16,10 @@
   position: relative;
 }
 
+.recordings-panel__spinner {
+  margin-bottom: 6rem;
+}
+
 @media screen and (min-width: 1025px) {
   .recordings-panel__content {
     width: 60%;

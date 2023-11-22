@@ -2,6 +2,7 @@ import './recordings-panel.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import type { FileStorage } from 'florescctvwebservice-types';
 import { Button } from 'src/components/button';
 import { OutsideClick } from 'src/components/outside-click';
 import { StickyHeaderList } from 'src/components/sticky-header-list';
@@ -24,15 +25,29 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
     hasFetched,
     status,
     fetch
-  } = useAsyncCall({
+  } = useAsyncCall<FileStorage.GetAllSuccess>({
     canRetry: true,
     params: ['create_date', 'desc', 10],
     fn: async (sortKey, sortOrder, pageSize) => await florescctvClient.recordings.getAll({
       pageSize,
       sortKey,
       sortOrder
-    })
+    }),
+    handleData: (data, prevData) => {
+      if (!prevData) return data;
+
+      return {
+        ...data,
+        files: [...prevData.files, ...data.files]
+      };
+    }
   });
+  const handleOnEndScroll = (): void => {
+    if (status === 'loading') {
+      return;
+    }
+    fetch?.();
+  };
 
   return (
     <div className="recordings-panel util-z-2000">
@@ -81,6 +96,16 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
                         })
                       };
                     })}
+                    postContent={
+                      data.nextPageToken != null ?
+                        (
+                          <div className="recordings-panel__spinner util-mt-2 util-ta-c">
+                            <Spinner size="small" />
+                          </div>
+                        ) :
+                        null
+                    }
+                    onEndReached={handleOnEndScroll}
                   />
                 ) :
                 (

@@ -1,14 +1,50 @@
 import './sticky-header-list.css';
 
+import {
+  useEffect,
+  useRef
+} from 'react';
+import { debounce } from 'src/util/debounce';
 import type { StickyHeaderListProps } from './interfaces';
 
 export function StickyHeaderList ({
   items,
   preContent,
-  postContent
+  postContent,
+  onEndReachedThreshold = 100,
+  onEndReached
 }: StickyHeaderListProps): JSX.Element {
+  const root = useRef<HTMLDivElement>(null);
+  const handleOnScroll = debounce(() => {
+    const {
+      scrollHeight,
+      scrollTop,
+      clientHeight
+    } = root.current as HTMLDivElement;
+    const scrollPos = Math.abs(scrollHeight - scrollTop - clientHeight);
+
+    if (scrollPos < onEndReachedThreshold) {
+      onEndReached?.();
+    }
+  }, 500);
+
+  useEffect(
+    () => {
+      const node = root.current;
+      node?.addEventListener('scroll', handleOnScroll);
+
+      return () => {
+        node?.removeEventListener('scroll', handleOnScroll);
+      };
+    },
+    []
+  );
+
   return (
-    <div className="sticky-header-list">
+    <div
+      ref={root}
+      className="sticky-header-list"
+    >
       {preContent}
       {
         items.map(({ header, children }, idx) => (

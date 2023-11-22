@@ -1,5 +1,6 @@
 .sticky-header-list {
   overflow: scroll;
+  height: 100%;
 }
 
 .sticky-header-list__header {

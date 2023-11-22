@@ -2,9 +2,14 @@ import './sticky-header-list.css';
 
 import type { StickyHeaderListProps } from './interfaces';
 
-export function StickyHeaderList ({ items }: StickyHeaderListProps): JSX.Element {
+export function StickyHeaderList ({
+  items,
+  preContent,
+  postContent
+}: StickyHeaderListProps): JSX.Element {
   return (
     <div className="sticky-header-list">
+      {preContent}
       {
         items.map(({ header, children }, idx) => (
           <div
@@ -25,6 +30,7 @@ export function StickyHeaderList ({ items }: StickyHeaderListProps): JSX.Element
           </div>
         ))
       }
+      {postContent}
     </div>
   );
 }

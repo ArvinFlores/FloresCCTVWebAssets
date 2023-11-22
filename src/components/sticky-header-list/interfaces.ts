@@ -5,4 +5,6 @@ export interface StickyHeaderListItem {
 
 export interface StickyHeaderListProps {
   items: StickyHeaderListItem[];
+  preContent?: React.ReactNode;
+  postContent?: React.ReactNode;
 }

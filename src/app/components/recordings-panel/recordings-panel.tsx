@@ -9,6 +9,7 @@ import { Spinner } from 'src/components/spinner';
 import { useAsyncCall } from 'src/hooks/use-async-call';
 import { florescctvClient } from 'src/services/florescctv-client';
 import type { RecordingsPanelProps } from './interfaces';
+import { createStickyHeaderItems } from './helpers';
 
 export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element {
   const {
@@ -52,7 +53,7 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
             (
               data?.files && data.files.length > 0 ?
                 (
-                  <StickyHeaderList items={[]} />
+                  <StickyHeaderList items={createStickyHeaderItems(data.files)} />
                 ) :
                 (
                   <div className="util-perfect-center">

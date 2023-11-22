@@ -3,7 +3,9 @@
 }
 
 .sticky-header-list__header {
+  color: black;
   background-color: #ededed;
+  font-weight: bold;
   padding: 1rem .5rem;
   border-bottom: 1px solid #dad6d6;
   position: sticky;

@@ -31,6 +31,11 @@ export function StickyHeaderList ({
   useEffect(
     () => {
       const node = root.current;
+
+      if (!onEndReached) {
+        return;
+      }
+
       node?.addEventListener('scroll', handleOnScroll);
 
       return () => {

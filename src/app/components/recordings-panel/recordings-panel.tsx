@@ -105,7 +105,7 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
                         ) :
                         null
                     }
-                    onEndReached={handleOnEndScroll}
+                    onEndReached={data.nextPageToken != null ? handleOnEndScroll : undefined}
                   />
                 ) :
                 (

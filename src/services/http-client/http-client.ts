@@ -1,29 +1,32 @@
 import type { IHttpClient } from './interfaces';
 
 function createHttpClient (): IHttpClient {
-  const baseFetch = (url: string, options: RequestInit) => fetch(url, options).then((response) => {
+  const baseFetch = async <Data>(url: string, options: RequestInit): Promise<Data> => await fetch(
+    url,
+    options
+  ).then(async (response) => {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
-    return response.json();
+    return await response.json();
   });
 
   return {
-    get (url, params) {
+    async get (url, params) {
       const q = new URLSearchParams(params).toString();
 
-      return baseFetch(`${url}?${q}`, { method: 'GET' });
+      return await baseFetch(`${url}?${q}`, { method: 'GET' });
     },
-    post (url, body) {
-      return baseFetch(url, {
+    async post (url, body) {
+      return await baseFetch(url, {
         body,
-        method: 'POST',
+        method: 'POST'
       });
     },
-    delete (url, body) {
-      return baseFetch(url, {
+    async delete (url, body) {
+      return await baseFetch(url, {
         body,
-        method: 'DELETE',
+        method: 'DELETE'
       });
     }
   };

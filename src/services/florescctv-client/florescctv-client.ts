@@ -9,7 +9,7 @@ function createFloresCCTVClient ({
 
   return {
     recordings: {
-      getAll ({
+      async getAll ({
         pageSize,
         sortKey,
         sortOrder
@@ -19,10 +19,10 @@ function createFloresCCTVClient ({
           'sort-key': sortKey,
           'sort-order': sortOrder
         };
-        return httpClient.get(baseUrl, params);
+        return await httpClient.get(baseUrl, params);
       },
-      delete (id) {
-        return httpClient.delete(`${baseUrl}/${id}`);
+      async delete (id) {
+        return await httpClient.delete(`${baseUrl}/${id}`);
       }
     }
   };

@@ -1,5 +1,5 @@
-import { FileStorage } from 'florescctvwebservice-types';
-import { httpClient } from 'src/services/http-client';
+import type { FileStorage } from 'florescctvwebservice-types';
+import type { httpClient } from 'src/services/http-client';
 
 export interface IFloresCCTVClientOptions {
   apiUrl: string;

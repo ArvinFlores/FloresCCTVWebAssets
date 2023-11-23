@@ -71,7 +71,7 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
           <div />
           <Button
             ariaLabel="Close recordings panel"
-            className="util-mr-2 util-mt-2"
+            className="util-mr-2 util-mt-2 recordings-panel__menu-btn"
             variant="see-through"
             circular={true}
             onClick={onClose}

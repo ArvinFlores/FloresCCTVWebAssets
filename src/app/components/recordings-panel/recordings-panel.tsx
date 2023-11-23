@@ -43,11 +43,23 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
     }
   });
   const handleOnEndScroll = (): void => {
-    if (status === 'loading') {
+    if (status === 'loading' || status === 'error') {
       return;
     }
     fetch?.();
   };
+  const showSpinner = status === 'loading' && <Spinner size="small" />;
+  const showError = status === 'error' && (
+    <>
+      <p>There was an error retrieving the recordings</p>
+      <Button
+        variant="primary"
+        onClick={fetch}
+      >
+        Retry
+      </Button>
+    </>
+  );
 
   return (
     <div className="recordings-panel util-z-2000">
@@ -100,7 +112,8 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
                       data.nextPageToken != null ?
                         (
                           <div className="recordings-panel__spinner util-mt-2 util-ta-c">
-                            <Spinner size="small" />
+                            {showSpinner}
+                            {showError}
                           </div>
                         ) :
                         null
@@ -116,20 +129,8 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
             ) :
             (
               <div className="util-perfect-center util-ta-c">
-                {status === 'loading' && <Spinner size="small" />}
-                {
-                  status === 'error' && (
-                    <>
-                      <p>There was an error retrieving the recordings</p>
-                      <Button
-                        variant="primary"
-                        onClick={fetch}
-                      >
-                        Retry
-                      </Button>
-                    </>
-                  )
-                }
+                {showSpinner}
+                {showError}
               </div>
             )
         }

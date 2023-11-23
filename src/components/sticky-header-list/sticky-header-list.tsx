@@ -42,7 +42,7 @@ export function StickyHeaderList ({
         node?.removeEventListener('scroll', handleOnScroll);
       };
     },
-    []
+    [handleOnScroll]
   );
 
   return (

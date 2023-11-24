@@ -206,7 +206,7 @@ export function App (): JSX.Element {
         }
       }
     },
-    [recordedItemRef.current, muteLocalAudio]
+    [micActive, muteLocalAudio]
   );
 
   return (

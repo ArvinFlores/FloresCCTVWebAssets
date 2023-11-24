@@ -15,13 +15,17 @@ export function useAsyncCall<Data> ({
   canRetry = false,
   handleData
 }: IUseAsyncOptions<Data>): IUseAsync<Data> {
+  const controller = new AbortController();
   const [status, setStatus] = useState<Status>('idle');
   const [hasFetched, setHasFetched] = useState<boolean>(false);
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const fetch = (): void => {
     setStatus('loading');
-    fn(...params).then((response) => {
+    fn({
+      params,
+      signal: controller.signal
+    }).then((response) => {
       setHasFetched(true);
       setStatus('idle');
       setData((data) => handleData ? handleData(response, data) : response);
@@ -36,6 +40,10 @@ export function useAsyncCall<Data> ({
       if (!lazy) {
         fetch();
       }
+
+      return () => {
+        controller.abort();
+      };
     },
     [...params]
   );

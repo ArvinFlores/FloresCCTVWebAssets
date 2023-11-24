@@ -31,11 +31,14 @@ export function RecordingsPanel ({
   } = useAsyncCall<FileStorage.GetAllSuccess>({
     canRetry: true,
     params: ['create_date', 'desc', 10],
-    fn: async (sortKey, sortOrder, pageSize) => await florescctvClient.recordings.getAll({
-      pageSize,
-      sortKey,
-      sortOrder
-    }),
+    fn: async ({
+      params,
+      signal
+    }) => await florescctvClient.recordings.getAll({
+      sortKey: params[0],
+      sortOrder: params[1],
+      pageSize: params[2]
+    }, { signal }),
     handleData: (data, prevData) => {
       if (!prevData) return data;
 

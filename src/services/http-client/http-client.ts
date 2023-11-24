@@ -12,19 +12,21 @@ function createHttpClient (): IHttpClient {
   });
 
   return {
-    async get (url, params) {
+    async get (url, params, opts) {
       const q = new URLSearchParams(params).toString();
 
-      return await baseFetch(`${url}?${q}`, { method: 'GET' });
+      return await baseFetch(`${url}?${q}`, { ...opts, method: 'GET' });
     },
-    async post (url, body) {
+    async post (url, body, opts) {
       return await baseFetch(url, {
+        ...opts,
         body,
         method: 'POST'
       });
     },
-    async delete (url, body) {
+    async delete (url, body, opts) {
       return await baseFetch(url, {
+        ...opts,
         body,
         method: 'DELETE'
       });

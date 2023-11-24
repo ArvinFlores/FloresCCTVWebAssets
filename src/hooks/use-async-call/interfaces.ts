@@ -1,5 +1,10 @@
 export type Status = 'idle' | 'loading' | 'error';
 
+interface AsyncFnArgs {
+  params: any[];
+  signal: AbortSignal;
+}
+
 export interface IUseAsyncOptions<Data> {
   /**
    * The params to provide to fn
@@ -9,7 +14,7 @@ export interface IUseAsyncOptions<Data> {
   /**
    * The async function to call
    */
-  fn: (...params: any[]) => Promise<Data>;
+  fn: (args: AsyncFnArgs) => Promise<Data>;
   /**
    * A handler to handle data from an async call, useful if you need to manipulate
    * how data is stored in the hook

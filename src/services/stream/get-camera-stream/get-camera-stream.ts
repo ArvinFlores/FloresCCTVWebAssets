@@ -1,5 +1,5 @@
 import { WebSocketConnection } from 'src/services/websocket-connection';
-import { getSenderTracks } from './helpers';
+import { getSenderTracks, getLocalAudioTrack } from './helpers';
 import { createRecordingHelpers } from '../helpers';
 import type { SingleStreamI, SingleStreamValue } from '../interfaces';
 
@@ -183,15 +183,20 @@ export function getCameraStream ({
       stream.getTracks().forEach((track) => pc?.addTrack(track, stream));
     },
     toggleLocalAudio () {
-      const tracks = getSenderTracks(pc);
-      const audioTracks = tracks.filter((track) => track?.kind === 'audio');
-      const audioTrack = audioTracks[0];
+      const audioTrack = getLocalAudioTrack(pc);
 
       if (audioTrack == null) return false;
 
       audioTrack.enabled = !audioTrack.enabled;
 
       return audioTrack.enabled;
+    },
+    muteLocalAudio (mute) {
+      const audioTrack = getLocalAudioTrack(pc);
+
+      if (audioTrack) {
+        audioTrack.enabled = !mute;
+      }
     },
     startVideoRecording () {
       startRecording(

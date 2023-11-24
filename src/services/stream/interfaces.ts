@@ -51,6 +51,10 @@ interface StreamValue {
    */
   toggleLocalAudio: () => boolean;
   /**
+   * Mute the local audio
+   */
+  muteLocalAudio: (mute: boolean) => void;
+  /**
    * Stops the active video recording of the stream
    */
   stopVideoRecording: () => void;

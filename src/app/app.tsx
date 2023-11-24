@@ -42,6 +42,7 @@ export function App (): JSX.Element {
     hasLocalStream,
     addLocalStream,
     toggleLocalAudio,
+    muteLocalAudio,
     setActiveStream
   } = useRemoteStream({
     wsUrl: JANUS_URL || `wss://${CAMERA_IP}:9000/stream`,
@@ -193,6 +194,19 @@ export function App (): JSX.Element {
       }
     },
     [wsConnStatus, micActive]
+  );
+
+  useEffect(
+    () => {
+      if (micActive) {
+        if (recordedItemRef.current) {
+          muteLocalAudio?.(true);
+        } else {
+          muteLocalAudio?.(false);
+        }
+      }
+    },
+    [recordedItemRef.current, muteLocalAudio]
   );
 
   return (

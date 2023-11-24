@@ -157,6 +157,7 @@ export function getJanusVideoroomStream ({
 
       return !muted;
     },
+    muteLocalAudio () {},
     startVideoRecording (item) {
       const remoteTrack = remoteTracks.get(item.id);
 

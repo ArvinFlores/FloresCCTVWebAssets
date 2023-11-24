@@ -25,7 +25,8 @@ export function useRemoteStream ({
     stopVideoRecording,
     hasLocalStream,
     addLocalStream,
-    toggleLocalAudio
+    toggleLocalAudio,
+    muteLocalAudio
   } = streamRef.current ?? {};
 
   useEffect(
@@ -82,6 +83,7 @@ export function useRemoteStream ({
     stopVideoRecording,
     hasLocalStream,
     addLocalStream,
-    toggleLocalAudio
+    toggleLocalAudio,
+    muteLocalAudio
   };
 }

@@ -2,6 +2,11 @@
   padding: 1rem;
 }
 
+.recording-item:hover {
+  background-color: #252525;
+  cursor: pointer;
+}
+
 .recording-item__img {
   width: 250px;
   height: 175px;

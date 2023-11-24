@@ -7,6 +7,7 @@ export interface ControlsProps {
   onToggleMic?: () => void;
   onCancelMediaPreview?: () => void;
   onDownloadMediaPreview?: () => void;
+  onDelete?: () => void;
   onTakeScreenshot?: () => void;
   onRecord?: () => void;
 }

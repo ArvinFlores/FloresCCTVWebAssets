@@ -2,13 +2,9 @@ import '../styles/base.css';
 import '../styles/util.css';
 
 import { useState, useRef, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faVolumeHigh } from '@fortawesome/free-solid-svg-icons/faVolumeHigh';
-import { faVolumeXmark } from '@fortawesome/free-solid-svg-icons/faVolumeXmark';
-import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import type { FileStorage } from 'florescctvwebservice-types';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
-import { Button } from 'src/components/button';
 import { Alert } from 'src/components/alert';
 import { JSONViewer } from 'src/components/json-viewer';
 import { ErrorBoundary } from 'src/components/error-boundary';
@@ -22,6 +18,7 @@ import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
 import { StreamsPreview } from './components/streams-preview';
 import { RecordingsPanel } from './components/recordings-panel';
+import { Actions } from './components/actions';
 import type { AppError } from './interfaces';
 
 export function App (): JSX.Element {
@@ -33,6 +30,7 @@ export function App (): JSX.Element {
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
+  const recordedItemRef = useRef<FileStorage.File | null>(null);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const {
@@ -83,6 +81,7 @@ export function App (): JSX.Element {
     if (previewSrc.startsWith('blob:')) {
       URL.revokeObjectURL(previewSrc);
     }
+    recordedItemRef.current = null;
     setPreviewSrc('');
   };
   const handleMediaDownload = (): void => {
@@ -146,6 +145,18 @@ export function App (): JSX.Element {
   };
   const handleToggleRecordingsPanel = (): void => {
     setShowRecordingsPanel((show) => !show);
+  };
+  const handleGoBackRecordingsPanel = (): void => {
+    recordedItemRef.current = null;
+    setShowRecordingsPanel(true);
+    setPreviewSrc('');
+  };
+  const handleOnSelectRecordingItem = (item: FileStorage.File): void => {
+    recordedItemRef.current = item;
+    setPreviewSrc(item.src);
+    setShowRecordingsPanel(false);
+  };
+  const handleOnDeleteRecordingItem = (): void => {
   };
   const renderFallbackError = (error: Error): JSX.Element => {
     return (
@@ -224,43 +235,41 @@ export function App (): JSX.Element {
       {
         activeStream && (
           <>
-            <div className="util-ml-2 util-mr-2 util-mt-2 util-flex-container util-flex-container--h-sb">
-              <Button
-                ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
-                variant="see-through"
-                circular={true}
-                onClick={handleToggleVideoAudio}
-              >
-                <FontAwesomeIcon
-                  icon={videoMuted ? faVolumeXmark : faVolumeHigh}
-                  size="2x"
-                />
-              </Button>
-              {
-                !showRecordingsPanel && (
-                  <Button
-                    ariaLabel="Open recordings panel"
-                    variant="see-through"
-                    circular={true}
-                    onClick={handleToggleRecordingsPanel}
-                  >
-                    <FontAwesomeIcon
-                      icon={faBars}
-                      size="2x"
-                    />
-                  </Button>
+            {
+              previewSrc && !recordedItemRef.current ?
+                null :
+                (
+                  <Actions
+                    videoMuted={videoMuted}
+                    showMenu={showRecordingsPanel}
+                    recording={recording}
+                    canGoBack={recordedItemRef.current != null}
+                    onVolumeClick={handleToggleVideoAudio}
+                    onMenuClick={handleToggleRecordingsPanel}
+                    onGoBackMenuClick={handleGoBackRecordingsPanel}
+                  />
                 )
-              }
-            </div>
-            <Video
-              ref={videofeedRef}
-              srcObject={activeStream.stream}
-              className="util-fullscreen util-z-neg"
-              autoPlay={true}
-              muted={videoMuted}
-              playsInline={true}
-            />
-            {showRecordingsPanel && <RecordingsPanel onClose={handleToggleRecordingsPanel} />}
+            }
+            {
+              !recordedItemRef.current && (
+                <Video
+                  ref={videofeedRef}
+                  srcObject={activeStream.stream}
+                  className="util-fullscreen util-z-neg"
+                  autoPlay={true}
+                  muted={videoMuted}
+                  playsInline={true}
+                />
+              )
+            }
+            {
+              showRecordingsPanel && (
+                <RecordingsPanel
+                  onClose={handleToggleRecordingsPanel}
+                  onItemClick={handleOnSelectRecordingItem}
+                />
+              )
+            }
           </>
         )
       }
@@ -288,9 +297,10 @@ export function App (): JSX.Element {
                 micEnabled={micEnabled}
                 recordingEnabled={recordingEnabled}
                 recording={recording}
-                onToggleMic={handleToggleMic}
                 onCancelMediaPreview={handleCancelMediaPreview}
-                onDownloadMediaPreview={handleMediaDownload}
+                onDownloadMediaPreview={recordedItemRef.current ? undefined : handleMediaDownload}
+                onDelete={recordedItemRef.current ? handleOnDeleteRecordingItem : undefined}
+                onToggleMic={handleToggleMic}
                 onTakeScreenshot={handleTakeScreenshot}
                 onRecord={handleRecordClick}
               />
@@ -298,7 +308,10 @@ export function App (): JSX.Element {
           </Fixed>
         )
       }
-      <MediaPreview previewSrc={previewSrc} />
+      <MediaPreview
+        previewSrc={previewSrc}
+        muteVideo={!recordedItemRef.current}
+      />
     </ErrorBoundary>
   );
 }

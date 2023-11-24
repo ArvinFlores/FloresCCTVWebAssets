@@ -19,7 +19,10 @@ import { RecordingItem } from './components/recording-item';
 import type { RecordingsPanelProps } from './interfaces';
 import { createStickyHeaderItems } from './helpers';
 
-export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element {
+export function RecordingsPanel ({
+  onClose,
+  onItemClick
+}: RecordingsPanelProps): JSX.Element {
   const {
     data,
     hasFetched,
@@ -97,13 +100,19 @@ export function RecordingsPanel ({ onClose }: RecordingsPanelProps): JSX.Element
 
                       return {
                         header: dayDiff > 6 ? dateFormat(itemDate, longFormat) : daysAgoFormat(itemDate, true),
-                        children: children.map(({ id, thumbnail, created_at: createdAt }) => {
+                        children: children.map((item) => {
+                          const { id, thumbnail, created_at: createdAt } = item;
+
                           return (
-                            <RecordingItem
+                            <div
                               key={id}
-                              thumbnail={thumbnail}
-                              label={ampmFormat(new Date(createdAt))}
-                            />
+                              onClick={onItemClick.bind(null, item)}
+                            >
+                              <RecordingItem
+                                thumbnail={thumbnail}
+                                label={ampmFormat(new Date(createdAt))}
+                              />
+                            </div>
                           );
                         })
                       };

@@ -5,6 +5,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone';
 import { faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons/faMicrophoneSlash';
+import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Button } from 'src/components/button';
@@ -21,7 +22,8 @@ export function Controls ({
   onCancelMediaPreview,
   onDownloadMediaPreview,
   onTakeScreenshot,
-  onRecord
+  onRecord,
+  onDelete
 }: ControlsProps): JSX.Element {
   return (
     <ul className="util-list util-list--inline">
@@ -29,27 +31,51 @@ export function Controls ({
         previewingMedia ?
           (
             <>
-              <li>
-                <Button onClick={onCancelMediaPreview}>
-                  <FontAwesomeIcon
-                    className="util-mr-0"
-                    icon={faXmark}
-                  />
-                  <span>Cancel</span>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="primary"
-                  onClick={onDownloadMediaPreview}
-                >
-                  <FontAwesomeIcon
-                    className="util-mr-0"
-                    icon={faDownload}
-                  />
-                  <span>Download</span>
-                </Button>
-              </li>
+              {
+                onCancelMediaPreview && (
+                  <li>
+                    <Button onClick={onCancelMediaPreview}>
+                      <FontAwesomeIcon
+                        className="util-mr-0"
+                        icon={faXmark}
+                      />
+                      <span>Cancel</span>
+                    </Button>
+                  </li>
+                )
+              }
+              {
+                onDelete && (
+                  <li>
+                    <Button
+                      variant="danger"
+                      onClick={onDelete}
+                    >
+                      <FontAwesomeIcon
+                        className="util-mr-0"
+                        icon={faTrash}
+                      />
+                      <span>Delete</span>
+                    </Button>
+                  </li>
+                )
+              }
+              {
+                onDownloadMediaPreview && (
+                  <li>
+                    <Button
+                      variant="primary"
+                      onClick={onDownloadMediaPreview}
+                    >
+                      <FontAwesomeIcon
+                        className="util-mr-0"
+                        icon={faDownload}
+                      />
+                      <span>Download</span>
+                    </Button>
+                  </li>
+                )
+              }
             </>
           ) :
           (

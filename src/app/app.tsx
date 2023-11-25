@@ -29,6 +29,7 @@ export function App (): JSX.Element {
   const [micActive, setMicActive] = useState<boolean>(false);
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
+  const [loadingRecording, setLoadingRecording] = useState<boolean>(false);
   const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
   const recordedItemRef = useRef<FileStorage.File | null>(null);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
@@ -239,7 +240,8 @@ export function App (): JSX.Element {
       {
         !['closed', 'failed'].includes(wsConnStatus as string) && (
           activeStream === null ||
-          ['connecting', 'reconnecting'].includes(wsConnStatus as string)
+          ['connecting', 'reconnecting'].includes(wsConnStatus as string) ||
+          loadingRecording
         ) && (
           <div className="util-perfect-center util-z-1000">
             <Spinner size="medium" />
@@ -247,7 +249,7 @@ export function App (): JSX.Element {
         )
       }
       {
-        activeStream && (
+        activeStream && !loadingRecording && (
           <>
             {
               previewSrc && !recordedItemRef.current ?
@@ -288,7 +290,7 @@ export function App (): JSX.Element {
         )
       }
       {
-        Boolean(activeStream ?? previewSrc) && (
+        Boolean(activeStream ?? previewSrc) && !loadingRecording && (
           <Fixed
             direction="bottom"
             className="util-z-1000"
@@ -325,6 +327,12 @@ export function App (): JSX.Element {
       <MediaPreview
         previewSrc={previewSrc}
         muteVideo={!recordedItemRef.current}
+        onVideoLoading={() => {
+          setLoadingRecording(true);
+        }}
+        onVideoLoaded={() => {
+          setLoadingRecording(false);
+        }}
       />
     </ErrorBoundary>
   );

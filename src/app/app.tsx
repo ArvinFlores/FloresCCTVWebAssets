@@ -12,8 +12,10 @@ import { Video } from 'src/components/media';
 import { Spinner } from 'src/components/spinner';
 import { Fixed } from 'src/components/fixed';
 import { useRemoteStream } from 'src/hooks/use-remote-stream';
+import { useAsyncCall } from 'src/hooks/use-async-call';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
+import { florescctvClient } from 'src/services/florescctv-client';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
 import { StreamsPreview } from './components/streams-preview';
@@ -158,8 +160,6 @@ export function App (): JSX.Element {
     setPreviewSrc(item.src);
     setShowRecordingsPanel(false);
   };
-  const handleOnDeleteRecordingItem = (): void => {
-  };
   const renderFallbackError = (error: Error): JSX.Element => {
     return (
       <Alert type="danger">
@@ -168,6 +168,15 @@ export function App (): JSX.Element {
       </Alert>
     );
   };
+  const {
+    fetch: handleOnDeleteRecordingItem,
+    status: deleteRecordingStatus
+  } = useAsyncCall<FileStorage.DeleteSuccess>({
+    lazy: true,
+    params: [recordedItemRef.current?.id],
+    fn: async ({ params: [fileId] }) => await florescctvClient.recordings.delete(fileId),
+    onSuccess: handleGoBackRecordingsPanel
+  });
 
   useEffect(
     () => {
@@ -252,7 +261,9 @@ export function App (): JSX.Element {
         activeStream && !loadingRecording && (
           <>
             {
-              previewSrc && !recordedItemRef.current ?
+              (
+                previewSrc && !recordedItemRef.current
+              ) || deleteRecordingStatus === 'loading' ?
                 null :
                 (
                   <Actions
@@ -307,19 +318,25 @@ export function App (): JSX.Element {
               )
             }
             <Navbar alignContent="center">
-              <Controls
-                previewingMedia={Boolean(previewSrc)}
-                micActive={micActive}
-                micEnabled={micEnabled}
-                recordingEnabled={recordingEnabled}
-                recording={recording}
-                onCancelMediaPreview={handleCancelMediaPreview}
-                onDownloadMediaPreview={recordedItemRef.current ? undefined : handleMediaDownload}
-                onDelete={recordedItemRef.current ? handleOnDeleteRecordingItem : undefined}
-                onToggleMic={handleToggleMic}
-                onTakeScreenshot={handleTakeScreenshot}
-                onRecord={handleRecordClick}
-              />
+              {
+                deleteRecordingStatus === 'loading' ?
+                  <Spinner size="small" /> :
+                  (
+                    <Controls
+                      previewingMedia={Boolean(previewSrc)}
+                      micActive={micActive}
+                      micEnabled={micEnabled}
+                      recordingEnabled={recordingEnabled}
+                      recording={recording}
+                      onCancelMediaPreview={handleCancelMediaPreview}
+                      onDownloadMediaPreview={recordedItemRef.current ? undefined : handleMediaDownload}
+                      onDelete={recordedItemRef.current ? handleOnDeleteRecordingItem : undefined}
+                      onToggleMic={handleToggleMic}
+                      onTakeScreenshot={handleTakeScreenshot}
+                      onRecord={handleRecordClick}
+                    />
+                  )
+              }
             </Navbar>
           </Fixed>
         )

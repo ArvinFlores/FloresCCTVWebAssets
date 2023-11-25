@@ -30,6 +30,10 @@ export interface IUseAsyncOptions<Data> {
    * IUseAsync.fetch will be provided in order to manually make the call
    */
   canRetry?: boolean;
+  /**
+   * A handler when the call resolves successfully
+   */
+  onSuccess?: () => void;
 }
 
 export interface IUseAsync<Data> {

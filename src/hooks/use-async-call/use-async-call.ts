@@ -13,7 +13,8 @@ export function useAsyncCall<Data> ({
   fn,
   lazy = false,
   canRetry = false,
-  handleData
+  handleData,
+  onSuccess
 }: IUseAsyncOptions<Data>): IUseAsync<Data> {
   const controller = new AbortController();
   const [status, setStatus] = useState<Status>('idle');
@@ -29,6 +30,7 @@ export function useAsyncCall<Data> ({
       setHasFetched(true);
       setStatus('idle');
       setData((data) => handleData ? handleData(response, data) : response);
+      onSuccess?.();
     }).catch((error) => {
       setStatus('error');
       setError(error);

@@ -34,6 +34,10 @@ export interface IUseAsyncOptions<Data> {
    * A handler when the call resolves successfully
    */
   onSuccess?: () => void;
+  /**
+   * A handler when the call fails
+   */
+  onError?: (err: Error) => void;
 }
 
 export interface IUseAsync<Data> {

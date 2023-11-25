@@ -135,7 +135,7 @@ export function RecordingsPanel ({
                 ) :
                 (
                   <div className="util-perfect-center">
-                    <p>The camera has not recorded anything</p>
+                    <p>The camera has not recorded anything yet</p>
                   </div>
                 )
             ) :

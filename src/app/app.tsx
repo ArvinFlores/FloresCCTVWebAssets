@@ -86,6 +86,7 @@ export function App (): JSX.Element {
       URL.revokeObjectURL(previewSrc);
     }
     recordedItemRef.current = null;
+    if (error) setError(null);
     setPreviewSrc('');
   };
   const handleMediaDownload = (): void => {
@@ -154,6 +155,7 @@ export function App (): JSX.Element {
     recordedItemRef.current = null;
     setShowRecordingsPanel(true);
     setPreviewSrc('');
+    if (error) setError(null);
   };
   const handleOnSelectRecordingItem = (item: FileStorage.File): void => {
     recordedItemRef.current = item;
@@ -175,13 +177,20 @@ export function App (): JSX.Element {
     lazy: true,
     params: [recordedItemRef.current?.id],
     fn: async ({ params: [fileId] }) => await florescctvClient.recordings.delete(fileId),
-    onSuccess: handleGoBackRecordingsPanel
+    onSuccess: handleGoBackRecordingsPanel,
+    onError: (err) => {
+      setError({
+        message: 'We were unable to delete the recording',
+        dismissable: true,
+        details: { message: err.message }
+      });
+    }
   });
 
   useEffect(
     () => {
       const hasVideoFeed = wsConnStatus === 'connected' && activeStream != null;
-      if (hasVideoFeed && error != null) {
+      if (hasVideoFeed && error != null && !recordedItemRef.current) {
         setError(null);
       }
     },

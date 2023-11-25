@@ -54,7 +54,6 @@ export function RecordingsPanel ({
     }
     fetch?.();
   };
-  const showSpinner = status === 'loading' && <Spinner size="small" />;
   const showError = status === 'error' && (
     <>
       <p>There was an error retrieving the recordings</p>
@@ -94,6 +93,7 @@ export function RecordingsPanel ({
               data?.files && data.files.length > 0 ?
                 (
                   <StickyHeaderList
+                    height="calc(100% - 75px)"
                     items={createStickyHeaderItems(data.files).map(({ header, children }) => {
                       const itemDate = new Date(header);
                       const currYear = new Date().getFullYear();
@@ -123,8 +123,8 @@ export function RecordingsPanel ({
                     postContent={
                       data.nextPageToken != null ?
                         (
-                          <div className="recordings-panel__spinner util-mt-2 util-ta-c">
-                            {showSpinner}
+                          <div className="util-mb-3 util-mt-3 util-ta-c">
+                            {status !== 'error' && <Spinner size="small" />}
                             {showError}
                           </div>
                         ) :
@@ -141,7 +141,7 @@ export function RecordingsPanel ({
             ) :
             (
               <div className="util-perfect-center util-ta-c">
-                {showSpinner}
+                {status === 'loading' && <Spinner size="small" />}
                 {showError}
               </div>
             )

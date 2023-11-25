@@ -16,10 +16,6 @@
   position: relative;
 }
 
-.recordings-panel__spinner {
-  margin-bottom: 6rem;
-}
-
 .recordings-panel__menu-btn {
   position: relative;
   top: 1px;

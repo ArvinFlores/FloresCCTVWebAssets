@@ -9,6 +9,7 @@ import type { StickyHeaderListProps } from './interfaces';
 
 export function StickyHeaderList ({
   items,
+  height = '100%',
   preContent,
   postContent,
   onEndReachedThreshold = 100,
@@ -49,6 +50,7 @@ export function StickyHeaderList ({
     <div
       ref={root}
       className="sticky-header-list"
+      style={{ height }}
     >
       {preContent}
       {

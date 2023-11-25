@@ -5,6 +5,7 @@ export interface StickyHeaderListItem {
 
 export interface StickyHeaderListProps {
   items: StickyHeaderListItem[];
+  height?: string;
   preContent?: React.ReactNode;
   postContent?: React.ReactNode;
   onEndReachedThreshold?: number;

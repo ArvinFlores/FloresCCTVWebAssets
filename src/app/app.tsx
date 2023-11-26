@@ -15,6 +15,7 @@ import { useRemoteStream } from 'src/hooks/use-remote-stream';
 import { useAsyncCall } from 'src/hooks/use-async-call';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
+import { dateFormat } from 'src/util/datetime';
 import { florescctvClient } from 'src/services/florescctv-client';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
@@ -353,6 +354,11 @@ export function App (): JSX.Element {
       <MediaPreview
         previewSrc={previewSrc}
         muteVideo={!recordedItemRef.current}
+        label={
+          recordedItemRef.current != null ?
+            dateFormat(new Date(recordedItemRef.current.created_at), 'm/dd/yyyy ampm') :
+            undefined
+        }
         onVideoLoading={() => {
           setLoadingRecording(true);
         }}

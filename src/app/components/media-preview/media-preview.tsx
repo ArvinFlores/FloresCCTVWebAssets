@@ -41,7 +41,7 @@ export function MediaPreview ({
   return (
     <>
       {
-        label && (
+        label != null && label.length > 0 && (
           <div className="media-preview__label util-z-2000">
             {label}
           </div>

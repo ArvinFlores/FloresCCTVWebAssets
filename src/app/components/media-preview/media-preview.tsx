@@ -1,3 +1,5 @@
+import './media-preview.css';
+
 import { useRef, useEffect } from 'react';
 import { Video } from 'src/components/media';
 import type { MediaPreviewProps } from './interfaces';
@@ -5,6 +7,7 @@ import type { MediaPreviewProps } from './interfaces';
 export function MediaPreview ({
   previewSrc,
   muteVideo,
+  label,
   onVideoLoading,
   onVideoLoaded
 }: MediaPreviewProps): JSX.Element {
@@ -37,6 +40,13 @@ export function MediaPreview ({
 
   return (
     <>
+      {
+        label && (
+          <div className="media-preview__label util-z-2000">
+            {label}
+          </div>
+        )
+      }
       {
         previewSrc.startsWith('data:') && (
           <img

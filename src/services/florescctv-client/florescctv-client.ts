@@ -5,7 +5,8 @@ function createFloresCCTVClient ({
   apiUrl,
   httpClient
 }: IFloresCCTVClientOptions): IFloresCCTVClient {
-  const baseUrl = `${apiUrl}/recordings`;
+  const recordingsUrl = `${apiUrl}/recordings`;
+  const camerasUrl = `${apiUrl}/cameras`;
 
   return {
     recordings: {
@@ -22,10 +23,15 @@ function createFloresCCTVClient ({
           'sort-key': sortKey,
           'sort-order': sortOrder
         };
-        return await httpClient.get(baseUrl, params, opts);
+        return await httpClient.get(recordingsUrl, params, opts);
       },
       async delete (id, opts) {
-        return await httpClient.delete(`${baseUrl}/${id}`, undefined, opts);
+        return await httpClient.delete(`${recordingsUrl}/${id}`, undefined, opts);
+      }
+    },
+    cameras: {
+      async getAllHealth () {
+        return await httpClient.get(`${camerasUrl}/health`);
       }
     }
   };

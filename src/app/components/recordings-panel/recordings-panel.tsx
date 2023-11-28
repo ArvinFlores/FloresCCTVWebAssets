@@ -19,6 +19,7 @@ import {
   daysAgoFormat
 } from 'src/util/datetime';
 import { classnames } from 'src/util/classnames';
+import { isDebugMode } from 'src/util/env';
 import { RecordingItem } from './components/recording-item';
 import { HealthCheckPanel } from './components/health-check-panel';
 import type { RecordingsPanelProps } from './interfaces';
@@ -93,19 +94,23 @@ export function RecordingsPanel ({
             activePanel === initialPanel ?
               (
                 <>
-                  <Button
-                    ariaLabel="Open camera health panel"
-                    variant="see-through"
-                    circular={true}
-                    onClick={() => {
-                      setActivePanel('health');
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faWrench}
-                      size="2x"
-                    />
-                  </Button>
+                  {
+                    isDebugMode() && (
+                      <Button
+                        ariaLabel="Open camera health panel"
+                        variant="see-through"
+                        circular={true}
+                        onClick={() => {
+                          setActivePanel('health');
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faWrench}
+                          size="2x"
+                        />
+                      </Button>
+                    )
+                  }
                   <Button
                     ariaLabel="Close recordings panel"
                     className="recordings-panel__menu-btn"

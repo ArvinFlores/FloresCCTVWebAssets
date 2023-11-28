@@ -2,17 +2,25 @@ import './media-preview.css';
 
 import { useRef, useEffect } from 'react';
 import { Video } from 'src/components/media';
+import { classnames } from 'src/util/classnames';
 import type { MediaPreviewProps } from './interfaces';
 
 export function MediaPreview ({
   previewSrc,
   muteVideo,
   label,
+  scaled,
   onVideoLoading,
   onVideoLoaded
 }: MediaPreviewProps): JSX.Element {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const isVideo = previewSrc.startsWith('blob:') || previewSrc.startsWith('http');
+  const classes = classnames({
+    'util-fullscreen': true,
+    'util-fullscreen--cover': scaled,
+    'util-fullscreen--contain': !isVideo && !scaled,
+    'util-z-1': true
+  });
   const handleVideoLoading = (): void => {
     if (isVideo) {
       onVideoLoading?.();
@@ -50,7 +58,7 @@ export function MediaPreview ({
       {
         previewSrc.startsWith('data:') && (
           <img
-            className="util-fullscreen util-z-1"
+            className={classes}
             src={previewSrc}
           />
         )
@@ -59,7 +67,7 @@ export function MediaPreview ({
         isVideo && (
           <Video
             ref={videoRef}
-            className="util-fullscreen util-z-1"
+            className={classes}
             src={previewSrc}
             autoPlay={true}
             muted={muteVideo}

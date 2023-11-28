@@ -4,10 +4,12 @@ export interface ControlsProps {
   micActive: boolean;
   recordingEnabled: boolean;
   recording: boolean;
+  scaled: boolean;
   onToggleMic?: () => void;
   onCancelMediaPreview?: () => void;
   onDownloadMediaPreview?: () => void;
   onDelete?: () => void;
   onTakeScreenshot?: () => void;
   onRecord?: () => void;
+  onToggleScale?: () => void;
 }

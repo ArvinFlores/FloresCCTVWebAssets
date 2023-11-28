@@ -6,6 +6,8 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone';
 import { faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons/faMicrophoneSlash';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
+import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
+import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Button } from 'src/components/button';
@@ -18,12 +20,14 @@ export function Controls ({
   micEnabled,
   recording,
   recordingEnabled,
+  scaled,
   onToggleMic,
   onCancelMediaPreview,
   onDownloadMediaPreview,
   onTakeScreenshot,
   onRecord,
-  onDelete
+  onDelete,
+  onToggleScale
 }: ControlsProps): JSX.Element {
   return (
     <ul className="util-list util-list--inline">
@@ -122,6 +126,19 @@ export function Controls ({
                   disabled={!recordingEnabled}
                   onClick={onRecord}
                 />
+              </li>
+              <li>
+                <Button
+                  ariaLabel={scaled ? 'Minimize camera view' : 'Maximize camera view'}
+                  className="controls__btn"
+                  circular={true}
+                  onClick={onToggleScale}
+                >
+                  <FontAwesomeIcon
+                    icon={scaled ? faCompress : faExpand}
+                    size="2x"
+                  />
+                </Button>
               </li>
             </>
           )

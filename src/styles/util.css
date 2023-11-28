@@ -52,10 +52,12 @@
   height: 100%;
 }
 
-@media screen and (max-width: 1010px) {
-  .util-fullscreen {
-    object-fit: cover;
-  }
+.util-fullscreen--cover {
+  object-fit: cover;
+}
+
+.util-fullscreen--contain {
+  object-fit: contain;
 }
 
 .util-pos-rel {

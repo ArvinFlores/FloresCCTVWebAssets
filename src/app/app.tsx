@@ -16,6 +16,7 @@ import { useAsyncCall } from 'src/hooks/use-async-call';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
 import { dateFormat } from 'src/util/datetime';
+import { classnames } from 'src/util/classnames';
 import { florescctvClient } from 'src/services/florescctv-client';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
@@ -34,6 +35,7 @@ export function App (): JSX.Element {
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const [loadingRecording, setLoadingRecording] = useState<boolean>(false);
   const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
+  const [scaled, setScaled] = useState<boolean>(true);
   const recordedItemRef = useRef<FileStorage.File | null>(null);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
@@ -292,7 +294,11 @@ export function App (): JSX.Element {
                 <Video
                   ref={videofeedRef}
                   srcObject={activeStream.stream}
-                  className="util-fullscreen util-z-neg"
+                  className={classnames({
+                    'util-fullscreen': true,
+                    'util-fullscreen--cover': scaled,
+                    'util-z-neg': true
+                  })}
                   autoPlay={true}
                   muted={videoMuted}
                   playsInline={true}
@@ -338,12 +344,16 @@ export function App (): JSX.Element {
                       micEnabled={micEnabled}
                       recordingEnabled={recordingEnabled}
                       recording={recording}
+                      scaled={scaled}
                       onCancelMediaPreview={handleCancelMediaPreview}
                       onDownloadMediaPreview={recordedItemRef.current ? undefined : handleMediaDownload}
                       onDelete={recordedItemRef.current ? handleOnDeleteRecordingItem : undefined}
                       onToggleMic={handleToggleMic}
                       onTakeScreenshot={handleTakeScreenshot}
                       onRecord={handleRecordClick}
+                      onToggleScale={() => {
+                        setScaled((active) => !active);
+                      }}
                     />
                   )
               }
@@ -354,6 +364,7 @@ export function App (): JSX.Element {
       <MediaPreview
         previewSrc={previewSrc}
         muteVideo={!recordedItemRef.current}
+        scaled={scaled}
         label={
           recordedItemRef.current != null ?
             dateFormat(new Date(recordedItemRef.current.created_at), 'm/dd/yyyy ampm') :

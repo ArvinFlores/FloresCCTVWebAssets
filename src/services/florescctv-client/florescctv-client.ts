@@ -30,8 +30,8 @@ function createFloresCCTVClient ({
       }
     },
     cameras: {
-      async getAllHealth () {
-        return await httpClient.get(`${camerasUrl}/health`);
+      async getAllHealth (opts) {
+        return await httpClient.get(`${camerasUrl}/health`, undefined, opts);
       }
     }
   };

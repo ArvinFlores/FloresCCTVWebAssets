@@ -20,6 +20,7 @@ import {
 } from 'src/util/datetime';
 import { classnames } from 'src/util/classnames';
 import { RecordingItem } from './components/recording-item';
+import { HealthCheckPanel } from './components/health-check-panel';
 import type { RecordingsPanelProps } from './interfaces';
 import { createStickyHeaderItems } from './helpers';
 
@@ -85,7 +86,6 @@ export function RecordingsPanel ({
             'util-flex-container--h-left': activePanel !== initialPanel,
             'util-flex-container--h-right': activePanel === initialPanel,
             'util-mr-2': true,
-            'util-ml-2': true,
             'util-mt-2': true
           })}
         >
@@ -198,9 +198,9 @@ export function RecordingsPanel ({
               )
           )
         }
-        {
-          activePanel === 'health' && <div />
-        }
+        <div className="recordings-panel__scrollable">
+          {activePanel === 'health' && <HealthCheckPanel />}
+        </div>
       </OutsideClick>
     </div>
   );

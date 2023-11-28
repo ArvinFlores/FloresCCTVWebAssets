@@ -8,7 +8,7 @@ interface RecordingsActions {
 }
 
 interface CamerasActions {
-  getAllHealth: () => Promise<Camera.Health[]>;
+  getAllHealth: (clientOpts?: HttpClientOpts) => Promise<Camera.Health[]>;
 }
 
 export interface IFloresCCTVClientOptions {

@@ -21,6 +21,11 @@
   position: relative;
 }
 
+.recordings-panel__scrollable {
+  height: calc(100% - 75px);
+  overflow-y: scroll;
+}
+
 @media screen and (min-width: 1025px) {
   .recordings-panel__content {
     width: 60%;

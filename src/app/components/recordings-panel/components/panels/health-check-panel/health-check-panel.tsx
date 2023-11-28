@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Spinner } from 'src/components/spinner';
 import { useAsyncCall } from 'src/hooks/use-async-call';
 import { florescctvClient } from 'src/services/florescctv-client';
-import { ErrorMessage } from '../error-message';
+import { ErrorMessage } from '../../error-message';
 
 export function HealthCheckPanel (): JSX.Element {
   const {

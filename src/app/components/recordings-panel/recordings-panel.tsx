@@ -21,7 +21,7 @@ import {
 import { classnames } from 'src/util/classnames';
 import { isDebugMode } from 'src/util/env';
 import { RecordingItem } from './components/recording-item';
-import { HealthCheckPanel } from './components/health-check-panel';
+import { HealthCheckPanel } from './components/panels/health-check-panel';
 import { ErrorMessage } from './components/error-message';
 import type { RecordingsPanelProps } from './interfaces';
 import { createStickyHeaderItems } from './helpers';

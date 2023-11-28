@@ -303,7 +303,7 @@ export function App (): JSX.Element {
               showRecordingsPanel && (
                 <RecordingsPanel
                   onClose={handleToggleRecordingsPanel}
-                  onItemClick={handleOnSelectRecordingItem}
+                  onRecordingItemClick={handleOnSelectRecordingItem}
                 />
               )
             }

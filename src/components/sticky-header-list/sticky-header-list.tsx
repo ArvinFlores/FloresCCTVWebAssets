@@ -59,7 +59,7 @@ export function StickyHeaderList ({
             key={idx}
             className="sticky-header-list__section"
           >
-            <div className="sticky-header-list__header">{header}</div>
+            <div className="sticky-header-list__header util-z-2000">{header}</div>
             {
               children.map((child, i) => (
                 <div

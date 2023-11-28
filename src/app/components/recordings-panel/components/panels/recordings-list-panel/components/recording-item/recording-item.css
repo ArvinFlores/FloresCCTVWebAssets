@@ -13,6 +13,10 @@
   object-fit: contain;
 }
 
+.recording-item__img-border {
+  border: 1px solid white;
+}
+
 .recording-item__label {
   color: white;
 }

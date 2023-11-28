@@ -22,6 +22,7 @@ import { classnames } from 'src/util/classnames';
 import { isDebugMode } from 'src/util/env';
 import { RecordingItem } from './components/recording-item';
 import { HealthCheckPanel } from './components/health-check-panel';
+import { ErrorMessage } from './components/error-message';
 import type { RecordingsPanelProps } from './interfaces';
 import { createStickyHeaderItems } from './helpers';
 
@@ -63,15 +64,10 @@ export function RecordingsPanel ({
     fetch?.();
   };
   const showError = status === 'error' && (
-    <>
-      <p>There was an error retrieving the recordings</p>
-      <Button
-        variant="primary"
-        onClick={fetch}
-      >
-        Retry
-      </Button>
-    </>
+    <ErrorMessage
+      message="There was an error retrieving the recordings"
+      onRetry={fetch}
+    />
   );
 
   return (
@@ -196,7 +192,7 @@ export function RecordingsPanel ({
                   )
               ) :
               (
-                <div className="util-perfect-center util-ta-c">
+                <div className="util-perfect-center">
                   {status === 'loading' && <Spinner size="small" />}
                   {showError}
                 </div>

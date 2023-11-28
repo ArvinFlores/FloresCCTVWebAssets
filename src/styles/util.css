@@ -76,6 +76,14 @@
   justify-content: space-between;
 }
 
+.util-flex-container--h-left {
+  justify-content: flex-start;
+}
+
+.util-flex-container--h-right {
+  justify-content: flex-end;
+}
+
 .util-ta-c {
   text-align: center;
 }

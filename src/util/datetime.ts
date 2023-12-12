@@ -54,8 +54,8 @@ export function dateFormat (date: Date, format: string): string {
   const day = date.getDate();
   const year = date.getFullYear();
 
-  return format.replace(/(MM)|(mm)/, months[month])
-    .replace(/(M)|(m)/, String(month + 1))
+  return format.replace(/(mm)/, months[month])
+    .replace(/(MM)/, String(month + 1))
     .replace(/(DD)|(dd)/, String(day))
     .replace(/(YYYY)|(yyyy)/, String(year))
     .replace('ampm', ampmFormat(date));

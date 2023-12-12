@@ -367,7 +367,7 @@ export function App (): JSX.Element {
         scaled={scaled}
         label={
           recordedItemRef.current != null ?
-            dateFormat(new Date(recordedItemRef.current.created_at), 'm/dd/yyyy ampm') :
+            dateFormat(new Date(recordedItemRef.current.created_at), 'MM/dd/yyyy ampm') :
             undefined
         }
         onVideoLoading={() => {

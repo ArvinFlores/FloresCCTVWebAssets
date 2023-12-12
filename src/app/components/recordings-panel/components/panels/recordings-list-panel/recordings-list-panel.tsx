@@ -1,4 +1,5 @@
 import type { FileStorage } from 'florescctvwebservice-types';
+import { useRef } from 'react';
 import { useAsyncCall } from 'src/hooks/use-async-call';
 import { florescctvClient } from 'src/services/florescctv-client';
 import { Spinner } from 'src/components/spinner';
@@ -15,6 +16,7 @@ import { createStickyHeaderItems } from './helpers';
 import type { RecordingsListPanelProps } from './interfaces';
 
 export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps): JSX.Element {
+  const pageTokenRef = useRef<null | string>(null);
   const {
     data,
     hasFetched,
@@ -29,7 +31,8 @@ export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps):
     }) => await florescctvClient.recordings.getAll({
       sortKey: params[0],
       sortOrder: params[1],
-      pageSize: params[2]
+      pageSize: params[2],
+      pageToken: pageTokenRef.current ?? undefined
     }, { signal }),
     handleData: (data, prevData) => {
       if (!prevData) return data;
@@ -38,6 +41,9 @@ export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps):
         ...data,
         files: [...prevData.files, ...data.files]
       };
+    },
+    onSuccess: (data) => {
+      pageTokenRef.current = data.nextPageToken ?? null;
     }
   });
   const handleOnEndScroll = (): void => {

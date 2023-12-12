@@ -13,6 +13,7 @@ function createFloresCCTVClient ({
       async getAll (
         {
           pageSize,
+          pageToken,
           sortKey,
           sortOrder
         },
@@ -20,6 +21,7 @@ function createFloresCCTVClient ({
       ) {
         const params = {
           'page-size': pageSize.toString(),
+          'page-token': pageToken ?? '',
           'sort-key': sortKey,
           'sort-order': sortOrder
         };

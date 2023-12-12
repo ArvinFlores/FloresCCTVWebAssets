@@ -31,7 +31,7 @@ export function useAsyncCall<Data> ({
       setHasFetched(true);
       setStatus('idle');
       setData((data) => handleData ? handleData(response, data) : response);
-      onSuccess?.();
+      onSuccess?.(response);
     }).catch((error) => {
       setStatus('error');
       setError(error);

@@ -13,6 +13,7 @@ export function RecordingItem ({
     <div className="recording-item util-list--inline">
       <Img
         className="recording-item__img"
+        referrerPolicy="no-referrer"
         src={thumbnail}
         errorFallback={
           <div className="recording-item__img recording-item__img-border util-pos-rel">

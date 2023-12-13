@@ -13,7 +13,7 @@ export function Img ({
   ...props
 }: ImgProps): JSX.Element {
   const node = useRef<HTMLImageElement | null>(null);
-  const [err, setErr] = useState<boolean>(true);
+  const [err, setErr] = useState<boolean>(false);
   const handleOnError = useCallback(
     (): void => {
       if (errorFallback != null) {

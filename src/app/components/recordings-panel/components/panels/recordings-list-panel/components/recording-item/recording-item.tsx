@@ -9,23 +9,31 @@ export function RecordingItem ({
   thumbnail,
   label
 }: RecordingItemProps): JSX.Element {
+  const errorFallback = (
+    <div className="recording-item__img recording-item__img-border util-pos-rel">
+      <div className="util-perfect-center">
+        <FontAwesomeIcon
+          icon={faVideo}
+          size="5x"
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className="recording-item util-list--inline">
-      <Img
-        className="recording-item__img"
-        referrerPolicy="no-referrer"
-        src={thumbnail}
-        errorFallback={
-          <div className="recording-item__img recording-item__img-border util-pos-rel">
-            <div className="util-perfect-center">
-              <FontAwesomeIcon
-                icon={faVideo}
-                size="5x"
-              />
-            </div>
-          </div>
-        }
-      />
+      {
+        thumbnail ?
+          (
+            <Img
+              className="recording-item__img"
+              referrerPolicy="no-referrer"
+              src={thumbnail}
+              errorFallback={errorFallback}
+            />
+          ) :
+          errorFallback
+      }
       <p className="recording-item__label util-ml-2">{label}</p>
     </div>
   );

@@ -70,7 +70,7 @@ export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps):
 
   if (!data || data.files.length === 0) {
     return (
-      <div className="util-perfect-center">
+      <div className="util-perfect-center util-ta-c">
         <p>The camera has not recorded anything yet</p>
       </div>
     );

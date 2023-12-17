@@ -8,7 +8,6 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { Button } from 'src/components/button';
 import { OutsideClick } from 'src/components/outside-click';
 import { classnames } from 'src/util/classnames';
-import { isDebugMode } from 'src/util/env';
 import { HealthCheckPanel } from './components/panels/health-check-panel';
 import { RecordingsListPanel } from './components/panels/recordings-list-panel';
 import type { RecordingsPanelProps } from './interfaces';
@@ -40,23 +39,19 @@ export function RecordingsPanel ({
             activePanel === initialPanel ?
               (
                 <>
-                  {
-                    isDebugMode() && (
-                      <Button
-                        ariaLabel="Open camera health panel"
-                        variant="see-through"
-                        circular={true}
-                        onClick={() => {
-                          setActivePanel('health');
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faWrench}
-                          size="2x"
-                        />
-                      </Button>
-                    )
-                  }
+                  <Button
+                    ariaLabel="Open camera health panel"
+                    variant="see-through"
+                    circular={true}
+                    onClick={() => {
+                      setActivePanel('health');
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faWrench}
+                      size="2x"
+                    />
+                  </Button>
                   <Button
                     ariaLabel="Close recordings panel"
                     className="recordings-panel__menu-btn"

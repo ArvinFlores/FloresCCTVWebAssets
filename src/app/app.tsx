@@ -35,7 +35,7 @@ export function App (): JSX.Element {
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const [loadingRecording, setLoadingRecording] = useState<boolean>(false);
   const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
-  const [scaled, setScaled] = useState<boolean>(true);
+  const [scaled, setScaled] = useState<boolean>(false);
   const recordedItemRef = useRef<FileStorage.File | null>(null);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();

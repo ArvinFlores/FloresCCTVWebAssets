@@ -9,14 +9,16 @@ import type { StickyHeaderListProps } from './interfaces';
 
 export function StickyHeaderList ({
   items,
+  scrollTop,
   height = '100%',
   preContent,
   postContent,
   onEndReachedThreshold = 100,
-  onEndReached
+  onEndReached,
+  onScroll
 }: StickyHeaderListProps): JSX.Element {
   const root = useRef<HTMLDivElement>(null);
-  const handleOnScroll = debounce(() => {
+  const handleOnEndReached = debounce(() => {
     const {
       scrollHeight,
       scrollTop,
@@ -28,12 +30,33 @@ export function StickyHeaderList ({
       onEndReached?.();
     }
   }, 500);
+  const handleOnScroll = (): void => {
+    const { scrollTop } = root.current as HTMLDivElement;
+    onScroll?.({ scrollTop });
+  };
 
   useEffect(
     () => {
       const node = root.current;
 
       if (!onEndReached) {
+        return;
+      }
+
+      node?.addEventListener('scroll', handleOnEndReached);
+
+      return () => {
+        node?.removeEventListener('scroll', handleOnEndReached);
+      };
+    },
+    [handleOnEndReached]
+  );
+
+  useEffect(
+    () => {
+      const node = root.current;
+
+      if (!onScroll) {
         return;
       }
 
@@ -44,6 +67,15 @@ export function StickyHeaderList ({
       };
     },
     [handleOnScroll]
+  );
+
+  useEffect(
+    () => {
+      if (root.current && scrollTop != null) {
+        root.current.scrollTop = scrollTop;
+      }
+    },
+    [scrollTop]
   );
 
   return (

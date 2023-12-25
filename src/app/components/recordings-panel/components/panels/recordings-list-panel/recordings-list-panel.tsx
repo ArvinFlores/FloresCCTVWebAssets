@@ -1,5 +1,4 @@
 import type { FileStorage } from 'florescctvwebservice-types';
-import { useRef } from 'react';
 import { useAsyncCall } from 'src/hooks/use-async-call';
 import { florescctvClient } from 'src/services/florescctv-client';
 import { Spinner } from 'src/components/spinner';
@@ -16,7 +15,7 @@ import { createStickyHeaderItems } from './helpers';
 import type { RecordingsListPanelProps } from './interfaces';
 
 export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps): JSX.Element {
-  const pageTokenRef = useRef<null | string>(null);
+  const cacheKey = 'recordings';
   const {
     data,
     hasFetched,
@@ -27,12 +26,13 @@ export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps):
     params: ['create_date', 'desc', 10],
     fn: async ({
       params,
-      signal
+      signal,
+      cache
     }) => await florescctvClient.recordings.getAll({
       sortKey: params[0],
       sortOrder: params[1],
       pageSize: params[2],
-      pageToken: pageTokenRef.current ?? undefined
+      pageToken: cache.get(cacheKey)?.nextPageToken ?? null
     }, { signal }),
     handleData: (data, prevData) => {
       if (!prevData) return data;
@@ -42,8 +42,15 @@ export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps):
         files: [...prevData.files, ...data.files]
       };
     },
-    onSuccess: (data) => {
-      pageTokenRef.current = data.nextPageToken ?? null;
+    cache: {
+      key: cacheKey,
+      handler: (response, cacheValue) => cacheValue == null ?
+        response :
+        {
+          nextPageToken: response.nextPageToken ?? null,
+          files: [...cacheValue.files, ...response.files]
+        },
+      shouldFetch: (cacheValue) => !cacheValue || cacheValue.nextPageToken != null
     }
   });
   const handleOnEndScroll = (): void => {

@@ -180,7 +180,16 @@ export function App (): JSX.Element {
     lazy: true,
     params: [recordedItemRef.current?.id],
     fn: async ({ params: [fileId] }) => await florescctvClient.recordings.delete(fileId),
-    onSuccess: handleGoBackRecordingsPanel,
+    onSuccess: ({ id }, cache) => {
+      const recordings: FileStorage.GetAllSuccess | null = cache.get('recordings');
+      if (recordings != null) {
+        cache.set('recordings', {
+          ...recordings,
+          files: recordings.files.filter((file) => file.id !== id)
+        });
+      }
+      handleGoBackRecordingsPanel();
+    },
     onError: (err) => {
       setError({
         message: 'We were unable to delete the recording',

@@ -13,7 +13,7 @@ export function HealthCheckPanel (): JSX.Element {
   } = useAsyncCall({
     canRetry: true,
     params: [],
-    fn: florescctvClient.cameras.getAllHealth
+    fn: async ({ signal }) => await florescctvClient.cameras.getAllHealth({ signal })
   });
 
   if (status === 'error') {

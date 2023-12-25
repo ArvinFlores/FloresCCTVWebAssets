@@ -3,6 +3,22 @@ export type Status = 'idle' | 'loading' | 'error';
 interface AsyncFnArgs {
   params: any[];
   signal: AbortSignal;
+  cache: Map<string, any>;
+}
+
+interface CacheOptions<Data> {
+  /**
+   * The key to use for the cache
+   */
+  key: string;
+  /**
+   * A handler for how the data should be stored in the cache
+   */
+  handler?: (data: Data, cacheValue: Data | null) => Data;
+  /**
+   * A handler to determine if a fetch should be forced
+   */
+  shouldFetch?: (cacheValue: Data | null) => boolean;
 }
 
 export interface IUseAsyncOptions<Data> {
@@ -33,11 +49,15 @@ export interface IUseAsyncOptions<Data> {
   /**
    * A handler when the call resolves successfully
    */
-  onSuccess?: (data: Data) => void;
+  onSuccess?: (data: Data, cache: Map<string, any>) => void;
   /**
    * A handler when the call fails
    */
   onError?: (err: Error) => void;
+  /**
+   * Cache options to persist data from the async call
+   */
+  cache?: CacheOptions<Data>;
 }
 
 export interface IUseAsync<Data> {

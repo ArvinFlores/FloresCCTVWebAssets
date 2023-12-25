@@ -14,7 +14,11 @@ import { RecordingItem } from './components/recording-item';
 import { createStickyHeaderItems } from './helpers';
 import type { RecordingsListPanelProps } from './interfaces';
 
-export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps): JSX.Element {
+export function RecordingsListPanel ({
+  scrollTop,
+  onScroll,
+  onItemClick
+}: RecordingsListPanelProps): JSX.Element {
   const cacheKey = 'recordings';
   const {
     data,
@@ -86,6 +90,7 @@ export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps):
   return (
     <StickyHeaderList
       height="calc(100% - 75px)"
+      scrollTop={scrollTop}
       items={createStickyHeaderItems(data.files).map(({ header, children }) => {
         const itemDate = new Date(header);
         const currYear = new Date().getFullYear();
@@ -121,6 +126,7 @@ export function RecordingsListPanel ({ onItemClick }: RecordingsListPanelProps):
         )
       }
       onEndReached={data.nextPageToken != null ? handleOnEndScroll : undefined}
+      onScroll={onScroll}
     />
   );
 }

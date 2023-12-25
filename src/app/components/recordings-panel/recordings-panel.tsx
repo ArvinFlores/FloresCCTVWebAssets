@@ -12,18 +12,27 @@ import { HealthCheckPanel } from './components/panels/health-check-panel';
 import { RecordingsListPanel } from './components/panels/recordings-list-panel';
 import type { RecordingsPanelProps } from './interfaces';
 
+/**
+ * Its probably better to persist this value using a custom hook or something but this is fine for now
+ */
+let recordingsListScrollTop = 0;
+
 export function RecordingsPanel ({
   onClose,
   onRecordingItemClick
 }: RecordingsPanelProps): JSX.Element {
   const initialPanel = 'recordings';
   const [activePanel, setActivePanel] = useState<'recordings' | 'health'>(initialPanel);
+  const handleOnClose = (): void => {
+    recordingsListScrollTop = 0;
+    onClose();
+  };
 
   return (
     <div className="recordings-panel util-z-2000">
       <OutsideClick
         className="recordings-panel__content"
-        onClick={onClose}
+        onClick={handleOnClose}
       >
         <div
           className={classnames({
@@ -57,7 +66,7 @@ export function RecordingsPanel ({
                     className="recordings-panel__menu-btn"
                     variant="see-through"
                     circular={true}
-                    onClick={onClose}
+                    onClick={handleOnClose}
                   >
                     <FontAwesomeIcon
                       icon={faBars}
@@ -83,7 +92,15 @@ export function RecordingsPanel ({
               )
           }
         </div>
-        {activePanel === 'recordings' && <RecordingsListPanel onItemClick={onRecordingItemClick} />}
+        {
+          activePanel === 'recordings' && (
+            <RecordingsListPanel
+              scrollTop={recordingsListScrollTop}
+              onScroll={({ scrollTop }) => { recordingsListScrollTop = scrollTop; }}
+              onItemClick={onRecordingItemClick}
+            />
+          )
+        }
         <div className="recordings-panel__scrollable">
           {activePanel === 'health' && <HealthCheckPanel />}
         </div>

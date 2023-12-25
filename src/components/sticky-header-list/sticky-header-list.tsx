@@ -19,11 +19,15 @@ export function StickyHeaderList ({
 }: StickyHeaderListProps): JSX.Element {
   const root = useRef<HTMLDivElement>(null);
   const handleOnEndReached = debounce(() => {
+    if (!root.current) {
+      return;
+    }
+
     const {
       scrollHeight,
       scrollTop,
       clientHeight
-    } = root.current as HTMLDivElement;
+    } = root.current;
     const scrollPos = Math.abs(scrollHeight - scrollTop - clientHeight);
 
     if (scrollPos < onEndReachedThreshold) {

@@ -18,8 +18,7 @@ import type { RecordingsPanelProps } from './interfaces';
 let recordingsListScrollTop = 0;
 
 export function RecordingsPanel ({
-  onClose,
-  onRecordingItemClick
+  onClose
 }: RecordingsPanelProps): JSX.Element {
   const initialPanel = 'recordings';
   const [activePanel, setActivePanel] = useState<'recordings' | 'health'>(initialPanel);
@@ -97,7 +96,6 @@ export function RecordingsPanel ({
             <RecordingsListPanel
               scrollTop={recordingsListScrollTop}
               onScroll={({ scrollTop }) => { recordingsListScrollTop = scrollTop; }}
-              onItemClick={onRecordingItemClick}
             />
           )
         }

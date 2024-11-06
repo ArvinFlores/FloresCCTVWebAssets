@@ -5,7 +5,6 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons/faMicrophone';
 import { faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons/faMicrophoneSlash';
-import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faExpand } from '@fortawesome/free-solid-svg-icons/faExpand';
 import { faCompress } from '@fortawesome/free-solid-svg-icons/faCompress';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,7 +25,6 @@ export function Controls ({
   onDownloadMediaPreview,
   onTakeScreenshot,
   onRecord,
-  onDelete,
   onToggleScale
 }: ControlsProps): JSX.Element {
   return (
@@ -44,22 +42,6 @@ export function Controls ({
                         icon={faXmark}
                       />
                       <span>Cancel</span>
-                    </Button>
-                  </li>
-                )
-              }
-              {
-                onDelete && (
-                  <li>
-                    <Button
-                      variant="danger"
-                      onClick={onDelete}
-                    >
-                      <FontAwesomeIcon
-                        className="util-mr-0"
-                        icon={faTrash}
-                      />
-                      <span>Delete</span>
                     </Button>
                   </li>
                 )

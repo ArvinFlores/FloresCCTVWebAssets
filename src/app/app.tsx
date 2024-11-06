@@ -2,7 +2,6 @@ import '../styles/base.css';
 import '../styles/util.css';
 
 import { useState, useRef, useEffect } from 'react';
-import type { FileStorage } from 'florescctvwebservice-types';
 import { RECORDING_LIMIT_SECS } from 'config/app';
 import { Navbar } from 'src/components/navbar';
 import { Alert } from 'src/components/alert';
@@ -12,12 +11,9 @@ import { Video } from 'src/components/media';
 import { Spinner } from 'src/components/spinner';
 import { Fixed } from 'src/components/fixed';
 import { useRemoteStream } from 'src/hooks/use-remote-stream';
-import { useAsyncCall } from 'src/hooks/use-async-call';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
-import { dateFormat } from 'src/util/datetime';
 import { classnames } from 'src/util/classnames';
-import { florescctvClient } from 'src/services/florescctv-client';
 import { Controls } from './components/controls';
 import { MediaPreview } from './components/media-preview';
 import { StreamsPreview } from './components/streams-preview';
@@ -33,10 +29,8 @@ export function App (): JSX.Element {
   const [micActive, setMicActive] = useState<boolean>(false);
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
-  const [loadingRecording, setLoadingRecording] = useState<boolean>(false);
   const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
   const [scaled, setScaled] = useState<boolean>(false);
-  const recordedItemRef = useRef<FileStorage.File | null>(null);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const {
@@ -48,7 +42,6 @@ export function App (): JSX.Element {
     hasLocalStream,
     addLocalStream,
     toggleLocalAudio,
-    muteLocalAudio,
     setActiveStream
   } = useRemoteStream({
     wsUrl: JANUS_URL || `wss://${CAMERA_IP}:9000/stream`,
@@ -88,7 +81,6 @@ export function App (): JSX.Element {
     if (previewSrc.startsWith('blob:')) {
       URL.revokeObjectURL(previewSrc);
     }
-    recordedItemRef.current = null;
     if (error) setError(null);
     setPreviewSrc('');
   };
@@ -154,17 +146,6 @@ export function App (): JSX.Element {
   const handleToggleRecordingsPanel = (): void => {
     setShowRecordingsPanel((show) => !show);
   };
-  const handleGoBackRecordingsPanel = (): void => {
-    recordedItemRef.current = null;
-    setShowRecordingsPanel(true);
-    setPreviewSrc('');
-    if (error) setError(null);
-  };
-  const handleOnSelectRecordingItem = (item: FileStorage.File): void => {
-    recordedItemRef.current = item;
-    setPreviewSrc(item.src);
-    setShowRecordingsPanel(false);
-  };
   const renderFallbackError = (error: Error): JSX.Element => {
     return (
       <Alert type="danger">
@@ -173,36 +154,11 @@ export function App (): JSX.Element {
       </Alert>
     );
   };
-  const {
-    fetch: handleOnDeleteRecordingItem,
-    status: deleteRecordingStatus
-  } = useAsyncCall<FileStorage.DeleteSuccess>({
-    lazy: true,
-    params: [recordedItemRef.current?.id],
-    fn: async ({ params: [fileId] }) => await florescctvClient.recordings.delete(fileId),
-    onSuccess: ({ id }, cache) => {
-      const recordings: FileStorage.GetAllSuccess | null = cache.get('recordings');
-      if (recordings != null) {
-        cache.set('recordings', {
-          ...recordings,
-          files: recordings.files.filter((file) => file.id !== id)
-        });
-      }
-      handleGoBackRecordingsPanel();
-    },
-    onError: (err) => {
-      setError({
-        message: 'We were unable to delete the recording',
-        dismissable: true,
-        details: { message: err.message }
-      });
-    }
-  });
 
   useEffect(
     () => {
       const hasVideoFeed = wsConnStatus === 'connected' && activeStream != null;
-      if (hasVideoFeed && error != null && !recordedItemRef.current) {
+      if (hasVideoFeed && error != null) {
         setError(null);
       }
     },
@@ -225,19 +181,6 @@ export function App (): JSX.Element {
       }
     },
     [wsConnStatus, micActive]
-  );
-
-  useEffect(
-    () => {
-      if (micActive) {
-        if (recordedItemRef.current) {
-          muteLocalAudio?.(true);
-        } else {
-          muteLocalAudio?.(false);
-        }
-      }
-    },
-    [micActive, muteLocalAudio]
   );
 
   return (
@@ -270,8 +213,7 @@ export function App (): JSX.Element {
       {
         !['closed', 'failed'].includes(wsConnStatus as string) && (
           activeStream === null ||
-          ['connecting', 'reconnecting'].includes(wsConnStatus as string) ||
-          loadingRecording
+          ['connecting', 'reconnecting'].includes(wsConnStatus as string)
         ) && (
           <div className="util-perfect-center util-z-1000">
             <Spinner size="medium" />
@@ -279,46 +221,35 @@ export function App (): JSX.Element {
         )
       }
       {
-        activeStream && !loadingRecording && (
+        activeStream && (
           <>
             {
-              (
-                previewSrc && !recordedItemRef.current
-              ) || deleteRecordingStatus === 'loading' ?
-                null :
-                (
-                  <Actions
-                    videoMuted={videoMuted}
-                    showMenu={showRecordingsPanel}
-                    recording={recording}
-                    canGoBack={recordedItemRef.current != null}
-                    onVolumeClick={handleToggleVideoAudio}
-                    onMenuClick={handleToggleRecordingsPanel}
-                    onGoBackMenuClick={handleGoBackRecordingsPanel}
-                  />
-                )
-            }
-            {
-              !recordedItemRef.current && (
-                <Video
-                  ref={videofeedRef}
-                  srcObject={activeStream.stream}
-                  className={classnames({
-                    'util-fullscreen': true,
-                    'util-fullscreen--cover': scaled,
-                    'util-z-neg': true
-                  })}
-                  autoPlay={true}
-                  muted={videoMuted}
-                  playsInline={true}
+              !previewSrc && (
+                <Actions
+                  videoMuted={videoMuted}
+                  showMenu={showRecordingsPanel}
+                  recording={recording}
+                  onVolumeClick={handleToggleVideoAudio}
+                  onMenuClick={handleToggleRecordingsPanel}
                 />
               )
             }
+            <Video
+              ref={videofeedRef}
+              srcObject={activeStream.stream}
+              className={classnames({
+                'util-fullscreen': true,
+                'util-fullscreen--cover': scaled,
+                'util-z-neg': true
+              })}
+              autoPlay={true}
+              muted={videoMuted}
+              playsInline={true}
+            />
             {
               showRecordingsPanel && (
                 <RecordingsPanel
                   onClose={handleToggleRecordingsPanel}
-                  onRecordingItemClick={handleOnSelectRecordingItem}
                 />
               )
             }
@@ -326,7 +257,7 @@ export function App (): JSX.Element {
         )
       }
       {
-        Boolean(activeStream ?? previewSrc) && !loadingRecording && (
+        Boolean(activeStream ?? previewSrc) && (
           <Fixed
             direction="bottom"
             className="util-z-1000"
@@ -343,48 +274,30 @@ export function App (): JSX.Element {
               )
             }
             <Navbar alignContent="center">
-              {
-                deleteRecordingStatus === 'loading' ?
-                  <Spinner size="small" /> :
-                  (
-                    <Controls
-                      previewingMedia={Boolean(previewSrc)}
-                      micActive={micActive}
-                      micEnabled={micEnabled}
-                      recordingEnabled={recordingEnabled}
-                      recording={recording}
-                      scaled={scaled}
-                      onCancelMediaPreview={handleCancelMediaPreview}
-                      onDownloadMediaPreview={recordedItemRef.current ? undefined : handleMediaDownload}
-                      onDelete={recordedItemRef.current ? handleOnDeleteRecordingItem : undefined}
-                      onToggleMic={handleToggleMic}
-                      onTakeScreenshot={handleTakeScreenshot}
-                      onRecord={handleRecordClick}
-                      onToggleScale={() => {
-                        setScaled((active) => !active);
-                      }}
-                    />
-                  )
-              }
+              <Controls
+                previewingMedia={Boolean(previewSrc)}
+                micActive={micActive}
+                micEnabled={micEnabled}
+                recordingEnabled={recordingEnabled}
+                recording={recording}
+                scaled={scaled}
+                onCancelMediaPreview={handleCancelMediaPreview}
+                onDownloadMediaPreview={handleMediaDownload}
+                onToggleMic={handleToggleMic}
+                onTakeScreenshot={handleTakeScreenshot}
+                onRecord={handleRecordClick}
+                onToggleScale={() => {
+                  setScaled((active) => !active);
+                }}
+              />
             </Navbar>
           </Fixed>
         )
       }
       <MediaPreview
         previewSrc={previewSrc}
-        muteVideo={!recordedItemRef.current}
+        muteVideo={true}
         scaled={scaled}
-        label={
-          recordedItemRef.current != null ?
-            dateFormat(new Date(recordedItemRef.current.created_at), 'MM/dd/yyyy ampm') :
-            undefined
-        }
-        onVideoLoading={() => {
-          setLoadingRecording(true);
-        }}
-        onVideoLoaded={() => {
-          setLoadingRecording(false);
-        }}
       />
     </ErrorBoundary>
   );

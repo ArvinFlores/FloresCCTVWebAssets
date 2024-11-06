@@ -16,8 +16,7 @@ import type { RecordingsListPanelProps } from './interfaces';
 
 export function RecordingsListPanel ({
   scrollTop,
-  onScroll,
-  onItemClick
+  onScroll
 }: RecordingsListPanelProps): JSX.Element {
   const cacheKey = 'recordings';
   const {
@@ -101,18 +100,20 @@ export function RecordingsListPanel ({
         return {
           header: dayDiff > 6 ? dateFormat(itemDate, longFormat) : daysAgoFormat(itemDate, true),
           children: children.map((item) => {
-            const { id, thumbnail, created_at: createdAt } = item;
+            const { id, thumbnail, created_at: createdAt, src } = item;
 
             return (
-              <div
+              <a
                 key={id}
-                onClick={onItemClick.bind(null, item)}
+                href={src}
+                target="_blank"
+                rel="noreferrer"
               >
                 <RecordingItem
                   thumbnail={thumbnail}
                   label={ampmFormat(new Date(createdAt))}
                 />
-              </div>
+              </a>
             );
           })
         };

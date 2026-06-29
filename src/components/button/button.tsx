@@ -25,6 +25,7 @@ export function Button ({
         'btn--danger': variant === 'danger',
         'btn--primary': variant === 'primary',
         'btn--see-through': variant === 'see-through',
+        'btn--full-see-through': variant === 'full-see-through',
         'btn--disabled': disabled,
         [className]: true
       })}

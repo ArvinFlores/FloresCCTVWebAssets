@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 export type ButtonProps = PropsWithChildren<{
   outline?: boolean;
   circular?: boolean;
-  variant?: 'danger' | 'primary' | 'see-through';
+  variant?: 'danger' | 'primary' | 'see-through' | 'full-see-through';
   ariaLabel?: string;
 }> & Pick<
 ButtonHTMLAttributes<unknown>,

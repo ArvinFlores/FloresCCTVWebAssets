@@ -11,7 +11,7 @@ export function ControlsToggleButton ({
   return (
     <Button
       ariaLabel={isOpen ? 'Close controls menu' : 'Open controls menu'}
-      variant="see-through"
+      variant="full-see-through"
       onClick={onClick}
     >
       <FontAwesomeIcon

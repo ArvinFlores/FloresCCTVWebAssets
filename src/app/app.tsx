@@ -125,6 +125,7 @@ export function App (): JSX.Element {
     if (hasLocalStream?.()) {
       setMicActive(toggleLocalAudio?.() ?? false);
     } else {
+      setMicEnabled(false);
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then((stream) => {
           addLocalStream?.(stream);
@@ -136,7 +137,9 @@ export function App (): JSX.Element {
             dismissable: true,
             details: { message: err.message }
           });
-          setMicEnabled(false);
+        })
+        .finally(() => {
+          setMicEnabled(true);
         });
     }
   };

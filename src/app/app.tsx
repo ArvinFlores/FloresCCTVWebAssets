@@ -30,7 +30,7 @@ export function App (): JSX.Element {
   const [recording, setRecording] = useState<boolean>(false);
   const [micActive, setMicActive] = useState<boolean>(false);
   const [micEnabled, setMicEnabled] = useState<boolean>(true);
-  const [videoMuted, setVideoMuted] = useState<boolean>(true);
+  const [videoMuted, setVideoMuted] = useState<boolean>(false);
   const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
   const [scaled, setScaled] = useState<boolean>(false);
   const [showSecondaryControls, setShowSecondaryControls] = useState<boolean>(false);

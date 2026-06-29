@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
-import { faVolumeXmark } from '@fortawesome/free-solid-svg-icons/faVolumeXmark';
 import { faVolumeHigh } from '@fortawesome/free-solid-svg-icons/faVolumeHigh';
 import { classnames } from 'src/util/classnames';
 import { Button } from 'src/components/button';

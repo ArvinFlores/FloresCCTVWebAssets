@@ -278,7 +278,8 @@ export function App (): JSX.Element {
             }
             <Navbar>
               <Flex justifyContent="space-between">
-                <div />
+                {/* TODO: Figure out better way to handle flex layout here */}
+                <div style={{ width: 55 }} />
                 <div>
                   <Controls
                     previewingMedia={Boolean(previewSrc)}

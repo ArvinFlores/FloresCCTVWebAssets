@@ -24,6 +24,7 @@ export function Actions ({
       })}
     >
       <Button
+        style={{ backgroundColor: videoMuted ? undefined : '#0866dd' }}
         ariaLabel={videoMuted ? 'Unmute video feed' : 'Mute video feed'}
         variant="see-through"
         circular={true}

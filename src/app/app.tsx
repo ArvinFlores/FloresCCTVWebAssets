@@ -10,11 +10,13 @@ import { ErrorBoundary } from 'src/components/error-boundary';
 import { Video } from 'src/components/media';
 import { Spinner } from 'src/components/spinner';
 import { Fixed } from 'src/components/fixed';
+import { Flex } from 'src/components/flex';
 import { useRemoteStream } from 'src/hooks/use-remote-stream';
 import { takeScreenshot } from 'src/util/take-screenshot';
 import { downloadLocalFile } from 'src/util/download-local-file';
 import { classnames } from 'src/util/classnames';
 import { Controls } from './components/controls';
+import { ControlsToggleButton } from './components/controls/components/controls-toggle-button';
 import { MediaPreview } from './components/media-preview';
 import { StreamsPreview } from './components/streams-preview';
 import { RecordingsPanel } from './components/recordings-panel';
@@ -31,6 +33,7 @@ export function App (): JSX.Element {
   const [videoMuted, setVideoMuted] = useState<boolean>(true);
   const [showRecordingsPanel, setShowRecordingsPanel] = useState<boolean>(false);
   const [scaled, setScaled] = useState<boolean>(false);
+  const [showSecondaryControls, setShowSecondaryControls] = useState<boolean>(false);
   const videofeedRef = useRef<HTMLVideoElement | null>(null);
   const recordingRef = useRef<NodeJS.Timeout>();
   const {
@@ -273,23 +276,33 @@ export function App (): JSX.Element {
                 </div>
               )
             }
-            <Navbar alignContent="center">
-              <Controls
-                previewingMedia={Boolean(previewSrc)}
-                micActive={micActive}
-                micEnabled={micEnabled}
-                recordingEnabled={recordingEnabled}
-                recording={recording}
-                scaled={scaled}
-                onCancelMediaPreview={handleCancelMediaPreview}
-                onDownloadMediaPreview={handleMediaDownload}
-                onToggleMic={handleToggleMic}
-                onTakeScreenshot={handleTakeScreenshot}
-                onRecord={handleRecordClick}
-                onToggleScale={() => {
-                  setScaled((active) => !active);
-                }}
-              />
+            <Navbar>
+              <Flex justifyContent="space-between">
+                <div />
+                <div>
+                  <Controls
+                    previewingMedia={Boolean(previewSrc)}
+                    micActive={micActive}
+                    micEnabled={micEnabled}
+                    recordingEnabled={recordingEnabled}
+                    recording={recording}
+                    scaled={scaled}
+                    showSecondaryControls={showSecondaryControls}
+                    onCancelMediaPreview={handleCancelMediaPreview}
+                    onDownloadMediaPreview={handleMediaDownload}
+                    onToggleMic={handleToggleMic}
+                    onTakeScreenshot={handleTakeScreenshot}
+                    onRecord={handleRecordClick}
+                    onToggleScale={() => {
+                      setScaled((active) => !active);
+                    }}
+                  />
+                </div>
+                <ControlsToggleButton
+                  isOpen={showSecondaryControls}
+                  onClick={() => { setShowSecondaryControls((open) => !open); }}
+                />
+              </Flex>
             </Navbar>
           </Fixed>
         )

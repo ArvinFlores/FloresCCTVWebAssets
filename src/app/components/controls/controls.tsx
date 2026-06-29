@@ -20,6 +20,7 @@ export function Controls ({
   recording,
   recordingEnabled,
   scaled,
+  showSecondaryControls,
   onToggleMic,
   onCancelMediaPreview,
   onDownloadMediaPreview,
@@ -83,45 +84,51 @@ export function Controls ({
                 </Button>
               </li>
               {
-                !recording && (
-                  <li>
-                    <Button
-                      ariaLabel="Take screenshot"
-                      className="controls__btn"
-                      circular={true}
-                      onClick={onTakeScreenshot}
-                    >
-                      <FontAwesomeIcon
-                        icon={faCamera}
-                        size="2x"
+                showSecondaryControls && (
+                  <>
+                    {
+                      !recording && (
+                        <li>
+                          <Button
+                            ariaLabel="Take screenshot"
+                            className="controls__btn"
+                            circular={true}
+                            onClick={onTakeScreenshot}
+                          >
+                            <FontAwesomeIcon
+                              icon={faCamera}
+                              size="2x"
+                            />
+                          </Button>
+                        </li>
+                      )
+                    }
+                    <li>
+                      <RecordButton
+                        ariaLabel={recording ? 'Stop recording' : 'Start recording'}
+                        className="controls__btn"
+                        active={recording}
+                        duration={RECORDING_LIMIT_SECS}
+                        disabled={!recordingEnabled}
+                        onClick={onRecord}
                       />
-                    </Button>
-                  </li>
+                    </li>
+                    <li>
+                      <Button
+                        ariaLabel={scaled ? 'Minimize camera view' : 'Maximize camera view'}
+                        className="controls__btn"
+                        circular={true}
+                        onClick={onToggleScale}
+                      >
+                        <FontAwesomeIcon
+                          icon={scaled ? faCompress : faExpand}
+                          size="2x"
+                        />
+                      </Button>
+                    </li>
+                  </>
                 )
               }
-              <li>
-                <RecordButton
-                  ariaLabel={recording ? 'Stop recording' : 'Start recording'}
-                  className="controls__btn"
-                  active={recording}
-                  duration={RECORDING_LIMIT_SECS}
-                  disabled={!recordingEnabled}
-                  onClick={onRecord}
-                />
-              </li>
-              <li>
-                <Button
-                  ariaLabel={scaled ? 'Minimize camera view' : 'Maximize camera view'}
-                  className="controls__btn"
-                  circular={true}
-                  onClick={onToggleScale}
-                >
-                  <FontAwesomeIcon
-                    icon={scaled ? faCompress : faExpand}
-                    size="2x"
-                  />
-                </Button>
-              </li>
             </>
           )
       }

@@ -5,6 +5,7 @@ export interface ControlsProps {
   recordingEnabled: boolean;
   recording: boolean;
   scaled: boolean;
+  showSecondaryControls: boolean;
   onToggleMic?: () => void;
   onCancelMediaPreview?: () => void;
   onDownloadMediaPreview?: () => void;

@@ -34,7 +34,7 @@ export function Actions ({
         onClick={onVolumeClick}
       >
         <FontAwesomeIcon
-          icon={videoMuted ? faVolumeXmark : faVolumeHigh}
+          icon={faVolumeHigh}
           size="2x"
         />
       </Button>
